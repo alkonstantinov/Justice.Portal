@@ -17,6 +17,8 @@ namespace Justice.Portal.DB.Models
 
         public virtual DbSet<PortalPart> PortalPart { get; set; }
         public virtual DbSet<PortalUser> PortalUser { get; set; }
+        public virtual DbSet<PortalUser2Right> PortalUser2Right { get; set; }
+        public virtual DbSet<Session> Session { get; set; }
         public virtual DbSet<UserRight> UserRight { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -54,6 +56,43 @@ namespace Justice.Portal.DB.Models
                 entity.Property(e => e.UserName)
                     .IsRequired()
                     .HasMaxLength(50);
+            });
+
+            modelBuilder.Entity<PortalUser2Right>(entity =>
+            {
+                entity.HasIndex(e => e.PortalUserId)
+                    .HasName("idx_PortalUser2Right_PortalUserId");
+
+                entity.HasIndex(e => e.UserRightId)
+                    .HasName("idx_PortalUser2Right_UserRightId");
+
+                entity.HasOne(d => d.PortalUser)
+                    .WithMany(p => p.PortalUser2Right)
+                    .HasForeignKey(d => d.PortalUserId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("fk_PortalUser2Right_PortalUserId");
+
+                entity.HasOne(d => d.UserRight)
+                    .WithMany(p => p.PortalUser2Right)
+                    .HasForeignKey(d => d.UserRightId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("fk_PortalUser2Right_UserRightId");
+            });
+
+            modelBuilder.Entity<Session>(entity =>
+            {
+                entity.HasIndex(e => e.PortalUserId)
+                    .HasName("idx_Session_PortalUserId");
+
+                entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+
+                entity.Property(e => e.LastEdit).HasColumnType("datetime");
+
+                entity.HasOne(d => d.PortalUser)
+                    .WithMany(p => p.Session)
+                    .HasForeignKey(d => d.PortalUserId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("fk_Session_PortalUserId");
             });
 
             modelBuilder.Entity<UserRight>(entity =>
