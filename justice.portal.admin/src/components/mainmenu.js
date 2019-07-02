@@ -51,51 +51,33 @@ class MainMenu extends BaseComponent {
 
     render() {
         var self = this;
-        var uLevel = this.SM.GetSession().level;
+        var session = self.SM.GetSession();
+        console.log(session.rights.find(x => x === "adminusers"));
         return (
 
             <div className="container mt-3">
                 <div className="row">
                     <div className="col-3">
                         {
-                            uLevel === "operator" ?
-                                <Link className="btn btn-default fillSpace" to='/documentsearch'>
-                                    <i className="fas fa-search"></i>
-                                    <p>{self.T("documents")}</p>
-                                </Link>
-                                : null
-                        }
-                    </div>
-                    <div className="col-3">
-                        {
-                            uLevel === "operator" ?
-                                <Link className="btn btn-default fillSpace" to='/categories'>
-                                    <i className="fas fa-sitemap"></i>
-                                    <p>{self.T("categories")}</p>
-                                </Link>
-                                : null
-                        }
-                    </div>
-                    <div className="col-3">
-                        {
-                            uLevel === "operator" ?
-                                <Link className="btn btn-default fillSpace" to='/nomenclatures'>
-                                    <i className="fas fa-align-justify"></i>
-                                    <p>{self.T("nomenclatures")}</p>
-                                </Link>
-                                : null
-                        }
-                    </div>
-                    <div className="col-3">
-                        {
-                            uLevel === "administrator" ?
+                            session.rights.find(x => x === "adminusers") !== null ?
                                 <Link className="btn btn-default fillSpace" to='/users'>
-                                    <i className="fas fa-users"></i>
-                                    <p>{self.T("users")}</p>
+                                    <i className="fas fa-user"></i>
+                                    <p>Потребители</p>
                                 </Link>
                                 : null
                         }
                     </div>
+                    <div className="col-3">
+                        {
+                            session.rights.find(x => x === "adminusers") !== null ?
+                                <Link className="btn btn-default fillSpace" to='/groups'>
+                                    <i className="fas fa-users"></i>
+                                    <p>Групи</p>
+                                </Link>
+                                : null
+                        }
+                    </div>
+
                 </div>
 
             </div>

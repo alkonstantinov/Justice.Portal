@@ -8,6 +8,7 @@ import Header from './components/header';
 import eventClient from './modules/eventclient';
 import MainMenu from './components/mainmenu';
 import Comm from './modules/comm'; 
+import Groups from './components/groups';
 
 class App extends BaseComponent {
 
@@ -55,6 +56,7 @@ class App extends BaseComponent {
               :
               <Switch>
                 <Route exact path='/mainmenu' component={MainMenu} />
+                <Route exact path='/groups' component={Groups} />
                 
                 <Route component={MainMenu} />
 

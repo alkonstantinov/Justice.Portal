@@ -1,11 +1,9 @@
 import React from 'react';
 import BaseComponent from './basecomponent';
 import Loader from 'react-loader-spinner';
-import Axios from 'axios';
 import { toast } from 'react-toastify';
 import { Redirect } from 'react-router-dom';
 import eventClient from '../modules/eventclient';
-import serverdata from '../data/serverdata.json';
 import Comm from '../modules/comm';
 
 
@@ -33,15 +31,18 @@ class Login extends BaseComponent {
         Comm.Instance().post('security/login', postData)
             .then(result => {
                 self.SM.SetSession({
-                    username: result.data.name,
-                    token: result.data.token,
-                    level: result.data.type
+                    id: result.data.portalUserId,
+                    name: result.data.name,
+                    userName: result.data.userName,
+                    token: result.data.sessionID,
+                    rights: result.data.rights,
+                    parts: result.data.parts,
                 });
                 Comm.Instance().defaults.headers.common['Authorization'] = result.data.token;
                 eventClient.emit("loginchange");
             })
             .catch(error => {
-                if (error.response.status === 401)
+                if (error.response && error.response.status === 401)
                     toast.error("Невалидно потребителско име или парола");
                 else
                     toast.error(error.message);

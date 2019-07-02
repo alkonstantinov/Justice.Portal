@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace kl2.server.DB.Models
+namespace Justice.Portal.DB.JSModels
 {
     public class LoginRequest
     {

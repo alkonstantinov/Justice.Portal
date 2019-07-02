@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Justice.Portal.DB.JSModels;
 using Justice.Portal.DB.Models;
-using kl2.server.DB.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Justice.Portal.Web.Controllers
@@ -22,11 +22,41 @@ namespace Justice.Portal.Web.Controllers
         {
             var result = this.db.Login(model);
             if (result != null)
-                result.Session = new Session[] { this.db.CreateSession(result.PortalUserId)};
+                result.SessionID = this.db.CreateSession(result.PortalUserId).SessionKey.ToString();
             if (result != null)
                 return Ok(result);
             else
                 return Unauthorized();
+        }
+
+        [HttpGet("GetGroupsForAdmin")]
+        public async Task<IActionResult> GetGroupsForAdmin()
+        {
+            if (!this.HasRight("adminusers"))
+                return Unauthorized();
+            GroupsResponse grps = new GroupsResponse();
+            grps.Groups = db.GetGroups();
+            grps.Parts = db.GetParts();
+            grps.Rights = db.GetRights();
+            return Ok(grps);            
+        }
+
+        [HttpPost("SetGroup")]
+        public async Task<IActionResult> SetGroup([FromBody]JSPortalGroup group)
+        {
+            if (!this.HasRight("adminusers"))
+                return Unauthorized();
+            db.SetGroup(group);
+            return Ok();
+        }
+
+        [HttpDelete("DelGroup/{groupId}")]
+        public async Task<IActionResult> DelGroup([FromRoute]int groupId)
+        {
+            if (!this.HasRight("adminusers"))
+                return Unauthorized();
+            db.DelGroup(groupId);
+            return Ok();
         }
 
 

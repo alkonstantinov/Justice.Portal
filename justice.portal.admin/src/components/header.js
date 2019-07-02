@@ -71,7 +71,7 @@ class Header extends BaseComponent {
                 
                 <div className="col-4 pull-right">
                     {
-                        user === null ? null : user.username
+                        user === null ? null : user.name
                     }
                 </div>
                 <div className="col-1">
