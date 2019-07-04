@@ -65,17 +65,35 @@ namespace Justice.Portal.DB
         }
 
 
-        public JSPortalGroup[] GetGroups()
+        public JSPortalGroup[] GetGroups(bool loadRights = true)
         {
             var grps = ModelMapper.Instance.Mapper.Map<ICollection<PortalGroup>, ICollection<JSPortalGroup>>(db.PortalGroup.OrderBy(x => x.Name).ToList()).ToArray();
             foreach (var g in grps)
             {
-                g.CanDel = !db.PortalUser2Group.Any(x => x.PortalGroupId == g.PortalGroupId);
-                g.Parts = db.PortalGroup2Part.Include(x => x.PortalPart).Where(x => x.PortalGroupId == g.PortalGroupId).Select(x => x.PortalPart.PartKey).ToArray();
-                g.Rights = db.PortalGroup2Right.Include(x => x.UserRight).Where(x => x.PortalGroupId == g.PortalGroupId).Select(x => x.UserRight.Name).ToArray();
+                if (loadRights)
+                {
+                    g.CanDel = !db.PortalUser2Group.Any(x => x.PortalGroupId == g.PortalGroupId);
+                    g.Parts = db.PortalGroup2Part.Include(x => x.PortalPart).Where(x => x.PortalGroupId == g.PortalGroupId).Select(x => x.PortalPart.PartKey).ToArray();
+                    g.Rights = db.PortalGroup2Right.Include(x => x.UserRight).Where(x => x.PortalGroupId == g.PortalGroupId).Select(x => x.UserRight.Name).ToArray();
+                }
             }
 
             return grps;
+
+        }
+
+        public JSPortalUser[] GetUsers()
+        {
+            var usrs = ModelMapper.Instance.Mapper.Map<ICollection<PortalUser>, ICollection<JSPortalUser>>(db.PortalUser.OrderBy(x => x.Name).ToList()).ToArray();
+            foreach (var u in usrs)
+            {
+                u.Parts = db.PortalUser2Part.Include(x => x.PortalPart).Where(x => x.PortalUserId == u.PortalUserId).Select(x => x.PortalPart.PartKey).ToArray();
+                u.Rights = db.PortalUser2Right.Include(x => x.UserRight).Where(x => x.PortalUserId == u.PortalUserId).Select(x => x.UserRight.Name).ToArray();
+                u.Groups = db.PortalUser2Group.Where(x => x.PortalUserId == u.PortalUserId).Select(x => x.PortalGroupId).ToArray();
+
+            }
+
+            return usrs;
 
         }
 
@@ -138,6 +156,8 @@ namespace Justice.Portal.DB
 
         public bool HasUserRight(string token, string right)
         {
+            db.Session.RemoveRange(db.Session.Where(x => Math.Abs((x.LastEdit - DateTime.Now).TotalMinutes) > 30));
+            db.SaveChanges();
             var u = db.Session.Include(x => x.PortalUser).FirstOrDefault(x => x.SessionKey.ToString() == token);
             if (u == null)
                 return false;
@@ -145,5 +165,87 @@ namespace Justice.Portal.DB
             return hs.Contains(right);
         }
 
+
+        public bool UsernameExists(string username)
+        {
+            return db.PortalUser.Any(x => x.UserName == username);
+        }
+
+
+
+        public void SetUser(JSPortalUser usr)
+        {
+            PortalUser newUser;
+
+
+            if (!usr.PortalUserId.HasValue)
+            {
+                newUser = new PortalUser();
+                db.PortalUser.Add(newUser);
+            }
+            else
+            {
+                newUser = db.PortalUser.First(x => x.PortalUserId == usr.PortalUserId);
+            }
+            newUser.Name = usr.Name;
+            newUser.UserName = usr.UserName;
+            newUser.Password = string.IsNullOrEmpty(usr.Password) ? newUser.Password : Utils.GetMD5(usr.Password);
+            newUser.Active = usr.Active;
+
+            db.SaveChanges();
+            db.PortalUser2Part.RemoveRange(db.PortalUser2Part.Where(x => x.PortalUserId == newUser.PortalUserId));
+            foreach (var p in usr.Parts)
+            {
+                var part = new PortalUser2Part();
+                part.PortalUserId = newUser.PortalUserId;
+                part.PortalPartId = db.PortalPart.First(x => x.PartKey == p).PortalPartId;
+                db.PortalUser2Part.Add(part);
+
+            }
+
+            db.PortalUser2Right.RemoveRange(db.PortalUser2Right.Where(x => x.PortalUserId == newUser.PortalUserId));
+            foreach (var r in usr.Rights)
+            {
+                var rght = new PortalUser2Right();
+                rght.PortalUserId = newUser.PortalUserId;
+                rght.UserRightId = db.UserRight.First(x => x.Name == r).UserRightId;
+                db.PortalUser2Right.Add(rght);
+
+            }
+
+            db.PortalUser2Group.RemoveRange(db.PortalUser2Group.Where(x => x.PortalUserId == newUser.PortalUserId));
+            foreach (var g in usr.Groups)
+            {
+                var grp = new PortalUser2Group();
+                grp.PortalUserId = newUser.PortalUserId;
+                grp.PortalGroupId = g;
+                db.PortalUser2Group.Add(grp);
+
+            }
+
+            db.SaveChanges();
+
+
+        }
+
+        public void Logout(string token)
+        {
+            var s = db.Session.FirstOrDefault(x => x.SessionKey.ToString() == token);
+            if (s != null)
+            {
+                db.Session.Remove(s);
+                db.SaveChanges();
+            }
+        }
+
+        public void UpdateToken(string token)
+        {
+            var s = db.Session.FirstOrDefault(x => x.SessionKey.ToString() == token);
+            if (s != null)
+            {
+                s.LastEdit = DateTime.Now;
+                db.SaveChanges();
+            }
+        }
     }
 }

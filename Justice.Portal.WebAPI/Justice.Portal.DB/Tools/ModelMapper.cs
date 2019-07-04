@@ -30,6 +30,8 @@ namespace Justice.Portal.DB.Tools
                     .ReverseMap();
                 cfg.CreateMap<JSUserRight, UserRight>()
                     .ReverseMap();
+                cfg.CreateMap<JSPortalUser, PortalUser>()
+                    .ReverseMap();
 
 
             }

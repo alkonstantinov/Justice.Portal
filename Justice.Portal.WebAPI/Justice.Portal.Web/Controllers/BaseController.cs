@@ -19,9 +19,17 @@ namespace Justice.Portal.Web.Controllers
             this.db = new DBFuncs(jpc);
         }
 
+
+        protected string GetToken()
+        {
+            var token = Request.HttpContext.Request.Headers["Authorization"];
+            if (token != null)
+                db.UpdateSession(token);
+            return token;
+        }
         protected bool HasRight(string right)
         {
-            string token = Request.HttpContext.Request.Headers["Authorization"];
+            string token = this.GetToken();
             if (token == null)
                 return false;
             return db.HasUserRight(token, "adminusers");

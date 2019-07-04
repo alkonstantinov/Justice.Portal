@@ -38,7 +38,7 @@ class Login extends BaseComponent {
                     rights: result.data.rights,
                     parts: result.data.parts,
                 });
-                Comm.Instance().defaults.headers.common['Authorization'] = result.data.token;
+                Comm.Instance().defaults.headers.common['Authorization'] = result.data.sessionID;
                 eventClient.emit("loginchange");
             })
             .catch(error => {

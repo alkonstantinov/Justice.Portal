@@ -35,7 +35,7 @@ class Header extends BaseComponent {
 
     Logout() {
 
-        Comm.Instance().get('admin/logout').then(result => alert(result));
+        Comm.Instance().get('security/logout');
         this.SM.Logout();
         eventClient.emit('loginchange');
     }

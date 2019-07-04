@@ -9,6 +9,7 @@ import eventClient from './modules/eventclient';
 import MainMenu from './components/mainmenu';
 import Comm from './modules/comm'; 
 import Groups from './components/groups';
+import Users from './components/users';
 
 class App extends BaseComponent {
 
@@ -57,6 +58,7 @@ class App extends BaseComponent {
               <Switch>
                 <Route exact path='/mainmenu' component={MainMenu} />
                 <Route exact path='/groups' component={Groups} />
+                <Route exact path='/users' component={Users} />
                 
                 <Route component={MainMenu} />
 

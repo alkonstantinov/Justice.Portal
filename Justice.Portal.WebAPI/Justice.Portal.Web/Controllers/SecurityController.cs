@@ -38,7 +38,7 @@ namespace Justice.Portal.Web.Controllers
             grps.Groups = db.GetGroups();
             grps.Parts = db.GetParts();
             grps.Rights = db.GetRights();
-            return Ok(grps);            
+            return Ok(grps);
         }
 
         [HttpPost("SetGroup")]
@@ -59,6 +59,42 @@ namespace Justice.Portal.Web.Controllers
             return Ok();
         }
 
+        [HttpGet("GetUsersForAdmin")]
+        public async Task<IActionResult> GetUsersForAdmin()
+        {
+            if (!this.HasRight("adminusers"))
+                return Unauthorized();
+            UsersResponse usrs = new UsersResponse();
+            usrs.Users = db.GetUsers();
+            usrs.Groups = db.GetGroups(false);
+            usrs.Parts = db.GetParts();
+            usrs.Rights = db.GetRights();
+            return Ok(usrs);
+        }
 
+
+        [HttpGet("UserNameExists")]
+        public async Task<IActionResult> UserNameExists(string username)
+        {
+            if (!this.HasRight("adminusers"))
+                return Unauthorized();
+            return Ok(db.UsernameExists(username));
+        }
+
+        [HttpPost("SetUser")]
+        public async Task<IActionResult> SetUser([FromBody]JSPortalUser user)
+        {
+            if (!this.HasRight("adminusers"))
+                return Unauthorized();
+            db.SetUser(user);
+            return Ok();
+        }
+
+        [HttpGet("Logout")]
+        public async Task<IActionResult> Logout()
+        {
+            db.Logout(this.GetToken());
+            return Ok();
+        }
     }
 }
