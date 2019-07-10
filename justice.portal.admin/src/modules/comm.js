@@ -15,7 +15,9 @@ class Comm {
                 headers: { 'Access-Control-Allow-Origin': '*', },
                 timeout: 60000
             });
-            this.instance.defaults.headers.common['Authorization'] = session.token;
+
+            if (session)
+                this.instance.defaults.headers.common['Authorization'] = session.token;
         }
         return this.instance;
     }

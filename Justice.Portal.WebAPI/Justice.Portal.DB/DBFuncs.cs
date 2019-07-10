@@ -28,7 +28,7 @@ namespace Justice.Portal.DB
 
         public HashSet<string> GetUserParts(int userId)
         {
-            return db.PortalPart.FromSql($"select * from vwUserParts where PortalUserId={userId}", userId).Select(x => x.PartKey).Distinct().ToHashSet();
+            return db.PortalPart.FromSql($"select * from vwUserParts where PortalUserId={userId}", userId).Select(x => x.PortalPartId).Distinct().ToHashSet();
         }
 
 
@@ -73,7 +73,7 @@ namespace Justice.Portal.DB
                 if (loadRights)
                 {
                     g.CanDel = !db.PortalUser2Group.Any(x => x.PortalGroupId == g.PortalGroupId);
-                    g.Parts = db.PortalGroup2Part.Include(x => x.PortalPart).Where(x => x.PortalGroupId == g.PortalGroupId).Select(x => x.PortalPart.PartKey).ToArray();
+                    g.Parts = db.PortalGroup2Part.Include(x => x.PortalPart).Where(x => x.PortalGroupId == g.PortalGroupId).Select(x => x.PortalPart.PortalPartId).ToArray();
                     g.Rights = db.PortalGroup2Right.Include(x => x.UserRight).Where(x => x.PortalGroupId == g.PortalGroupId).Select(x => x.UserRight.Name).ToArray();
                 }
             }
@@ -87,7 +87,7 @@ namespace Justice.Portal.DB
             var usrs = ModelMapper.Instance.Mapper.Map<ICollection<PortalUser>, ICollection<JSPortalUser>>(db.PortalUser.OrderBy(x => x.Name).ToList()).ToArray();
             foreach (var u in usrs)
             {
-                u.Parts = db.PortalUser2Part.Include(x => x.PortalPart).Where(x => x.PortalUserId == u.PortalUserId).Select(x => x.PortalPart.PartKey).ToArray();
+                u.Parts = db.PortalUser2Part.Include(x => x.PortalPart).Where(x => x.PortalUserId == u.PortalUserId).Select(x => x.PortalPart.PortalPartId).ToArray();
                 u.Rights = db.PortalUser2Right.Include(x => x.UserRight).Where(x => x.PortalUserId == u.PortalUserId).Select(x => x.UserRight.Name).ToArray();
                 u.Groups = db.PortalUser2Group.Where(x => x.PortalUserId == u.PortalUserId).Select(x => x.PortalGroupId).ToArray();
 
@@ -128,7 +128,7 @@ namespace Justice.Portal.DB
             {
                 var part = new PortalGroup2Part();
                 part.PortalGroupId = newGroup.PortalGroupId;
-                part.PortalPartId = db.PortalPart.First(x => x.PartKey == p).PortalPartId;
+                part.PortalPartId = p;
                 db.PortalGroup2Part.Add(part);
 
             }
@@ -165,6 +165,26 @@ namespace Justice.Portal.DB
             return hs.Contains(right);
         }
 
+        public bool CanDoPart(string token, string part)
+        {
+            db.Session.RemoveRange(db.Session.Where(x => Math.Abs((x.LastEdit - DateTime.Now).TotalMinutes) > 30));
+            db.SaveChanges();
+            var u = db.Session.Include(x => x.PortalUser).FirstOrDefault(x => x.SessionKey.ToString() == token);
+            if (u == null)
+                return false;
+            var hs = this.GetUserParts(u.PortalUserId);
+            return hs.Contains(part);
+        }
+
+
+        public bool IsAuthenticated(string token)
+        {
+            db.Session.RemoveRange(db.Session.Where(x => Math.Abs((x.LastEdit - DateTime.Now).TotalMinutes) > 30));
+            db.SaveChanges();
+            return db.Session.Any(x => x.SessionKey.ToString() == token);
+
+        }
+
 
         public bool UsernameExists(string username)
         {
@@ -198,7 +218,7 @@ namespace Justice.Portal.DB
             {
                 var part = new PortalUser2Part();
                 part.PortalUserId = newUser.PortalUserId;
-                part.PortalPartId = db.PortalPart.First(x => x.PartKey == p).PortalPartId;
+                part.PortalPartId = p;
                 db.PortalUser2Part.Add(part);
 
             }
@@ -247,5 +267,41 @@ namespace Justice.Portal.DB
                 db.SaveChanges();
             }
         }
+
+        public JSBlockType[] GetBlockTypes()
+        {
+            return ModelMapper.Instance.Mapper.Map<ICollection<BlockType>, ICollection<JSBlockType>>(db.BlockType.OrderBy(x => x.Name).ToArray()).ToArray();
+        }
+
+        public JSPortalPart[] GetPortalParts(Guid token)
+        {
+            var user = db.Session.Include(x => x.PortalUser).First(x => x.SessionKey == token);
+            var allowedParts = GetUserParts(user.PortalUserId);
+            var parts = db.PortalPart.Where(x => allowedParts.Contains(x.PortalPartId));
+
+            return ModelMapper.Instance.Mapper.Map<ICollection<PortalPart>, ICollection<JSPortalPart>>(parts.ToArray()).ToArray();
+        }
+
+
+        public JSBlock[] GetBlocks(string portalPartId, string blockTypeId)
+        {
+            return ModelMapper.Instance.Mapper.Map<ICollection<Block>, ICollection<JSBlock>>(db.Block.Where(x => x.BlockTypeId == blockTypeId && x.PortalPartId == portalPartId).ToArray()).ToArray();
+        }
+
+        public JSBlock GetBlock(int blockId)
+        {
+            return ModelMapper.Instance.Mapper.Map<JSBlock>(db.Block.First(x => x.BlockId == blockId));
+        }
+
+        public JSProperty[] GetBlockProperties(string blockTypeId)
+        {
+
+
+
+            return ModelMapper.Instance.Mapper.Map<ICollection<Property>, ICollection<JSProperty>>(db.Property.Where().ToArray()).ToArray();
+        }
+
+
+
     }
 }

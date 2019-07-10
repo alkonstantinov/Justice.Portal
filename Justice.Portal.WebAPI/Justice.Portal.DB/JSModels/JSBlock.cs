@@ -3,14 +3,18 @@ using System.Collections.Generic;
 
 namespace Justice.Portal.DB.JSModels
 {
-    public partial class JSPortalPart
+    public partial class JSBlock
     {
-        public JSPortalPart()
+        public JSBlock()
         {
+            
         }
 
+        public int BlockId { get; set; }
         public string PortalPartId { get; set; }
+        public string BlockTypeId { get; set; }
         public string Name { get; set; }
+        public string Jsonvalues { get; set; }
 
     }
 }

@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import SessionManager from '../modules/session';
+import eventClient from '../modules/eventclient';
+import Comm from '../modules/comm';
 
 class BaseComponent extends Component {
 
@@ -12,7 +14,7 @@ class BaseComponent extends Component {
         this.Refresh = this.Refresh.bind(this);
         this.ConvertArrayToObject = this.ConvertArrayToObject.bind(this);
         this.ValidateEmail = this.ValidateEmail.bind(this);
-
+        this.Logout = this.Logout.bind(this);
 
 
         this.state = {
@@ -23,11 +25,18 @@ class BaseComponent extends Component {
 
     }
 
+    Logout() {
+
+        Comm.Instance().get('security/logout');
+        this.SM.Logout();
+        eventClient.emit('loginchange');
+    }
+
     Refresh() {
         window.location.reload();
     }
 
-    
+
     HandleChange = event => {
         var rec = this.state.Rec;
         rec[event.target.id] = event.target.type === "checkbox" ? event.target.checked : event.target.value;

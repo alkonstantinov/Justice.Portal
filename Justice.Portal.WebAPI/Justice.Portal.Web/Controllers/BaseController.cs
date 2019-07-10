@@ -7,6 +7,7 @@ using Justice.Portal.DB.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Primitives;
 
 namespace Justice.Portal.Web.Controllers
 {
@@ -22,10 +23,15 @@ namespace Justice.Portal.Web.Controllers
 
         protected string GetToken()
         {
-            var token = Request.HttpContext.Request.Headers["Authorization"];
-            if (token != null)
-                db.UpdateSession(token);
-            return token;
+            if (Request.Headers.TryGetValue("Authorization", out StringValues authToken))
+            {
+
+                string authHeader = authToken.First();
+                return authHeader;
+
+            }
+            else return null;
+
         }
         protected bool HasRight(string right)
         {
@@ -33,6 +39,15 @@ namespace Justice.Portal.Web.Controllers
             if (token == null)
                 return false;
             return db.HasUserRight(token, "adminusers");
+        }
+
+
+        protected bool CanDoPart(string portalPartId)
+        {
+            string token = this.GetToken();
+            if (token == null)
+                return false;
+            return db.CanDoPart(token, portalPartId);
         }
     }
 }

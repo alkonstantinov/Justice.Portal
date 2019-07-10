@@ -33,6 +33,13 @@ namespace Justice.Portal.DB.Tools
                 cfg.CreateMap<JSPortalUser, PortalUser>()
                     .ReverseMap();
 
+                cfg.CreateMap<JSBlockType, BlockType>()
+                    .ReverseMap();
+                cfg.CreateMap<JSBlock, Block>()
+                    .ReverseMap();
+                cfg.CreateMap<JSProperty, Property>()
+                    .ReverseMap();
+
 
             }
             );

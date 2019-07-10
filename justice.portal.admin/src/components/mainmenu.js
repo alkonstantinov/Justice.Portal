@@ -77,6 +77,16 @@ class MainMenu extends BaseComponent {
                                 : null
                         }
                     </div>
+                    <div className="col-3">
+                        {
+                            session.parts.length !== 0 ?
+                                <Link className="btn btn-default fillSpace" to='/blocks'>
+                                    <i class="fas fa-th"></i>
+                                    <p>Части</p>
+                                </Link>
+                                : null
+                        }
+                    </div>
 
                 </div>
 

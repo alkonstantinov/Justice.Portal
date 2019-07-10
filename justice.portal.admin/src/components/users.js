@@ -49,7 +49,9 @@ export default class Users extends BaseComponent {
             })
             .catch(error => {
                 if (error.response && error.response.status === 401)
-                    toast.error("Липса на права");
+                    toast.error("Липса на права", {
+                        onClose: this.Logout
+                    });
                 else
                     toast.error(error.message);
 
@@ -136,7 +138,9 @@ export default class Users extends BaseComponent {
                 })
                 .catch(error => {
                     if (error.response && error.response.status === 401)
-                        toast.error("Липса на права");
+                        toast.error("Липса на права", {
+                            onClose: this.Logout
+                        });
                     else
                         toast.error(error.message);
 
@@ -155,7 +159,9 @@ export default class Users extends BaseComponent {
             })
             .catch(error => {
                 if (error.response && error.response.status === 401)
-                    toast.error("Липса на права");
+                    toast.error("Липса на права", {
+                        onClose: this.Logout
+                    });
                 else
                     toast.error(error.message);
 
@@ -173,7 +179,9 @@ export default class Users extends BaseComponent {
             })
             .catch(error => {
                 if (error.response && error.response.status === 401)
-                    toast.error("Липса на права");
+                    toast.error("Липса на права", {
+                        onClose: this.Logout
+                    });
                 else
                     toast.error(error.message);
 
