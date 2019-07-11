@@ -293,12 +293,22 @@ namespace Justice.Portal.DB
             return ModelMapper.Instance.Mapper.Map<JSBlock>(db.Block.First(x => x.BlockId == blockId));
         }
 
+        public JSPortalPart GetPart(string partId)
+        {
+            return ModelMapper.Instance.Mapper.Map<JSPortalPart>(db.PortalPart.First(x => x.PortalPartId == partId));
+        }
+
+
         public JSProperty[] GetBlockProperties(string blockTypeId)
         {
+            var props = db.BlockTypeProperty.Where(x => x.BlockTypeId == blockTypeId).Select(x => x.PropertyId).ToHashSet();
+            return ModelMapper.Instance.Mapper.Map<ICollection<Property>, ICollection<JSProperty>>(db.Property.Where(x => props.Contains(x.PropertyId)).ToArray()).ToArray();
+        }
 
 
-
-            return ModelMapper.Instance.Mapper.Map<ICollection<Property>, ICollection<JSProperty>>(db.Property.Where().ToArray()).ToArray();
+        public PropertyValue[] GetBlockPropertyValues(int blockId)
+        {
+            return db.BlockTypePropertyValue.Where(x => x.BlockId == blockId).Select(x => new PropertyValue() { PropertyId = x.PropertyId, Value = x.Value }).ToArray();
         }
 
 

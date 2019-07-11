@@ -15,7 +15,7 @@ class BaseComponent extends Component {
         this.ConvertArrayToObject = this.ConvertArrayToObject.bind(this);
         this.ValidateEmail = this.ValidateEmail.bind(this);
         this.Logout = this.Logout.bind(this);
-
+        this.GetTranslation = this.GetTranslation.bind(this);
 
         this.state = {
             Error: null,
@@ -23,6 +23,10 @@ class BaseComponent extends Component {
             Rec: {}
         };
 
+    }
+
+    GetTranslation(obj) {
+        return obj == null ? null : obj[this.state.lang];
     }
 
     Logout() {
@@ -55,6 +59,21 @@ class BaseComponent extends Component {
 
     HideSpin() {
         this.setState({ spinner: false });
+    }
+
+
+    SetSpecific = (prop, value) => {
+        var rec = this.state.Rec;
+        rec[prop] = value;
+        this.setState({
+            Rec: rec
+        });
+    }
+
+    GetSpecific = (prop) => {
+        var rec = this.state.Rec;
+
+        return rec !== null ? rec[prop] : null;
     }
 
 

@@ -44,13 +44,24 @@ namespace Justice.Portal.Web.Controllers
             return Ok(db.GetBlocks(portalPartId, blockTypeId));
         }
 
-        [HttpGet("GetBlockProperties")]
-        public async Task<IActionResult> GetBlockProperties(string blockTypeId)
+        [HttpGet("GetBlockData")]
+        public async Task<IActionResult> GetBlockData(string blockTypeId, int? blockId)
         {
             string token = this.GetToken();
             if (!db.IsAuthenticated(token))
                 return Unauthorized();
-            return Ok(db.GetBlocks(portalPartId, blockTypeId));
+
+            BlockData result = new BlockData();
+            result.Properties = db.GetBlockProperties(blockTypeId);
+            if (blockId.HasValue)
+            {
+                result.Block = db.GetBlock(blockId.Value);                
+                if(!this.CanDoPart(result.Block.PortalPartId))
+                    return Unauthorized();
+                result.Values = db.GetBlockPropertyValues(blockId.Value);
+            }
+
+            return Ok(result);
         }
 
         //[HttpGet("GetBlockProperties")]

@@ -1,4 +1,5 @@
 import React from 'react';
+import { Redirect } from 'react-router-dom';
 import BaseComponent from './basecomponent';
 import eventClient from '../modules/eventclient';
 import Loader from 'react-loader-spinner';
@@ -21,7 +22,7 @@ export default class Blocks extends BaseComponent {
             ]
         );
         this.LoadData = this.LoadData.bind(this);
-        this.Edit = this.Edit.bind(this);
+        this.EditBlock = this.EditBlock.bind(this);
 
 
 
@@ -74,134 +75,22 @@ export default class Blocks extends BaseComponent {
     }
 
 
-    Edit(obj) {
-        if (!obj)
-            obj = {
-                portalUserId: null,
-                name: "",
-                userName: "",
-                groups: [],
-                parts: [],
-                rights: []
-            }
-        obj.password = "";
-        obj.rePassword = "";
-        this.setState({ obj: obj, mode: "edit" })
-    }
-
-
-    CheckPart(part, checked) {
-
-        var obj = this.state.obj
-        if (checked)
-            obj.parts.push(part);
-        else
-            obj.parts.splice(this.state.obj.parts.indexOf(part), 1);
-        this.setState({ obj: obj });
-
-    }
-
-    CheckRight(right, checked) {
-
-        var obj = this.state.obj
-        if (checked)
-            obj.rights.push(right);
-        else
-            obj.rights.splice(this.state.obj.rights.indexOf(right), 1);
-        this.setState({ obj: obj });
-
-    }
-
-    CheckGroup(group, checked) {
-
-        var obj = this.state.obj
-        if (checked)
-            obj.groups.push(group);
-        else
-            obj.groups.splice(this.state.obj.groups.indexOf(group), 1);
-        this.setState({ obj: obj });
-
-    }
-
-    async Save() {
-        var self = this;
-        if (this.state.obj.name === "") {
-            toast.error("Моля, въведете име");
-            return;
-        }
-        if (this.state.obj.userName === "") {
-            toast.error("Моля, въведете потребителско име");
-            return;
-        }
-        if (this.state.obj.password === "" && !this.state.obj.portalUserId) {
-            toast.error("Моля, въведете парола");
-            return;
-        }
-        if (this.state.obj.password !== this.state.obj.rePassword) {
-            toast.error("Въведените пароли не съвпадат");
-            return;
-        }
-
-        if (!this.state.obj.portalUserId) {
-            var nameExists = false;
-            await Comm.Instance().get('security/UserNameExists?username=' + self.state.obj.userName)
-                .then(result => {
-                    nameExists = result.data;
-                })
-                .catch(error => {
-                    if (error.response && error.response.status === 401)
-                        toast.error("Липса на права", {
-                            onClose: this.Logout
-                        });
-                    else
-                        toast.error(error.message);
-
-                });
-
-            if (nameExists) {
-                toast.error("Името е вече използвано");
-                return;
-            }
-        }
-
-
-        Comm.Instance().post('security/SetUser', self.state.obj)
-            .then(result => {
-                self.LoadData();
-            })
-            .catch(error => {
-                if (error.response && error.response.status === 401)
-                    toast.error("Липса на права", {
-                        onClose: this.Logout
-                    });
-                else
-                    toast.error(error.message);
-
-            });
-    }
-
-    Delete(group) {
-        if (!window.confirm("Моля, потвърдете")) {
-            return;
-        }
-        var self = this;
-        Comm.Instance().delete('security/DelGroup/' + group.portalGroupId)
-            .then(result => {
-                self.LoadData();
-            })
-            .catch(error => {
-                if (error.response && error.response.status === 401)
-                    toast.error("Липса на права", {
-                        onClose: this.Logout
-                    });
-                else
-                    toast.error(error.message);
-
-            });
+    EditBlock(blockId) {
+        this.setState({
+            EditBlockId: blockId,
+            ShowEdit: true
+        })
     }
 
     render() {
         var self = this;
+        if (self.state.ShowEdit)
+            return (
+                <Redirect to={"/editblock/" + this.state.blockTypeId + "/" + (this.state.EditBlockId || "")}>
+                </Redirect>
+            );
+
+
         return (
             self.state.mode === "loading" ?
                 <Loader
@@ -230,7 +119,7 @@ export default class Blocks extends BaseComponent {
                             </div>
 
                             <div className="col-3">
-                                <button className="btn btn-primary pull-right" onClick={() => self.Edit(null)}>Нов</button>
+                                <button className="btn btn-primary pull-right" onClick={() => self.EditBlock(null)}>Нов</button>
                             </div>
                         </div>
                         <div className="row">

@@ -52,7 +52,6 @@ class MainMenu extends BaseComponent {
     render() {
         var self = this;
         var session = self.SM.GetSession();
-        console.log(session.rights.find(x => x === "adminusers"));
         return (
 
             <div className="container mt-3">
@@ -81,7 +80,7 @@ class MainMenu extends BaseComponent {
                         {
                             session.parts.length !== 0 ?
                                 <Link className="btn btn-default fillSpace" to='/blocks'>
-                                    <i class="fas fa-th"></i>
+                                    <i className="fas fa-th"></i>
                                     <p>Части</p>
                                 </Link>
                                 : null
@@ -89,7 +88,7 @@ class MainMenu extends BaseComponent {
                     </div>
 
                 </div>
-
+                
             </div>
 
         )

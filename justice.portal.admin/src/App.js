@@ -11,6 +11,7 @@ import Comm from './modules/comm';
 import Groups from './components/groups';
 import Users from './components/users';
 import Blocks from './components/blocks';
+import BlockEditor from './components/blockeditor';
 
 class App extends BaseComponent {
 
@@ -61,6 +62,7 @@ class App extends BaseComponent {
                 <Route exact path='/groups' component={Groups} />
                 <Route exact path='/users' component={Users} />
                 <Route exact path='/blocks' component={Blocks} />
+                <Route exact path='/editblock/:blockTypeId/:blockId?' component={BlockEditor} />
                 
                 <Route component={MainMenu} />
 
