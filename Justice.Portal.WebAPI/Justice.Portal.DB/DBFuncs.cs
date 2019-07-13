@@ -311,6 +311,62 @@ namespace Justice.Portal.DB
             return db.BlockTypePropertyValue.Where(x => x.BlockId == blockId).Select(x => new PropertyValue() { PropertyId = x.PropertyId, Value = x.Value }).ToArray();
         }
 
+        public int AddBlob(Blob blob)
+        {
+            var b = db.Blob.FirstOrDefault(x => x.Hash == blob.Hash);
+            if (b == null)
+            {
+                db.Blob.Add(blob);
+                db.SaveChanges();
+            }
+            else blob.BlobId = b.BlobId;
+
+            return blob.BlobId;
+        }
+
+        public Blob GetBlob(string hash)
+        {
+            var b = db.Blob.FirstOrDefault(x => x.Hash == hash);
+            return b;
+        }
+
+        public void DeleteBlock(int blockId)
+        {
+            db.Block.Remove(db.Block.First(x => x.BlockId == blockId));
+            db.SaveChanges();
+        }
+
+        public void SetBlock(BlockData data)
+        {
+            Block block;
+            if (data.Block.BlockId==0)
+            {
+                block = ModelMapper.Instance.Mapper.Map<Block>(data.Block);
+                db.Block.Add(block);
+                
+            }
+            else
+            {
+                block = db.Block.First(x => x.BlockId == data.Block.BlockId);
+                block.Jsonvalues = data.Block.Jsonvalues;
+                block.Name = data.Block.Name;
+                
+            }
+            db.SaveChanges();
+            db.BlockTypePropertyValue.RemoveRange(db.BlockTypePropertyValue.Where(x => x.BlockId == block.BlockId));
+            foreach (var p in data.Values)
+            {
+                db.BlockTypePropertyValue.Add(
+                    new BlockTypePropertyValue()
+                    {
+                        BlockId = block.BlockId,
+                        PropertyId = p.PropertyId,
+                        Value = p.Value
+                    }
+                    );
+            }
+            db.SaveChanges();
+        }
 
 
     }

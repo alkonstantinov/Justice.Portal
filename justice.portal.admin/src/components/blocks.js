@@ -23,6 +23,7 @@ export default class Blocks extends BaseComponent {
         );
         this.LoadData = this.LoadData.bind(this);
         this.EditBlock = this.EditBlock.bind(this);
+        this.DeleteBlock = this.DeleteBlock.bind(this);
 
 
 
@@ -82,11 +83,31 @@ export default class Blocks extends BaseComponent {
         })
     }
 
+    DeleteBlock(blockId) {
+        if (!window.confirm("Моля, потвърдете"))
+            return;
+        var self = this;
+        Comm.Instance().delete('part/DeleteBlock/' + blockId)
+            .then(result => {
+                self.LoadData();
+            })
+            .catch(error => {
+                if (error.response && error.response.status === 401)
+                    toast.error("Липса на права", {
+                        onClose: this.Logout
+                    });
+                else
+                    toast.error(error.message);
+
+            });
+    }
+
+
     render() {
         var self = this;
         if (self.state.ShowEdit)
             return (
-                <Redirect to={"/editblock/" + this.state.blockTypeId + "/" + (this.state.EditBlockId || "")}>
+                <Redirect to={"/editblock/" + this.state.blockTypeId + "/" + this.state.portalPartId + "/" + (this.state.EditBlockId || "")}>
                 </Redirect>
             );
 
@@ -134,11 +155,10 @@ export default class Blocks extends BaseComponent {
                                             self.state.blocks.map(obj =>
                                                 <tr>
                                                     <td>
-                                                        {obj.canDel ?
-                                                            <button className="btn btn-danger" onClick={() => self.Delete(obj)}><i className="far fa-trash-alt"></i></button>
-                                                            : null
-                                                        }
-                                                        <button className="btn btn-info" onClick={() => self.Edit(obj)}><i class="fas fa-edit"></i></button>
+
+                                                        <button className="btn btn-danger" onClick={() => self.DeleteBlock(obj.blockId)}><i className="far fa-trash-alt"></i></button>
+
+                                                        <button className="btn btn-info" onClick={() => self.EditBlock(obj.blockId)}><i class="fas fa-edit"></i></button>
                                                     </td>
                                                     <td>{obj.userName}</td>
                                                     <td>{obj.name}</td>

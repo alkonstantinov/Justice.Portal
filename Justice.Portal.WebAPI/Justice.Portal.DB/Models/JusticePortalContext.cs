@@ -15,6 +15,7 @@ namespace Justice.Portal.DB.Models
         {
         }
 
+        public virtual DbSet<Blob> Blob { get; set; }
         public virtual DbSet<Block> Block { get; set; }
         public virtual DbSet<BlockType> BlockType { get; set; }
         public virtual DbSet<BlockTypeProperty> BlockTypeProperty { get; set; }
@@ -42,7 +43,30 @@ namespace Justice.Portal.DB.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.HasAnnotation("ProductVersion", "2.2.4-servicing-10062");
+            modelBuilder.HasAnnotation("ProductVersion", "2.2.6-servicing-10079");
+
+            modelBuilder.Entity<Blob>(entity =>
+            {
+                entity.HasIndex(e => e.Hash)
+                    .HasName("ix_blob_hash")
+                    .IsUnique();
+
+                entity.Property(e => e.Content).IsRequired();
+
+                entity.Property(e => e.ContentType)
+                    .IsRequired()
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.Extension)
+                    .IsRequired()
+                    .HasMaxLength(10);
+
+                entity.Property(e => e.Filename).IsRequired();
+
+                entity.Property(e => e.Hash)
+                    .IsRequired()
+                    .HasMaxLength(32);
+            });
 
             modelBuilder.Entity<Block>(entity =>
             {
@@ -95,6 +119,10 @@ namespace Justice.Portal.DB.Models
 
                 entity.HasIndex(e => e.PropertyId)
                     .HasName("idx_BlockTypeProperty_PropertyId");
+
+                entity.HasIndex(e => new { e.BlockTypeId, e.PropertyId })
+                    .HasName("ix_BlockTypeProperty_BlockTypeId_PropertyId")
+                    .IsUnique();
 
                 entity.Property(e => e.BlockTypeId)
                     .IsRequired()

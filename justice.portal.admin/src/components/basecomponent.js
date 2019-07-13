@@ -3,6 +3,9 @@ import SessionManager from '../modules/session';
 import eventClient from '../modules/eventclient';
 import Comm from '../modules/comm';
 
+
+
+
 class BaseComponent extends Component {
 
     SM = new SessionManager();
@@ -16,6 +19,11 @@ class BaseComponent extends Component {
         this.ValidateEmail = this.ValidateEmail.bind(this);
         this.Logout = this.Logout.bind(this);
         this.GetTranslation = this.GetTranslation.bind(this);
+        this.UploadBlob = this.UploadBlob.bind(this);
+        this.GetStateMLData = this.GetStateMLData.bind(this);
+        this.SetStateMLData = this.SetStateMLData.bind(this);
+
+
 
         this.state = {
             Error: null,
@@ -23,6 +31,38 @@ class BaseComponent extends Component {
             Rec: {}
         };
 
+    }
+
+
+
+    UploadBlob(callback) {
+        var x = document.createElement("INPUT");
+        x.setAttribute("type", "file");
+        x.style.display = 'none';
+        document.body.appendChild(x);
+        x.addEventListener("change", () => {
+            var formData = new FormData();
+            formData.append("image", x.files[0]);
+            Comm.Instance().post('part/AddBlob', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            }).then(
+                function (response) {
+                    callback(response.data);
+
+                })
+                .finally(
+                    function (response) {
+                        document.body.removeChild(x);
+                    });
+
+
+        });
+
+
+
+        x.click();
     }
 
     GetTranslation(obj) {
@@ -100,6 +140,16 @@ class BaseComponent extends Component {
         return /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,})+$/.test(mail);
     }
 
+
+    GetStateMLData(stateId) {
+        //console.log("get", this.state[stateId][this.state.lang]);
+        return this.state[stateId][this.state.lang] || "";
+    }
+    SetStateMLData(value, stateId) {
+        var info = this.state[stateId];
+        info[this.state.lang] = value;
+        this.setState({ [stateId]: info });
+    }
 
     render() {
         return (<div></div>);

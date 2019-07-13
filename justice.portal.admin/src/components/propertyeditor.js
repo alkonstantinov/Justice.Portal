@@ -4,6 +4,7 @@ import { Calendar } from 'primereact/calendar';
 import 'primereact/resources/themes/nova-light/theme.css';
 import 'primereact/resources/primereact.min.css';
 import 'primeicons/primeicons.css';
+import moment from 'moment';
 
 export default class PropertyEditor extends BaseComponent {
     constructor(props) {
@@ -11,6 +12,7 @@ export default class PropertyEditor extends BaseComponent {
         this.GetPropertyElement = this.GetPropertyElement.bind(this);
         this.GetCheck = this.GetCheck.bind(this);
         this.GetDate = this.GetDate.bind(this);
+        this.Validate = this.Validate.bind(this);
 
 
         this.InitializeState();
@@ -21,7 +23,7 @@ export default class PropertyEditor extends BaseComponent {
 
         var state = {};
         if (this.props.values) {
-            this.props.values.array.forEach(element => {
+            this.props.values.forEach(element => {
                 state[element.propertyId] = element.value;
             });
         }
@@ -49,9 +51,11 @@ export default class PropertyEditor extends BaseComponent {
         return (
 
             [
+                // <Calendar dateFormat="dd.mm.yy" onChange={(e) => this.setState({dddd:e.value}) }
+                // readOnlyInput="true" inputClassName="form-control" value={this.state.dddd}></Calendar>,
                 <label className="control-label" htmlFor="Date">{item.name}</label>,
 
-                <Calendar dateFormat="dd.mm.yy" value={this.state[item.propertyId]} onChange={(e) => this.setState({ [item.propertyId]: e.value })}
+                <Calendar dateFormat="dd.mm.yy" value={(this.state[item.propertyId] || "")===""?"":moment(this.state[item.propertyId],"YYYY-MM-DD").toDate()} onChange={(e) => this.setState({ [item.propertyId]: moment(e.value).format("YYYY-MM-DD") })}
                     readOnlyInput="true" inputClassName="form-control"></Calendar>
             ]
 
@@ -65,6 +69,10 @@ export default class PropertyEditor extends BaseComponent {
             case "date": return this.GetDate(item);
             default: return null;
         }
+    }
+
+    Validate() {
+        return null;
     }
 
 

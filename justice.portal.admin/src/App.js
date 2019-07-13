@@ -62,7 +62,7 @@ class App extends BaseComponent {
                 <Route exact path='/groups' component={Groups} />
                 <Route exact path='/users' component={Users} />
                 <Route exact path='/blocks' component={Blocks} />
-                <Route exact path='/editblock/:blockTypeId/:blockId?' component={BlockEditor} />
+                <Route exact path='/editblock/:blockTypeId/:portalPartId/:blockId?' component={BlockEditor} />
                 
                 <Route component={MainMenu} />
 
