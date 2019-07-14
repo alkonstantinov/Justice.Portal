@@ -1,72 +1,32 @@
 import React from 'react';
 import BaseComponent from '../basecomponent';
-import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css';
 import ServerData from '../../data/serverdata.json';
 import Comm from '../../modules/comm';
 import { Dialog } from 'primereact/dialog';
 import SelectPage from '../selectpage';
 import renderHTML from 'react-render-html';
+import CKEditor from '@ckeditor/ckeditor5-react';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
-
-const Toolbar = ({ onClickLinkDoc, onClickLinkPage }) => (
-
-    <div id="toolbar">
-        <select className="ql-size"></select>
-        <button className="ql-bold"></button>
-        <button className="ql-italic"></button>
-        <button className="ql-underline"></button>
-        <select className="ql-color"></select>
-        <button className="ql-indent" value="-1"></button>
-        <button className="ql-indent" value="+1"></button>
-        <button className="ql-image"></button>
-        <button className="ql-list" value="ordered"></button>
-        <button className="ql-list" value="bullet"></button>
-        <button onClick={onClickLinkDoc}>Док</button>
-        <button onClick={onClickLinkPage}>Стр</button>
-    </div>
-);
+//import ClassicEditor from '../../ckeditor/build/ckeditor';
 
 
 
 
 export default class WYSIWYG extends BaseComponent {
 
-    modules = {
-        toolbar:
-        {
-            container: '#toolbar',
-            // container: [
-            //     [{ 'header': '1' }, { 'header': '2' }],
-            //     [{ size: [] }],
-            //     ['bold', 'italic', 'underline', 'strike', 'blockquote'],
-            //     [{ 'list': 'ordered' }, { 'list': 'bullet' },
-            //     { 'indent': '-1' }, { 'indent': '+1' }],
-            //     ['link', 'image'],
-            //     ['clean']
-            // ],
-            handlers: { "image": this.imageHandler }
-
-
-        }
-
-    };
-
-    formats = [
-        'header', 'color', 'size',
-        'bold', 'italic', 'underline', 'strike', 'blockquote',
-        'list', 'bullet', 'indent',
-        'link', 'image'
-    ];
 
     constructor(props) {
         super(props);
         this.imageHandler = this.imageHandler.bind(this);
         this.ClickLinkDoc = this.ClickLinkDoc.bind(this);
         this.ChoosePage = this.ChoosePage.bind(this);
+        this.Test = this.Test.bind(this);
+        var data = this.props.getData(this.props.stateId);
 
         this.state = {
-            ShowSelectPageDialog: false
+            ShowSelectPageDialog: false,
+            Data: data
         };
     }
 
@@ -104,40 +64,59 @@ export default class WYSIWYG extends BaseComponent {
 
     ChoosePage(pageId, pageTitle) {
         const range = this.refs["QL"].editor.getSelection();
+        var index = range ? range.index : 0;
 
         const link = ServerData.url + "part/GetPage?pageId=" + pageId;
-
-
-        var delta = {
-            ops: [
-                { insert: pageTitle, attributes: { link: link } }
-            ]
-        };
-        this.refs["QL"].editor.updateContents(delta);
+        this.refs["QL"].editor.clipboard.dangerouslyPasteHTML('raw html');
         this.setState({ ShowSelectPageDialog: false });
+    }
+
+
+    Test() {
+
+        const content = 'A paragraph with <a href="https://ckeditor.com">some link</a>.</p>';
+        const viewFragment = this.editor.data.processor.toView(content);
+        const modelFragment = this.editor.data.toModel(viewFragment);
+
+        this.editor.model.insertContent(modelFragment);
     }
 
     render() {
         var self = this;
         return (
             [
-                <Toolbar onClickLinkDoc={this.ClickLinkDoc} onClickLinkPage={() => self.setState({ ShowSelectPageDialog: true })} />,
-                <ReactQuill value={self.props.getData(self.props.stateId)}
-                    onChange={(e) => self.props.setData(e, self.props.stateId)}
-                    theme="snow"
-                    modules={self.modules}
-                    formats={self.formats}
-                    ref="QL"
 
-                />,
+                <button className="btn btn-primary" onClick={self.Test}>xxxx</button>,
                 <Dialog header="Избор страница" visible={self.state.ShowSelectPageDialog} style={{ width: '50vw' }} modal={true} onHide={() => { }}>
                     <SelectPage choosePage={self.ChoosePage}></SelectPage>
                 </Dialog>,
+                <CKEditor
+                    id="ckEditor"
+                    config={{
 
-                <textarea value={this.state.html} onChange={(e) => this.setState({ html: e.target.value })}></textarea>,
-                <div>
-                    {this.state.html ? renderHTML(this.state.html) : null}
-                </div>
+                        toolbar: ['heading', '|', 'alignment', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', 'insertTable', 'undo',
+                            'alignment',
+                            'redo',
+                            'imageStyle:full',
+                            'imageStyle:side'
+                        ]
+                    }}
+                    ref="CKEditor"
+                    editor={ClassicEditor}
+                    data={self.state.Data}
+                    onInit={editor => {
+                        // You can store the "editor" and use when it is needed.
+                        console.log('Editor is ready to use!', editor);
+                        self.editor = editor;
+                        console.log('names', Array.from( editor.ui.componentFactory.names() ) );
+                    }}
+                    onChange={(event, editor) => {
+                        const data = editor.getData();
+                        self.props.setData(data, self.props.stateId)
+
+                    }}
+
+                />
 
 
 
@@ -150,3 +129,4 @@ export default class WYSIWYG extends BaseComponent {
 
 
 }
+

@@ -17,6 +17,10 @@ class App extends BaseComponent {
 
   constructor(props) {
     super(props);
+
+
+    
+
     this.LoginEvent = this.LoginEvent.bind(this);
     this.state = {
       dt: new Date().getMilliseconds()
