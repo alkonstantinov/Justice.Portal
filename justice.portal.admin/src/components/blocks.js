@@ -21,6 +21,8 @@ export default class Blocks extends BaseComponent {
             }
             ]
         );
+
+
         this.LoadData = this.LoadData.bind(this);
         this.EditBlock = this.EditBlock.bind(this);
         this.DeleteBlock = this.DeleteBlock.bind(this);
@@ -105,6 +107,10 @@ export default class Blocks extends BaseComponent {
 
     render() {
         var self = this;
+        if(this.SM.IsSessionExpired()){
+            this.Logout();
+            return (<Redirect to="/login"></Redirect>)
+        }
         if (self.state.ShowEdit)
             return (
                 <Redirect to={"/editblock/" + this.state.blockTypeId + "/" + this.state.portalPartId + "/" + (this.state.EditBlockId || "")}>

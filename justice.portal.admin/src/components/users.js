@@ -4,6 +4,7 @@ import eventClient from '../modules/eventclient';
 import Loader from 'react-loader-spinner';
 import Comm from '../modules/comm';
 import { toast } from 'react-toastify';
+import { Redirect } from 'react-router-dom';
 
 
 export default class Users extends BaseComponent {
@@ -27,7 +28,7 @@ export default class Users extends BaseComponent {
         this.Save = this.Save.bind(this);
         this.Delete = this.Delete.bind(this);
         this.CheckGroup = this.CheckGroup.bind(this);
-
+        
         this.state.mode = "loading";
 
 
@@ -190,6 +191,10 @@ export default class Users extends BaseComponent {
 
     render() {
         var self = this;
+        if(this.SM.IsSessionExpired()){
+            this.Logout();
+            return (<Redirect to="/login"></Redirect>)
+        }
         return (
             self.state.mode === "loading" ?
                 <Loader

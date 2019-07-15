@@ -9,7 +9,7 @@ class Header extends BaseComponent {
         super(props);
         this.Logout = this.Logout.bind(this);
         this.SetBreadcrump = this.SetBreadcrump.bind(this);
-
+        this.AddBreadcrump = this.AddBreadcrump.bind(this);
         this.state = {
             breadcrumbs: [],
             logout: false
@@ -23,8 +23,18 @@ class Header extends BaseComponent {
         this.setState({ breadcrumbs: data })
     }
 
+    AddBreadcrump(data) {
+        var bc = this.state.breadcrumbs;
+        data.array.forEach(element => {
+            bc.push(element);
+        });
+        this.setState({ breadcrumbs: bc });
+    }
+
+
     componentWillMount() {
         eventClient.on('breadcrump', this.SetBreadcrump);
+        eventClient.on('addbreadcrump', this.AddBreadcrump);
     }
 
     componentWillUnmount() {
@@ -68,7 +78,7 @@ class Header extends BaseComponent {
 
                             )}
                 </div>
-                
+
                 <div className="col-4 pull-right">
                     {
                         user === null ? null : user.name

@@ -4,6 +4,7 @@ import eventClient from '../modules/eventclient';
 import Loader from 'react-loader-spinner';
 import Comm from '../modules/comm';
 import { toast } from 'react-toastify';
+import { Redirect } from 'react-router-dom';
 
 
 export default class Groups extends BaseComponent {
@@ -26,7 +27,6 @@ export default class Groups extends BaseComponent {
         this.CheckRight = this.CheckRight.bind(this);
         this.Save = this.Save.bind(this);
         this.Delete = this.Delete.bind(this);
-
         this.state.mode = "loading";
 
 
@@ -137,6 +137,10 @@ export default class Groups extends BaseComponent {
 
     render() {
         var self = this;
+        if(this.SM.IsSessionExpired()){
+            this.Logout();
+            return (<Redirect to="/login"></Redirect>)
+        }
         return (
             self.state.mode === "loading" ?
                 <Loader

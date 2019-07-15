@@ -3,6 +3,7 @@ import BaseComponent from './basecomponent';
 import eventClient from '../modules/eventclient';
 import { Link } from 'react-router-dom';
 import Axios from 'axios';
+import { Redirect } from 'react-router-dom';
 
 
 class MainMenu extends BaseComponent {
@@ -16,41 +17,23 @@ class MainMenu extends BaseComponent {
         )
 
 
-        this.uploadCallback = this.uploadCallback.bind(this);
-
+        
 
     }
 
 
-    uploadCallback(file) {
-        return new Promise(
-            (resolve, reject) => {
-                var formData = new FormData();
-                formData.append("image", file);
-                //Axios.defaults.baseURL = 'http://myurl';
-                //Axios.defaults.headers.post['Content-Type'] ='application/json;charset=utf-8';
-                Axios.defaults.headers.post['Access-Control-Allow-Origin'] = '*';
-                Axios.post('http://localhost:57274/api/values/upload', formData, {
-                    headers: {
-                        'Content-Type': 'multipart/form-data'
-                    }
-                }).then(
-                    function (response) {
-                        window.alert(response);
-                        console.log(response);
-                        resolve({ data: { link: response.data } })
-                    });
-
-
-            }
-        );
-    }
-
+   
 
 
 
     render() {
         var self = this;
+
+        if(this.SM.IsSessionExpired()){
+            this.Logout();
+            return (<Redirect to="/login"></Redirect>)
+        }
+
         var session = self.SM.GetSession();
         return (
 

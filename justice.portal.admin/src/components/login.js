@@ -5,6 +5,7 @@ import { toast } from 'react-toastify';
 import { Redirect } from 'react-router-dom';
 import eventClient from '../modules/eventclient';
 import Comm from '../modules/comm';
+import moment from 'moment';
 
 
 
@@ -37,6 +38,7 @@ class Login extends BaseComponent {
                     token: result.data.sessionID,
                     rights: result.data.rights,
                     parts: result.data.parts,
+                    LastAccessDate: moment(new Date())
                 });
                 Comm.Instance().defaults.headers.common['Authorization'] = result.data.sessionID;
                 eventClient.emit("loginchange");

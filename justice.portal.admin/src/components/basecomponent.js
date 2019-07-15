@@ -22,7 +22,7 @@ class BaseComponent extends Component {
         this.UploadBlob = this.UploadBlob.bind(this);
         this.GetStateMLData = this.GetStateMLData.bind(this);
         this.SetStateMLData = this.SetStateMLData.bind(this);
-
+        
 
 
         this.state = {
@@ -32,6 +32,8 @@ class BaseComponent extends Component {
         };
 
     }
+
+
 
 
 

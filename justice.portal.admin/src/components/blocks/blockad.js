@@ -10,6 +10,7 @@ export default class BlockAd extends BaseComponent {
 
     constructor(props) {
         super(props);
+        
         this.AddImage = this.AddImage.bind(this);
         this.Validate = this.Validate.bind(this);
         this.GetData = this.GetData.bind(this);

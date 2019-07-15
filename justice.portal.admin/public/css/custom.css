@@ -62,8 +62,8 @@ body {
   width: 100%;
 }
 
-.ql-container {
-  border-bottom-left-radius: 0.5em;
-  border-bottom-right-radius: 0.5em;
-  background: #fefcfc;
+
+.ck-editor__editable_inline {
+    min-height: 400px;
+    max-height: 400px;
 }

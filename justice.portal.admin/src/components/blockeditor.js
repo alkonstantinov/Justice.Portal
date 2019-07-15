@@ -8,18 +8,34 @@ import { toast } from 'react-toastify';
 import BlockNew from './blocks/blocknew';
 import BlockAd from './blocks/blockad';
 import BlockText from './blocks/blocktext';
+import BlockLive from './blocks/blocklive';
+import eventClient from '../modules/eventclient';
 
 export default class BlockEditor extends BaseComponent {
     constructor(props) {
         super(props);
+        eventClient.emit(
+            "breadcrump",
+            [{
+                title: "Начало",
+                href: ""
+            },
+            {
+                title: "Части",
+                href: "blocks"
+            },
+            {
+                title: "Част",
+            }
+            ]
+        );
         this.Save = this.Save.bind(this);
         this.GetEditor = this.GetEditor.bind(this);
         this.GetNew = this.GetNew.bind(this);
         this.GetAd = this.GetAd.bind(this);
         this.GetText = this.GetText.bind(this);
         this.Cancel = this.Cancel.bind(this);
-
-
+        
         this.state = { mode: "loading" };
 
     }
@@ -28,6 +44,13 @@ export default class BlockEditor extends BaseComponent {
     GetNew() {
         return (
             <BlockNew block={this.state.block} ref="Editor" />
+        );
+
+    }
+
+    GetLive() {
+        return (
+            <BlockLive block={this.state.block} ref="Editor" />
         );
 
     }
@@ -50,6 +73,7 @@ export default class BlockEditor extends BaseComponent {
             case "new": return this.GetNew();
             case "ad": return this.GetAd();
             case "text": return this.GetText();
+            case "live": return this.GetLive();
             default: return null;
         }
     }
@@ -148,6 +172,10 @@ export default class BlockEditor extends BaseComponent {
 
     render() {
         var self = this;
+        if(this.SM.IsSessionExpired()){
+            this.Logout();
+            return (<Redirect to="/login"></Redirect>)
+        }
         if (self.state.Saved)
             return (
                 <Redirect to={"/blocks"}>
