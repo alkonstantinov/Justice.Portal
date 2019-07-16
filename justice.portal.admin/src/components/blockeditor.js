@@ -12,6 +12,8 @@ import BlockLive from './blocks/blocklive';
 import eventClient from '../modules/eventclient';
 import BlockBanner from './blocks/blockbanner';
 import BlockBio from './blocks/blockbio';
+import BlockInfo from './blocks/blockinfo';
+import BlockDocList from './blocks/blockdoclist';
 
 export default class BlockEditor extends BaseComponent {
     constructor(props) {
@@ -38,6 +40,8 @@ export default class BlockEditor extends BaseComponent {
         this.GetText = this.GetText.bind(this);
         this.GetBanner = this.GetBanner.bind(this);
         this.GetBio = this.GetBio.bind(this);
+        this.GetInfo = this.GetInfo.bind(this);
+        this.GetDocList = this.GetDocList.bind(this);
         this.Cancel = this.Cancel.bind(this);
                 
         this.state = { mode: "loading" };
@@ -86,6 +90,20 @@ export default class BlockEditor extends BaseComponent {
 
     }
 
+    GetInfo() {
+        return (
+            <BlockInfo block={this.state.block} ref="Editor" />
+        );
+
+    }
+
+    GetDocList(){
+        return (
+            <BlockDocList block={this.state.block} ref="Editor" />
+        );
+
+    }
+
     GetEditor() {
         switch (this.props.match.params.blockTypeId) {
             case "new": return this.GetNew();
@@ -94,6 +112,8 @@ export default class BlockEditor extends BaseComponent {
             case "live": return this.GetLive();
             case "banner": return this.GetBanner();
             case "bio": return this.GetBio();
+            case "info": return this.GetInfo();            
+            case "doclist": return this.GetDocList();            
             default: return null;
         }
     }
