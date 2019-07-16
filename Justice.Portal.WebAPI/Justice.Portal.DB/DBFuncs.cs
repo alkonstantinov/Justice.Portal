@@ -175,14 +175,12 @@ namespace Justice.Portal.DB
             var hs = this.GetUserParts(u.PortalUserId);
             return hs.Contains(part);
         }
-
-
+        
         public bool IsAuthenticated(string token)
         {
             db.Session.RemoveRange(db.Session.Where(x => Math.Abs((x.LastEdit - DateTime.Now).TotalMinutes) > 30));
             db.SaveChanges();
             return db.Session.Any(x => x.SessionKey.ToString() == token);
-
         }
 
 

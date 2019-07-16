@@ -1,27 +1,32 @@
 import moment from 'moment';
+const SessionTimeout = 19;
+
 class SessionManager {
 
-
+    
 
 
     IsSessionExpired() {
-        var obj = this.GetSession(false);
-        if (obj === null)
+        var data = this.GetSession();
+
+        if (data === null)
             return true;
+        var obj = data;
         var now = moment(new Date());
         var end = obj.LastAccessDate; // another date
         var duration = moment.duration(now.diff(end));
         var mins = duration.asMinutes();
-        return mins > 19;
+        if (mins <= SessionTimeout) {
+            obj.LastAccessDate = now;
+            this.SetSession(obj);
+        }
+        return mins > SessionTimeout;
     }
 
-    GetSession(updTime = true) {
+    GetSession() {
         var user = localStorage.getItem("user");
         if (user) {
             var obj = JSON.parse(user);
-            obj.LastAccessDate = moment(new Date());
-            if (updTime)
-                this.SetSession(obj);
             return obj;
         }
         else

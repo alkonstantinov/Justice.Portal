@@ -10,6 +10,8 @@ import BlockAd from './blocks/blockad';
 import BlockText from './blocks/blocktext';
 import BlockLive from './blocks/blocklive';
 import eventClient from '../modules/eventclient';
+import BlockBanner from './blocks/blockbanner';
+import BlockBio from './blocks/blockbio';
 
 export default class BlockEditor extends BaseComponent {
     constructor(props) {
@@ -34,8 +36,10 @@ export default class BlockEditor extends BaseComponent {
         this.GetNew = this.GetNew.bind(this);
         this.GetAd = this.GetAd.bind(this);
         this.GetText = this.GetText.bind(this);
+        this.GetBanner = this.GetBanner.bind(this);
+        this.GetBio = this.GetBio.bind(this);
         this.Cancel = this.Cancel.bind(this);
-        
+                
         this.state = { mode: "loading" };
 
     }
@@ -67,13 +71,29 @@ export default class BlockEditor extends BaseComponent {
         );
 
     }
+
+    GetBanner() {
+        return (
+            <BlockBanner block={this.state.block} ref="Editor" />
+        );
+
+    }
     
+    GetBio() {
+        return (
+            <BlockBio block={this.state.block} ref="Editor" />
+        );
+
+    }
+
     GetEditor() {
         switch (this.props.match.params.blockTypeId) {
             case "new": return this.GetNew();
             case "ad": return this.GetAd();
             case "text": return this.GetText();
             case "live": return this.GetLive();
+            case "banner": return this.GetBanner();
+            case "bio": return this.GetBio();
             default: return null;
         }
     }
