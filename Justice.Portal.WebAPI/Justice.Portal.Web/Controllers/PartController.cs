@@ -37,6 +37,54 @@ namespace Justice.Portal.Web.Controllers
             return Ok(result);
         }
 
+
+        [HttpGet("GetWebPageRequisites")]
+        public async Task<IActionResult> GetWebPageRequisites()
+        {
+            string token = this.GetToken();
+            if (!db.IsAuthenticated(token))
+                return Unauthorized();
+
+
+            WebPageRequisites result = new WebPageRequisites();
+            result.Parts = db.GetPortalParts(Guid.Parse(token));
+            return Ok(result);
+        }
+
+        [HttpGet("GetWebPagesForPortalPart")]
+        public async Task<IActionResult> GetWebPagesForPortalPart(string portalPartId)
+        {
+            string token = this.GetToken();
+            if (!this.CanDoPart(portalPartId))
+                return Unauthorized();
+
+            return Ok(db.GetPortalParts2WebPages(portalPartId));
+        }
+
+
+        [HttpGet("GetSpecificWebPageProperties")]
+        public async Task<IActionResult> GetSpecificWebPageProperties(int portalPart2WebPageId)
+        {
+            string token = this.GetToken();
+            var data = db.GetSpecificWebPageProperties(portalPart2WebPageId);
+            if (!this.CanDoPart(data.PortalPartId))
+                return Unauthorized();
+
+            return Ok(data);
+        }
+
+        [HttpGet("GetBlocksPerPortalPart")]
+        public async Task<IActionResult> GetBlocksPerPortalPart(string portalPartId)
+        {
+            string token = this.GetToken();
+            if (!this.CanDoPart(portalPartId))
+                return Unauthorized();
+
+            return Ok(db.GetBlocksPerPortalPart(portalPartId));
+
+        }
+
+
         [HttpGet("GetBlocks")]
         public async Task<IActionResult> GetBlocks(string portalPartId, string blockTypeId)
         {
@@ -175,6 +223,19 @@ namespace Justice.Portal.Web.Controllers
         }
 
 
+        [HttpPost("SetWebPage")]
+        public async Task<IActionResult> SetWebPage([FromBody] JSPortalPart2WebPage page)
+        {
+            string token = this.GetToken();
+            if (!db.IsAuthenticated(token))
+                return Unauthorized();
+            var oldPage = db.GetSpecificWebPageProperties(page.PortalPart2WebPageId);
+
+            if (!this.CanDoPart(oldPage.PortalPartId))
+                return Unauthorized();
+            db.SetWebPage(page);
+            return Ok();
+        }
 
         //[HttpGet("GetBlockProperties")]
 

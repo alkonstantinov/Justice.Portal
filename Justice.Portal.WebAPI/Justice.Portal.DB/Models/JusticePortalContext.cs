@@ -24,6 +24,7 @@ namespace Justice.Portal.DB.Models
         public virtual DbSet<PortalGroup2Part> PortalGroup2Part { get; set; }
         public virtual DbSet<PortalGroup2Right> PortalGroup2Right { get; set; }
         public virtual DbSet<PortalPart> PortalPart { get; set; }
+        public virtual DbSet<PortalPart2WebPage> PortalPart2WebPage { get; set; }
         public virtual DbSet<PortalUser> PortalUser { get; set; }
         public virtual DbSet<PortalUser2Group> PortalUser2Group { get; set; }
         public virtual DbSet<PortalUser2Part> PortalUser2Part { get; set; }
@@ -31,6 +32,7 @@ namespace Justice.Portal.DB.Models
         public virtual DbSet<Property> Property { get; set; }
         public virtual DbSet<Session> Session { get; set; }
         public virtual DbSet<UserRight> UserRight { get; set; }
+        public virtual DbSet<WebPage> WebPage { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -226,6 +228,27 @@ namespace Justice.Portal.DB.Models
                     .HasMaxLength(50);
             });
 
+            modelBuilder.Entity<PortalPart2WebPage>(entity =>
+            {
+                entity.Property(e => e.PortalPartId)
+                    .IsRequired()
+                    .HasMaxLength(20);
+
+                entity.Property(e => e.WebPageId)
+                    .IsRequired()
+                    .HasMaxLength(20);
+
+                entity.HasOne(d => d.PortalPart)
+                    .WithMany(p => p.PortalPart2WebPage)
+                    .HasForeignKey(d => d.PortalPartId)
+                    .HasConstraintName("fk_PortalPart2WebPage_PortalPartId");
+
+                entity.HasOne(d => d.WebPage)
+                    .WithMany(p => p.PortalPart2WebPage)
+                    .HasForeignKey(d => d.WebPageId)
+                    .HasConstraintName("fk_PortalPart2WebPage_WebPageId");
+            });
+
             modelBuilder.Entity<PortalUser>(entity =>
             {
                 entity.Property(e => e.Name)
@@ -347,6 +370,17 @@ namespace Justice.Portal.DB.Models
                 entity.Property(e => e.Name)
                     .IsRequired()
                     .HasMaxLength(20);
+            });
+
+            modelBuilder.Entity<WebPage>(entity =>
+            {
+                entity.Property(e => e.WebPageId)
+                    .HasMaxLength(20)
+                    .ValueGeneratedNever();
+
+                entity.Property(e => e.WebPageName)
+                    .IsRequired()
+                    .HasMaxLength(100);
             });
         }
     }

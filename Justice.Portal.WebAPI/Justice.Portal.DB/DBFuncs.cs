@@ -175,7 +175,7 @@ namespace Justice.Portal.DB
             var hs = this.GetUserParts(u.PortalUserId);
             return hs.Contains(part);
         }
-        
+
         public bool IsAuthenticated(string token)
         {
             db.Session.RemoveRange(db.Session.Where(x => Math.Abs((x.LastEdit - DateTime.Now).TotalMinutes) > 30));
@@ -271,6 +271,11 @@ namespace Justice.Portal.DB
             return ModelMapper.Instance.Mapper.Map<ICollection<BlockType>, ICollection<JSBlockType>>(db.BlockType.OrderBy(x => x.Name).ToArray()).ToArray();
         }
 
+        public JSWebPage[] GetWebPages()
+        {
+            return ModelMapper.Instance.Mapper.Map<ICollection<WebPage>, ICollection<JSWebPage>>(db.WebPage.OrderBy(x => x.WebPageName).ToArray()).ToArray();
+        }
+
         public JSPortalPart[] GetPortalParts(Guid token)
         {
             var user = db.Session.Include(x => x.PortalUser).First(x => x.SessionKey == token);
@@ -285,6 +290,20 @@ namespace Justice.Portal.DB
         {
             return ModelMapper.Instance.Mapper.Map<ICollection<Block>, ICollection<JSBlock>>(db.Block.Where(x => x.BlockTypeId == blockTypeId && x.PortalPartId == portalPartId).ToArray()).ToArray();
         }
+
+
+        public JSPortalPart2WebPage[] GetPortalParts2WebPages(string portalPartId)
+        {
+            return db.PortalPart2WebPage.Include(x => x.WebPage).Where(x => x.PortalPartId == portalPartId)
+                .Select(x => new JSPortalPart2WebPage() { PortalPart2WebPageId = x.PortalPart2WebPageId, WebPageId=x.WebPageId, WebPageName=x.WebPage.WebPageName}).ToArray();
+        }
+
+
+        public JSPortalPart2WebPage GetSpecificWebPageProperties(int portalPart2WebPageId)
+        {
+            return ModelMapper.Instance.Mapper.Map<JSPortalPart2WebPage>(db.PortalPart2WebPage.First(x => x.PortalPart2WebPageId == portalPart2WebPageId));
+        }
+
 
         public JSBlock GetBlock(int blockId)
         {
@@ -337,18 +356,18 @@ namespace Justice.Portal.DB
         public void SetBlock(BlockData data)
         {
             Block block;
-            if (data.Block.BlockId==0)
+            if (data.Block.BlockId == 0)
             {
                 block = ModelMapper.Instance.Mapper.Map<Block>(data.Block);
                 db.Block.Add(block);
-                
+
             }
             else
             {
                 block = db.Block.First(x => x.BlockId == data.Block.BlockId);
                 block.Jsonvalues = data.Block.Jsonvalues;
                 block.Name = data.Block.Name;
-                
+
             }
             db.SaveChanges();
             db.BlockTypePropertyValue.RemoveRange(db.BlockTypePropertyValue.Where(x => x.BlockId == block.BlockId));
@@ -363,6 +382,34 @@ namespace Justice.Portal.DB
                     }
                     );
             }
+            db.SaveChanges();
+        }
+
+
+        public BlocksPerPortalPart GetBlocksPerPortalPart(string portalPartId)
+        {
+            BlocksPerPortalPart result = new BlocksPerPortalPart();
+
+            foreach (var b in db.Block.Where(x => x.PortalPartId == portalPartId).ToArray())
+            {
+                var bt = b.BlockTypeId;
+                JSBlock blk = new JSBlock()
+                {
+                    BlockId = b.BlockId,
+                    Name = b.Name
+                };
+                result.Data.TryAdd(bt, new List<JSBlock>());
+                result.Data[bt].Add(blk);
+            }
+
+            return result;
+        }
+
+        public void SetWebPage(JSPortalPart2WebPage page)
+        {
+            var oldPage = db.PortalPart2WebPage.First(x => x.PortalPart2WebPageId == page.PortalPart2WebPageId);
+            oldPage.Sources = page.Sources;
+            oldPage.Template = page.Template;
             db.SaveChanges();
         }
 

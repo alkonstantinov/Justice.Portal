@@ -14,6 +14,11 @@ import BlockBanner from './blocks/blockbanner';
 import BlockBio from './blocks/blockbio';
 import BlockInfo from './blocks/blockinfo';
 import BlockDocList from './blocks/blockdoclist';
+import BlockMain from './blocks/blockmain';
+import BlockBioCabinet from './blocks/blockbiocabinet';
+import BlockBioMain from './blocks/blockbiomain';
+import BlockNews from './blocks/blocknews';
+import BlockAds from './blocks/blockads';
 
 export default class BlockEditor extends BaseComponent {
     constructor(props) {
@@ -42,9 +47,43 @@ export default class BlockEditor extends BaseComponent {
         this.GetBio = this.GetBio.bind(this);
         this.GetInfo = this.GetInfo.bind(this);
         this.GetDocList = this.GetDocList.bind(this);
+        this.GetMain = this.GetMain.bind(this);
         this.Cancel = this.Cancel.bind(this);
+        this.GetBioCabinet = this.GetBioCabinet.bind(this);
+        this.GetBioMain = this.GetBioMain.bind(this);
+        this.GetNews = this.GetNews.bind(this);
+        this.GetAds = this.GetAds.bind(this);
+        
                 
         this.state = { mode: "loading" };
+
+    }
+
+
+    GetAds() {
+        return (<BlockAds block={this.state.block} ref="Editor" />
+        );
+
+    }
+    GetNews() {
+        return (<BlockNews block={this.state.block} ref="Editor" />
+        );
+
+    }
+    GetBioMain() {
+        return (<BlockBioMain block={this.state.block} ref="Editor" />
+        );
+
+    }
+    GetBioCabinet() {
+        return (<BlockBioCabinet block={this.state.block} ref="Editor" />
+        );
+
+    }
+
+    GetMain() {
+        return (<BlockMain block={this.state.block} ref="Editor" />
+        );
 
     }
 
@@ -114,6 +153,11 @@ export default class BlockEditor extends BaseComponent {
             case "bio": return this.GetBio();
             case "info": return this.GetInfo();            
             case "doclist": return this.GetDocList();            
+            case "main": return this.GetMain();
+            case "biocabinet": return this.GetBioCabinet();
+            case "biomain": return this.GetBioMain();
+            case "news": return this.GetNews();
+            case "ads": return this.GetAds();
             default: return null;
         }
     }

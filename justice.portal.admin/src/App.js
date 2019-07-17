@@ -12,6 +12,8 @@ import Groups from './components/groups';
 import Users from './components/users';
 import Blocks from './components/blocks';
 import BlockEditor from './components/blockeditor';
+import WebPages from './components/webpages';
+import WebPageEditor from './components/webpageeditor';
 
 class App extends BaseComponent {
 
@@ -67,7 +69,9 @@ class App extends BaseComponent {
                 <Route exact path='/groups' component={Groups} />
                 <Route exact path='/users' component={Users} />
                 <Route exact path='/blocks' component={Blocks} />
+                <Route exact path='/webpages' component={WebPages} />
                 <Route exact path='/editblock/:blockTypeId/:portalPartId/:blockId?' component={BlockEditor} />
+                <Route exact path='/editwebpage/:id?' component={WebPageEditor} />
 
                 <Route component={MainMenu} />
 

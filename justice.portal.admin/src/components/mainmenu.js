@@ -17,19 +17,19 @@ class MainMenu extends BaseComponent {
         )
 
 
-        
+
 
     }
 
 
-   
+
 
 
 
     render() {
         var self = this;
 
-        if(this.SM.IsSessionExpired()){
+        if (this.SM.IsSessionExpired()) {
             this.Logout();
             return (<Redirect to="/login"></Redirect>)
         }
@@ -69,9 +69,20 @@ class MainMenu extends BaseComponent {
                                 : null
                         }
                     </div>
+                    <div className="col-3">
+                        {
+                            session.parts.length !== 0 ?
+                                <Link className="btn btn-default fillSpace" to='/webpages'>
+                                    <i className="far fa-file-alt"></i>
+                                    <p>Страници</p>
+                                </Link>
+                                : null
+                        }
+                    </div>
+
 
                 </div>
-                
+
             </div>
 
         )

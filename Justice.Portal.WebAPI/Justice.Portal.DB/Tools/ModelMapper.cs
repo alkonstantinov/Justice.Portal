@@ -39,7 +39,11 @@ namespace Justice.Portal.DB.Tools
                     .ReverseMap();
                 cfg.CreateMap<JSProperty, Property>()
                     .ReverseMap();
-
+                cfg.CreateMap<JSWebPage, WebPage>()
+                    .ReverseMap();
+                cfg.CreateMap<JSPortalPart2WebPage, PortalPart2WebPage>()
+                    .ReverseMap();
+                
 
             }
             );
