@@ -48,6 +48,7 @@ namespace Justice.Portal.Web.Controllers
 
             WebPageRequisites result = new WebPageRequisites();
             result.Parts = db.GetPortalParts(Guid.Parse(token));
+            result.BlockTypes = db.GetBlockTypes();
             return Ok(result);
         }
 
@@ -188,12 +189,14 @@ namespace Justice.Portal.Web.Controllers
         }
 
         [HttpGet("GetPagesForLinking")]
-        public async Task<IActionResult> GetPagesForLinking()
+        public async Task<IActionResult> GetPagesForLinking(string portalPartId, string webPageId)
         {
             string token = this.GetToken();
             if (!db.IsAuthenticated(token))
                 return Unauthorized();
 
+
+            
 
             List<PageInfo> lst = new List<PageInfo>();
             lst.Add(new PageInfo()

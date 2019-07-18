@@ -271,9 +271,9 @@ namespace Justice.Portal.DB
             return ModelMapper.Instance.Mapper.Map<ICollection<BlockType>, ICollection<JSBlockType>>(db.BlockType.OrderBy(x => x.Name).ToArray()).ToArray();
         }
 
-        public JSWebPage[] GetWebPages()
+        public JSBlock[] GetWebPages()
         {
-            return ModelMapper.Instance.Mapper.Map<ICollection<WebPage>, ICollection<JSWebPage>>(db.WebPage.OrderBy(x => x.WebPageName).ToArray()).ToArray();
+            return ModelMapper.Instance.Mapper.Map<ICollection<Block>, ICollection<JSBlock>>(db.WebPage.OrderBy(x => x.WebPageName).ToArray()).ToArray();
         }
 
         public JSPortalPart[] GetPortalParts(Guid token)

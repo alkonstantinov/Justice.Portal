@@ -11,7 +11,7 @@ export default class SelectPage extends BaseComponent {
     constructor(props) {
         super(props);
         this.LoadData = this.LoadData.bind(this);
-        
+
 
 
     }
@@ -20,10 +20,10 @@ export default class SelectPage extends BaseComponent {
         var self = this;
         this.setState({ mode: "loading" });
 
-        Comm.Instance().get('part/GetPagesForLinking')
+        Comm.Instance().get('part/GetPagesForLinking?portalPartId=' + self.state.portalPartId + "&webPageId=" + self.state.webPageId)
             .then(result => {
                 self.setState({
-                    pages: result.data,
+                    result: result.data,
                     mode: "list"
                 })
             })
@@ -38,14 +38,36 @@ export default class SelectPage extends BaseComponent {
             });
     }
     componentDidMount() {
-        this.LoadData();
+        var self = this;
+        this.setState({ mode: "loading" });
+
+        Comm.Instance().get('part/GetWebPageRequisites')
+            .then(result => {
+                self.setState({
+                    portalParts: result.data.parts,
+                    portalPartId: result.data.parts[0].portalPartId,
+                    webPages: result.data.pages,
+                    webPageId: result.data.pages[0].webPageId
+
+                }, self.LoadData())
+            })
+            .catch(error => {
+                if (error.response && error.response.status === 401)
+                    toast.error("Липса на права", {
+                        onClose: this.Logout
+                    });
+                else
+                    toast.error(error.message);
+
+            });
+
     }
 
 
-    
+
     render() {
         var self = this;
-    
+
         return (
             self.state.mode === "loading" ?
                 <Loader
@@ -56,7 +78,23 @@ export default class SelectPage extends BaseComponent {
                     width="100"
                 /> :
                 self.state.mode === "list" ?
-                    <div className="container mt-3">                        
+                    <div className="container mt-3">
+                        <div className="row">
+                            <div className="col-6">
+                                <select className="form-control" value={self.state.portalPartId} onChange={(e) => self.setState({ portalPartId: e.target.value })}>
+                                    {
+                                        self.state.portalParts.map(x => <option value={x.portalPartId}>{x.name}</option>)
+                                    }
+                                </select>
+                            </div>
+                            <div className="col-6">
+                                <select className="form-control" value={self.state.webPageId} onChange={(e) => self.setState({ webPageId: e.target.value })}>
+                                    {
+                                        self.state.portalParts.map(x => <option value={x.webPageId}>{x.webPageName}</option>)
+                                    }
+                                </select>
+                            </div>
+                        </div>
                         <div className="row">
                             <div className="col-12">
                                 <table className="table table-striped">
@@ -67,8 +105,8 @@ export default class SelectPage extends BaseComponent {
                                         {
                                             self.state.pages.map(obj =>
                                                 <tr>
-                                                    <td><a href="#" onClick={()=>self.props.choosePage(obj.pageId, obj.title)}>{obj.title}</a></td>
-                                                    
+                                                    <td><a href="#" onClick={() => self.props.choosePage(obj.pageId, obj.title)}>{obj.title}</a></td>
+
 
                                                 </tr>
                                             )

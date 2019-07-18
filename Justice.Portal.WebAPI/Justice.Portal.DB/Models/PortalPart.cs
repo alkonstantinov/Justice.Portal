@@ -9,8 +9,8 @@ namespace Justice.Portal.DB.Models
         {
             Block = new HashSet<Block>();
             PortalGroup2Part = new HashSet<PortalGroup2Part>();
-            PortalPart2WebPage = new HashSet<PortalPart2WebPage>();
             PortalUser2Part = new HashSet<PortalUser2Part>();
+            Template = new HashSet<Template>();
         }
 
         public string PortalPartId { get; set; }
@@ -18,7 +18,7 @@ namespace Justice.Portal.DB.Models
 
         public virtual ICollection<Block> Block { get; set; }
         public virtual ICollection<PortalGroup2Part> PortalGroup2Part { get; set; }
-        public virtual ICollection<PortalPart2WebPage> PortalPart2WebPage { get; set; }
         public virtual ICollection<PortalUser2Part> PortalUser2Part { get; set; }
+        public virtual ICollection<Template> Template { get; set; }
     }
 }

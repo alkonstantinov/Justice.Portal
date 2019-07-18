@@ -19,6 +19,7 @@ import BlockBioCabinet from './blocks/blockbiocabinet';
 import BlockBioMain from './blocks/blockbiomain';
 import BlockNews from './blocks/blocknews';
 import BlockAds from './blocks/blockads';
+import BlockMenu from './blocks/blockmenu';
 
 export default class BlockEditor extends BaseComponent {
     constructor(props) {
@@ -53,13 +54,19 @@ export default class BlockEditor extends BaseComponent {
         this.GetBioMain = this.GetBioMain.bind(this);
         this.GetNews = this.GetNews.bind(this);
         this.GetAds = this.GetAds.bind(this);
+        this.GetMenu = this.GetMenu.bind(this);
         
                 
         this.state = { mode: "loading" };
 
     }
 
+    GetMenu() {
+        return (<BlockMenu block={this.state.block} ref="Editor" />
+        );
 
+    }
+    
     GetAds() {
         return (<BlockAds block={this.state.block} ref="Editor" />
         );
@@ -158,6 +165,7 @@ export default class BlockEditor extends BaseComponent {
             case "biomain": return this.GetBioMain();
             case "news": return this.GetNews();
             case "ads": return this.GetAds();
+            case "menu": return this.GetMenu();
             default: return null;
         }
     }
