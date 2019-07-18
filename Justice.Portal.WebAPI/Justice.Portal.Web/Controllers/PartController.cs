@@ -38,41 +38,41 @@ namespace Justice.Portal.Web.Controllers
         }
 
 
-        [HttpGet("GetWebPageRequisites")]
-        public async Task<IActionResult> GetWebPageRequisites()
-        {
-            string token = this.GetToken();
-            if (!db.IsAuthenticated(token))
-                return Unauthorized();
+        //[HttpGet("GetWebPageRequisites")]
+        //public async Task<IActionResult> GetWebPageRequisites()
+        //{
+        //    string token = this.GetToken();
+        //    if (!db.IsAuthenticated(token))
+        //        return Unauthorized();
 
 
-            WebPageRequisites result = new WebPageRequisites();
-            result.Parts = db.GetPortalParts(Guid.Parse(token));
-            result.BlockTypes = db.GetBlockTypes();
-            return Ok(result);
-        }
+        //    WebPageRequisites result = new WebPageRequisites();
+        //    result.Parts = db.GetPortalParts(Guid.Parse(token));
+        //    result.BlockTypes = db.GetBlockTypes();
+        //    return Ok(result);
+        //}
 
-        [HttpGet("GetWebPagesForPortalPart")]
-        public async Task<IActionResult> GetWebPagesForPortalPart(string portalPartId)
+        [HttpGet("GetTemplates")]
+        public async Task<IActionResult> GetTemplates(string portalPartId)
         {
             string token = this.GetToken();
             if (!this.CanDoPart(portalPartId))
                 return Unauthorized();
 
-            return Ok(db.GetPortalParts2WebPages(portalPartId));
+            return Ok(db.GetTemplates(portalPartId));
         }
 
 
-        [HttpGet("GetSpecificWebPageProperties")]
-        public async Task<IActionResult> GetSpecificWebPageProperties(int portalPart2WebPageId)
-        {
-            string token = this.GetToken();
-            var data = db.GetSpecificWebPageProperties(portalPart2WebPageId);
-            if (!this.CanDoPart(data.PortalPartId))
-                return Unauthorized();
+        //[HttpGet("GetSpecificWebPageProperties")]
+        //public async Task<IActionResult> GetSpecificWebPageProperties(int portalPart2WebPageId)
+        //{
+        //    string token = this.GetToken();
+        //    var data = db.GetSpecificWebPageProperties(portalPart2WebPageId);
+        //    if (!this.CanDoPart(data.PortalPartId))
+        //        return Unauthorized();
 
-            return Ok(data);
-        }
+        //    return Ok(data);
+        //}
 
         [HttpGet("GetBlocksPerPortalPart")]
         public async Task<IActionResult> GetBlocksPerPortalPart(string portalPartId)
@@ -226,37 +226,31 @@ namespace Justice.Portal.Web.Controllers
         }
 
 
-        [HttpPost("SetWebPage")]
-        public async Task<IActionResult> SetWebPage([FromBody] JSPortalPart2WebPage page)
+        [HttpGet("GetTemplate")]
+
+        public async Task<IActionResult> GetTemplate(int templateId)
         {
             string token = this.GetToken();
             if (!db.IsAuthenticated(token))
                 return Unauthorized();
-            var oldPage = db.GetSpecificWebPageProperties(page.PortalPart2WebPageId);
+            var template = db.GetTemplate(templateId);
+            if(!this.CanDoPart(template.PortalPartId))
+                return Unauthorized();
+            return Ok(template);
+        }
+        [HttpPost("SetTemplate")]
+        public async Task<IActionResult> SetTemplate([FromBody]JSTemplate template)
+        {
+            string token = this.GetToken();
+            if (!db.IsAuthenticated(token))
+                return Unauthorized();
+            var oldPage = db.GetTemplate(template.TemplateId);
 
             if (!this.CanDoPart(oldPage.PortalPartId))
                 return Unauthorized();
-            db.SetWebPage(page);
+            db.SetTemplate(template);
             return Ok();
         }
-
-        //[HttpGet("GetBlockProperties")]
-
-        //public async Task<IActionResult> GetBlock(int? blockId)
-        //{
-        //    string token = this.GetToken();
-        //    if (!db.IsAuthenticated(token))
-        //        return Unauthorized();
-        //    if (blockId.HasValue)
-        //    {
-        //        var block = db.GetBlock(blockId.Value);
-        //        if (!this.CanDoPart(block.PortalPartId))
-        //            return Unauthorized();
-        //    }
-
-
-        //    return Ok(db.GetBlocks(portalPartId, blockTypeId));
-        //}
 
     }
 }

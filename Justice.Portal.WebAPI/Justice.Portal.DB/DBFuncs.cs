@@ -271,10 +271,10 @@ namespace Justice.Portal.DB
             return ModelMapper.Instance.Mapper.Map<ICollection<BlockType>, ICollection<JSBlockType>>(db.BlockType.OrderBy(x => x.Name).ToArray()).ToArray();
         }
 
-        public JSBlock[] GetWebPages()
-        {
-            return ModelMapper.Instance.Mapper.Map<ICollection<Block>, ICollection<JSBlock>>(db.WebPage.OrderBy(x => x.WebPageName).ToArray()).ToArray();
-        }
+        //public JSBlock[] GetWebPages()
+        //{
+        //    return ModelMapper.Instance.Mapper.Map<ICollection<Block>, ICollection<JSBlock>>(db.WebPage.OrderBy(x => x.WebPageName).ToArray()).ToArray();
+        //}
 
         public JSPortalPart[] GetPortalParts(Guid token)
         {
@@ -292,17 +292,33 @@ namespace Justice.Portal.DB
         }
 
 
-        public JSPortalPart2WebPage[] GetPortalParts2WebPages(string portalPartId)
-        {
-            return db.PortalPart2WebPage.Include(x => x.WebPage).Where(x => x.PortalPartId == portalPartId)
-                .Select(x => new JSPortalPart2WebPage() { PortalPart2WebPageId = x.PortalPart2WebPageId, WebPageId=x.WebPageId, WebPageName=x.WebPage.WebPageName}).ToArray();
-        }
+        //public JSPortalPart2WebPage[] GetPortalParts2WebPages(string portalPartId)
+        //{
+        //    return db.PortalPart2WebPage.Include(x => x.WebPage).Where(x => x.PortalPartId == portalPartId)
+        //        .Select(x => new JSPortalPart2WebPage() { PortalPart2WebPageId = x.PortalPart2WebPageId, WebPageId=x.WebPageId, WebPageName=x.WebPage.WebPageName}).ToArray();
+        //}
 
 
-        public JSPortalPart2WebPage GetSpecificWebPageProperties(int portalPart2WebPageId)
+        //public JSPortalPart2WebPage GetSpecificWebPageProperties(int portalPart2WebPageId)
+        //{
+        //    return ModelMapper.Instance.Mapper.Map<JSPortalPart2WebPage>(db.PortalPart2WebPage.First(x => x.PortalPart2WebPageId == portalPart2WebPageId));
+        //}
+
+        public JSTemplate[] GetTemplates(string portalPartId)
         {
-            return ModelMapper.Instance.Mapper.Map<JSPortalPart2WebPage>(db.PortalPart2WebPage.First(x => x.PortalPart2WebPageId == portalPart2WebPageId));
+            return db.Template.Include(x => x.BlockType).Where(x => x.PortalPartId == portalPartId)
+                .Select(x => new JSTemplate()
+                {
+                    TemplateId = x.TemplateId,
+                    Title = x.BlockType.Name
+                }).OrderBy(x => x.Title).ToArray();
         }
+
+        public JSTemplate GetTemplate(int templateId)
+        {
+            return ModelMapper.Instance.Mapper.Map<Template,JSTemplate > (db.Template.First(x => x.TemplateId == templateId));
+        }
+
 
 
         public JSBlock GetBlock(int blockId)
@@ -405,11 +421,11 @@ namespace Justice.Portal.DB
             return result;
         }
 
-        public void SetWebPage(JSPortalPart2WebPage page)
+        public void SetTemplate(JSTemplate template)
         {
-            var oldPage = db.PortalPart2WebPage.First(x => x.PortalPart2WebPageId == page.PortalPart2WebPageId);
-            oldPage.Sources = page.Sources;
-            oldPage.Template = page.Template;
+            var oldPage = db.Template.First(x => x.TemplateId == template.TemplateId);
+            oldPage.Sources = template.Sources;
+            oldPage.TemplateJson = template.TemplateJson;
             db.SaveChanges();
         }
 

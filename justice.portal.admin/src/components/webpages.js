@@ -34,7 +34,7 @@ export default class WebPages extends BaseComponent {
         var self = this;
         this.setState({ mode: "loading" });
 
-        Comm.Instance().get('part/GetWebPagesForPortalPart?portalPartId=' + self.state.portalPartId)
+        Comm.Instance().get('part/GetTemplates?portalPartId=' + self.state.portalPartId)
             .then(result => {
                 self.setState({
                     blocks: result.data,
@@ -54,8 +54,9 @@ export default class WebPages extends BaseComponent {
     componentDidMount() {
         var self = this;
         this.setState({ mode: "loading" });
-        Comm.Instance().get('part/GetWebPageRequisites')
+        Comm.Instance().get('part/GetBlockRequisites')
             .then(result => {
+                
                 self.setState({
                     parts: result.data.parts,
                     portalPartId: result.data.parts[0].portalPartId
@@ -133,9 +134,9 @@ export default class WebPages extends BaseComponent {
                                                     <td>
 
                                                         
-                                                        <button className="btn btn-info" onClick={() => self.EditPage(obj.portalPart2WebPageId)}><i class="fas fa-edit"></i></button>
+                                                        <button className="btn btn-info" onClick={() => self.EditPage(obj.templateId)}><i class="fas fa-edit"></i></button>
                                                     </td>
-                                                    <td>{obj.webPageName}</td>
+                                                    <td>{obj.title}</td>
 
                                                 </tr>
                                             )

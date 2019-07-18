@@ -349,7 +349,7 @@ namespace Justice.Portal.DB.Models
                     .IsRequired()
                     .HasMaxLength(20);
 
-                entity.Property(e => e.Template1).HasColumnName("Template");
+                entity.Property(e => e.TemplateJson).HasColumnName("TemplateJSON");
 
                 entity.HasOne(d => d.BlockType)
                     .WithMany(p => p.Template)

@@ -40,10 +40,10 @@ export default class WebPageEditor extends BaseComponent {
     async LoadData() {
         var self = this;
         var sources = [];
-        await Comm.Instance().get('part/GetSpecificWebPageProperties?portalPart2WebPageId=' + self.props.match.params.id)
+        await Comm.Instance().get('part/GetTemplate?templateId=' + self.props.match.params.id)
             .then(result => {
                 self.setState({
-                    template: result.data.template
+                    template: result.data.templateJson
                 });
 
                 if (result.data.sources)
@@ -134,11 +134,11 @@ export default class WebPageEditor extends BaseComponent {
             value: x.value
         }));
         var data = {
-            PortalPart2WebPageId: self.props.match.params.id,
-            template: self.state.template,
+            TemplateId: self.props.match.params.id,
+            templateJson: self.state.template,
             sources: JSON.stringify(sources)
         };
-        Comm.Instance().post('part/SetWebPage', data)
+        Comm.Instance().post('part/SetTemplate', data)
             .then(result => {
                 self.setState({ Saved: true });
             })

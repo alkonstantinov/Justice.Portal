@@ -7,6 +7,7 @@ import SelectPage from '../selectpage';
 import renderHTML from 'react-render-html';
 import CKEditor from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import Blocks from '../blocks';
 
 //import ClassicEditor from '../../ckeditor/build/ckeditor';
 
