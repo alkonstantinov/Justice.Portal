@@ -5,6 +5,7 @@ import eventClient from '../modules/eventclient';
 import Loader from 'react-loader-spinner';
 import Comm from '../modules/comm';
 import { toast } from 'react-toastify';
+import UIContext from '../modules/context'
 
 
 export default class Blocks extends BaseComponent {
@@ -35,6 +36,13 @@ export default class Blocks extends BaseComponent {
         var self = this;
         this.setState({ mode: "loading" });
 
+        if (this.props.mode !== "select") {
+            UIContext.LastBlockTypeId = this.state.blockTypeId;
+            UIContext.LastPortalPartId = this.state.portalPartId;
+
+        }
+
+
         Comm.Instance().get('part/GetBlocks?portalPartId=' + self.state.portalPartId + "&blockTypeId=" + self.state.blockTypeId)
             .then(result => {
                 self.setState({
@@ -59,9 +67,9 @@ export default class Blocks extends BaseComponent {
             .then(result => {
                 self.setState({
                     blockTypes: result.data.blockTypes,
-                    blockTypeId: result.data.blockTypes[0].blockTypeId,
+                    blockTypeId: UIContext.LastBlockTypeId || result.data.blockTypes[0].blockTypeId,
                     parts: result.data.parts,
-                    portalPartId: result.data.parts[0].portalPartId
+                    portalPartId: UIContext.LastPortalPartId || result.data.parts[0].portalPartId
                 }, () => self.LoadData());
             })
             .catch(error => {
@@ -107,7 +115,7 @@ export default class Blocks extends BaseComponent {
 
     render() {
         var self = this;
-        if(this.SM.IsSessionExpired()){
+        if (this.SM.IsSessionExpired()) {
             this.Logout();
             return (<Redirect to="/login"></Redirect>)
         }
@@ -130,14 +138,14 @@ export default class Blocks extends BaseComponent {
                 self.state.mode === "list" ?
                     <div className="container mt-3">
                         <div className="row">
-                            <div className="col-3">
+                            <div className="col-5">
                                 <select className="form-control" value={self.state.portalPartId} onChange={(e) => self.setState({ portalPartId: e.target.value }, () => self.LoadData())}>
                                     {
                                         self.state.parts.map(x => <option value={x.portalPartId}>{x.name}</option>)
                                     }
                                 </select>
                             </div>
-                            <div className="col-3">
+                            <div className="col-5">
                                 <select className="form-control" value={self.state.blockTypeId} onChange={(e) => self.setState({ blockTypeId: e.target.value }, () => self.LoadData())}>
                                     {
                                         self.state.blockTypes.map(x => <option value={x.blockTypeId}>{x.name}</option>)
@@ -145,7 +153,7 @@ export default class Blocks extends BaseComponent {
                                 </select>
                             </div>
 
-                            <div className="col-3">
+                            <div className="col-2">
                                 <button className="btn btn-primary pull-right" onClick={() => self.EditBlock(null)}>Нов</button>
                             </div>
                         </div>
@@ -154,19 +162,24 @@ export default class Blocks extends BaseComponent {
                                 <table className="table table-striped">
                                     <thead>
                                         <th width="10%"></th>
-                                        <th width="45%">Име</th>
+                                        <th width="90%">Име</th>
                                     </thead>
                                     <tbody>
                                         {
                                             self.state.blocks.map(obj =>
                                                 <tr>
                                                     <td>
+                                                        {
+                                                            self.props.mode === "select" ?
+                                                                <button className="btn btn-light" onClick={() => self.props.selectFunc(obj.blockId)}><i className="fas fa-check"></i></button>
+                                                                :
 
-                                                        <button className="btn btn-danger" onClick={() => self.DeleteBlock(obj.blockId)}><i className="far fa-trash-alt"></i></button>
-
-                                                        <button className="btn btn-info" onClick={() => self.EditBlock(obj.blockId)}><i class="fas fa-edit"></i></button>
+                                                                [
+                                                                    <button className="btn btn-danger" onClick={() => self.DeleteBlock(obj.blockId)}><i className="far fa-trash-alt"></i></button>,
+                                                                    <button className="btn btn-light" onClick={() => self.EditBlock(obj.blockId)}><i className="fas fa-edit"></i></button>
+                                                                ]
+                                                        }
                                                     </td>
-                                                    <td>{obj.userName}</td>
                                                     <td>{obj.name}</td>
 
                                                 </tr>

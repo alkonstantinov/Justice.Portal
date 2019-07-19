@@ -429,6 +429,19 @@ namespace Justice.Portal.DB
             db.SaveChanges();
         }
 
+        public bool ChangePassword(ChangePasswordData data, Guid token)
+        {
+            var user = db.Session.Include(x=>x.PortalUser).First(x => x.SessionKey == token);
+            if (!user.PortalUser.Password.Equals(Utils.GetMD5(data.OldPassword),StringComparison.InvariantCultureIgnoreCase))
+                return false;
+            user.PortalUser.Password = Utils.GetMD5(data.NewPassword);
+            db.SaveChanges();
+            return true;
+
+            
+        }
+
+
 
     }
 }

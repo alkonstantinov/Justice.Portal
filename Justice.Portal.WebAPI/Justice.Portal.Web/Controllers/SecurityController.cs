@@ -96,5 +96,19 @@ namespace Justice.Portal.Web.Controllers
             db.Logout(this.GetToken());
             return Ok();
         }
+
+        [HttpPost("ChangePassword")]
+        public async Task<IActionResult> ChangePassword([FromBody]ChangePasswordData data)
+        {
+            string token = this.GetToken();
+            if (!db.IsAuthenticated(token))
+                return Unauthorized();
+
+            if (db.ChangePassword(data, Guid.Parse(token)))
+                return Ok();
+            else
+                return Unauthorized();
+
+        }
     }
 }

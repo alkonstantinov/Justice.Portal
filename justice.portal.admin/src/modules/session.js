@@ -4,6 +4,7 @@ const SessionTimeout = 19;
 class SessionManager {
 
     
+    
 
 
     IsSessionExpired() {

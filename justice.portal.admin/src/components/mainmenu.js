@@ -79,6 +79,16 @@ class MainMenu extends BaseComponent {
                                 : null
                         }
                     </div>
+                    <div className="col-3">
+                        {
+                            session.parts.length !== 0 ?
+                                <Link className="btn btn-default fillSpace" to='/changepassword'>
+                                    <i className="fas fa-unlock"></i>
+                                    <p>Смяна парола</p>
+                                </Link>
+                                : null
+                        }
+                    </div>
 
 
                 </div>

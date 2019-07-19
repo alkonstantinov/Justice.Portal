@@ -14,6 +14,7 @@ import Blocks from './components/blocks';
 import BlockEditor from './components/blockeditor';
 import WebPages from './components/webpages';
 import WebPageEditor from './components/webpageeditor';
+import ChangePassword from './components/changepassword';
 
 class App extends BaseComponent {
 
@@ -72,7 +73,7 @@ class App extends BaseComponent {
                 <Route exact path='/webpages' component={WebPages} />
                 <Route exact path='/editblock/:blockTypeId/:portalPartId/:blockId?' component={BlockEditor} />
                 <Route exact path='/editwebpage/:id?' component={WebPageEditor} />
-
+                <Route exact path='/changepassword' component={ChangePassword} />
                 <Route component={MainMenu} />
 
 

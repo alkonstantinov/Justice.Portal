@@ -102,9 +102,12 @@ export default class WYSIWYG extends BaseComponent {
 
     shouldComponentUpdate(nextProps, nextState) {
         var propData = nextProps.getData(this.props.stateId)
-        var upd = propData !== this.editor.getData();
-        if (upd) this.editor.setData(propData);
-        return upd;
+        var updText = propData !== this.editor.getData();
+        var updDialog = this.state.ShowSelectPageDialog !== nextProps.ShowSelectPageDialog;
+
+
+        if (updText) this.editor.setData(propData);
+        return updText || updDialog;
     }
 
     render() {
@@ -116,8 +119,8 @@ export default class WYSIWYG extends BaseComponent {
                 <button className="btn btn-light" onClick={() => self.UploadBlob(self.InsertDocument)}>Документ</button>,
                 <button className="btn btn-light" onClick={() => self.InsertLinkToPage()}>Към страница</button>,
 
-                <Dialog header="Избор страница" visible={self.state.ShowSelectPageDialog} style={{ width: '50vw' }} modal={true} onHide={() => { }}>
-                    <SelectPage choosePage={self.ChoosePage}></SelectPage>
+                <Dialog header="Избор страница" visible={this.state.ShowSelectPageDialog} style={{ width: '50vw' }} modal={true} onHide={() => { self.setState({ ShowSelectPageDialog: false }) }}>
+                    <Blocks selectFunc={this.ChoosePage} mode="select"></Blocks>
                 </Dialog>,
                 <CKEditor
                     id="ckEditor"
