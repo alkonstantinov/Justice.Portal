@@ -10,7 +10,7 @@ namespace Justice.Portal.DB.Models
         public string PortalPartId { get; set; }
         public string TemplateJson { get; set; }
         public string Sources { get; set; }
-        
+
         public virtual BlockType BlockType { get; set; }
         public virtual PortalPart PortalPart { get; set; }
     }

@@ -20,6 +20,7 @@ namespace Justice.Portal.DB.Models
         public virtual DbSet<BlockType> BlockType { get; set; }
         public virtual DbSet<BlockTypeProperty> BlockTypeProperty { get; set; }
         public virtual DbSet<BlockTypePropertyValue> BlockTypePropertyValue { get; set; }
+        public virtual DbSet<Collection> Collection { get; set; }
         public virtual DbSet<PortalGroup> PortalGroup { get; set; }
         public virtual DbSet<PortalGroup2Part> PortalGroup2Part { get; set; }
         public virtual DbSet<PortalGroup2Right> PortalGroup2Right { get; set; }
@@ -165,6 +166,17 @@ namespace Justice.Portal.DB.Models
                     .WithMany(p => p.BlockTypePropertyValue)
                     .HasForeignKey(d => d.PropertyId)
                     .HasConstraintName("fk_BlockTypePropertyValue_PropertyId");
+            });
+
+            modelBuilder.Entity<Collection>(entity =>
+            {
+                entity.Property(e => e.Content).IsRequired();
+
+                entity.Property(e => e.Name)
+                    .IsRequired()
+                    .HasMaxLength(200);
+
+                entity.Property(e => e.Structure).IsRequired();
             });
 
             modelBuilder.Entity<PortalGroup>(entity =>

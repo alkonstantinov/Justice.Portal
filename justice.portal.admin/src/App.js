@@ -15,6 +15,8 @@ import BlockEditor from './components/blockeditor';
 import WebPages from './components/webpages';
 import WebPageEditor from './components/webpageeditor';
 import ChangePassword from './components/changepassword';
+import Collections from './components/collections';
+import CollectionEditor from './components/collectioneditor';
 
 class App extends BaseComponent {
 
@@ -74,7 +76,10 @@ class App extends BaseComponent {
                 <Route exact path='/editblock/:blockTypeId/:portalPartId/:blockId?' component={BlockEditor} />
                 <Route exact path='/editwebpage/:id?' component={WebPageEditor} />
                 <Route exact path='/changepassword' component={ChangePassword} />
+                <Route exact path='/collections' component={Collections} />
+                <Route exact path='/editcollection/:id?' component={CollectionEditor} />
                 <Route component={MainMenu} />
+                
 
 
               </Switch>

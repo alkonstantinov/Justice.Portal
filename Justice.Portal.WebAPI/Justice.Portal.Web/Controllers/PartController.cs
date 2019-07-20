@@ -252,8 +252,50 @@ namespace Justice.Portal.Web.Controllers
             return Ok();
         }
 
+        [HttpGet("GetCollections")]
+        public async Task<IActionResult> GetCollections()
+        {
+            string token = this.GetToken();
+            if (!db.IsAuthenticated(token))
+                return Unauthorized();
 
-        
+            return Ok(db.GetCollections());
+        }
+
+        [HttpGet("GetCollection")]
+        public async Task<IActionResult> GetCollection(int collectionId)
+        {
+            string token = this.GetToken();
+            if (!db.IsAuthenticated(token))
+                return Unauthorized();
+
+            return Ok(db.GetCollection(collectionId));
+        }
+
+        [HttpDelete("DeleteCollection/{collectionId}")]
+        public async Task<IActionResult> DeleteCollection([FromRoute]int collectionId)
+        {
+            string token = this.GetToken();
+            if (!db.IsAuthenticated(token))
+                return Unauthorized();
+
+            db.DeleteCollection(collectionId);
+            return Ok();
+
+        }
+
+        [HttpPost("SaveCollection")]
+        public async Task<IActionResult> SaveCollection([FromBody]JSCollection collection)
+        {
+            string token = this.GetToken();
+            if (!db.IsAuthenticated(token))
+                return Unauthorized();
+            db.SaveCollection(collection);
+            return Ok();
+        }
+
+
+
 
     }
 }

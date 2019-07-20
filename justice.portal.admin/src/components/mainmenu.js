@@ -62,6 +62,16 @@ class MainMenu extends BaseComponent {
                     <div className="col-3">
                         {
                             session.parts.length !== 0 ?
+                                <Link className="btn btn-default fillSpace" to='/changepassword'>
+                                    <i className="fas fa-unlock"></i>
+                                    <p>Смяна парола</p>
+                                </Link>
+                                : null
+                        }
+                    </div>
+                    <div className="col-3">
+                        {
+                            session.parts.length !== 0 ?
                                 <Link className="btn btn-default fillSpace" to='/blocks'>
                                     <i className="fas fa-th"></i>
                                     <p>Части</p>
@@ -80,14 +90,12 @@ class MainMenu extends BaseComponent {
                         }
                     </div>
                     <div className="col-3">
-                        {
-                            session.parts.length !== 0 ?
-                                <Link className="btn btn-default fillSpace" to='/changepassword'>
-                                    <i className="fas fa-unlock"></i>
-                                    <p>Смяна парола</p>
-                                </Link>
-                                : null
-                        }
+
+                        <Link className="btn btn-default fillSpace" to='/collections'>
+                            <i className="fas fa-file-alt"></i>
+                            <p>Колекции</p>
+                        </Link>
+
                     </div>
 
 

@@ -316,7 +316,7 @@ namespace Justice.Portal.DB
 
         public JSTemplate GetTemplate(int templateId)
         {
-            return ModelMapper.Instance.Mapper.Map<Template,JSTemplate > (db.Template.First(x => x.TemplateId == templateId));
+            return ModelMapper.Instance.Mapper.Map<Template, JSTemplate>(db.Template.First(x => x.TemplateId == templateId));
         }
 
 
@@ -431,17 +431,53 @@ namespace Justice.Portal.DB
 
         public bool ChangePassword(ChangePasswordData data, Guid token)
         {
-            var user = db.Session.Include(x=>x.PortalUser).First(x => x.SessionKey == token);
-            if (!user.PortalUser.Password.Equals(Utils.GetMD5(data.OldPassword),StringComparison.InvariantCultureIgnoreCase))
+            var user = db.Session.Include(x => x.PortalUser).First(x => x.SessionKey == token);
+            if (!user.PortalUser.Password.Equals(Utils.GetMD5(data.OldPassword), StringComparison.InvariantCultureIgnoreCase))
                 return false;
             user.PortalUser.Password = Utils.GetMD5(data.NewPassword);
             db.SaveChanges();
             return true;
 
-            
+
         }
 
+        public JSCollection[] GetCollections()
+        {
+            return db.Collection.Select(x =>
+            new JSCollection()
+            {
+                CollectionId = x.CollectionId,
+                Name = x.Name
+            })
+                .ToArray();
+        }
 
+        public JSCollection GetCollection(int collectionId)
+        {
+            return ModelMapper.Instance.Mapper.Map<JSCollection>(db.Collection.First(x=>x.CollectionId == collectionId));
+        }
+
+        public void DeleteCollection(int collectionId)
+        {
+            db.Collection.Remove(db.Collection.First(x => x.CollectionId == collectionId));
+            db.SaveChanges();
+        }
+
+        public void SaveCollection(JSCollection collection)
+        {
+            Collection c;
+            if (collection.CollectionId == 0)
+            {
+                c = new Collection();
+                db.Collection.Add(c);
+            }
+            else
+                c = db.Collection.First(x => x.CollectionId == collection.CollectionId);
+            c.Content = collection.Content;
+            c.Name = collection.Name;
+            c.Structure = collection.Structure;
+            db.SaveChanges();
+        }
 
     }
 }
