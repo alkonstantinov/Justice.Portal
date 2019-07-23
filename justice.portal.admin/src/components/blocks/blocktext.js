@@ -1,7 +1,7 @@
 import React from 'react';
 import BaseComponent from '../basecomponent';
 import { ToggleButton } from 'primereact/togglebutton';
-import ServerData from '../../data/serverdata.json';
+import Comm from '../../modules/comm'
 import WYSIWYG from '../editors/wysiwyg';
 import TB from '../editors/tb';
 
@@ -65,7 +65,7 @@ export default class BlockText extends BaseComponent {
                             setData={self.SetStateMLData}
                             stateId="title"
                         ></TB>
-                        
+
                     </div>
                 </div>,
                 <div className="row">
@@ -77,7 +77,7 @@ export default class BlockText extends BaseComponent {
                             stateId="body"
                         ></WYSIWYG>
 
-                        
+
 
                     </div>
                 </div>,
@@ -89,7 +89,7 @@ export default class BlockText extends BaseComponent {
                         <button className="btn btn-danger" onClick={() => self.setState({ imageId: null })}>Изчистване</button>
                     </div>
                     <div className="col-8">
-                        <img src={self.state.imageId ? ServerData.url + "part/GetBlob?hash=" + self.state.imageId : null} alt="" style={{'max-width':'300px'}}>
+                        <img src={self.state.imageId ? Comm.url + "part/GetBlob?hash=" + self.state.imageId : null} alt="" style={{ 'max-width': '300px' }}>
 
                         </img>
                     </div>

@@ -4,14 +4,25 @@ import { ToggleButton } from 'primereact/togglebutton';
 import TB from '../editors/tb';
 import uuidv4 from 'uuid/v4';
 import { Dialog } from 'primereact/dialog';
-import SelectPage from '../selectpage';
-import ServerData from '../../data/serverdata.json';
+import Comm from '../../modules/comm'
+import Blocks from '../blocks';
+import eventClient from '../../modules/eventclient';
 
 export default class BlockMenu extends BaseComponent {
 
 
     constructor(props) {
         super(props);
+
+        eventClient.emit(
+            "addbreadcrump",
+            [
+                {
+                    title: "Подменю",
+                }
+            ]
+        );
+
         this.Validate = this.Validate.bind(this);
         this.GetData = this.GetData.bind(this);
         this.ChoosePage = this.ChoosePage.bind(this);
@@ -24,10 +35,12 @@ export default class BlockMenu extends BaseComponent {
             var obj = JSON.parse(this.props.block.jsonvalues);
             state.title = obj.title || {};
             state.elements = obj.elements || [];
+            state.divisions = obj.divisions || { bg: "", en: "" };
         }
         else {
             state.title = {};
             state.elements = [];
+            state.divisions = { bg: "", en: "" };
         }
 
 
@@ -52,7 +65,7 @@ export default class BlockMenu extends BaseComponent {
         var elements = this.state.elements;
         elements.push({
             id: uuidv4(),
-            column: 1,
+            division: 1,
             text: { bg: "", en: "" },
             url: "",
             urlCaption: ""
@@ -84,7 +97,7 @@ export default class BlockMenu extends BaseComponent {
     }
 
     SetUrl(pageId, pageTitle) {
-        const content = ServerData.url + "part/GetPage?pageId=" + pageId;
+        const content = Comm.url + "part/GetPage?pageId=" + pageId;
         var elements = this.state.elements;
         var element = elements.find(x => x.id === this.currentId);
         element.url = content;
@@ -111,6 +124,11 @@ export default class BlockMenu extends BaseComponent {
                         ></TB>
 
                     </div>
+                    <div className="col-12">
+                        <label className="control-label">Раздели</label>
+                        <textarea className="form-control" rows="5" value={self.state.divisions[self.state.lang]}
+                            onChange={(e) => { var d = self.state.divisions; d[self.state.lang] = e.target.value; self.setState({ divisions: d }) }}></textarea>
+                    </div>
                 </div>,
                 <div className="row">
                     <div className="col-2">
@@ -118,15 +136,20 @@ export default class BlockMenu extends BaseComponent {
                     </div>
                     <div className="col-10">
                         {
-                            self.state.elements.map((x,i) =>
+                            self.state.elements.map((x, i) =>
                                 <div className="row" key={i}>
                                     <div className="col-2">
-                                        <label className="control-label">Колона</label>
-                                        <select className="form-control" value={x.column} onChange={(e) => self.SetArrayValue(x.id, "column", false, e.target.value)}>
+                                        <label className="control-label">Раздел</label>
+                                        <select className="form-control" value={x.division} onChange={(e) => self.SetArrayValue(x.id, "division", false, e.target.value)}>
                                             <option value="1">1</option>
                                             <option value="2">2</option>
                                             <option value="3">3</option>
                                             <option value="4">4</option>
+                                            <option value="5">5</option>
+                                            <option value="6">6</option>
+                                            <option value="7">7</option>
+                                            <option value="8">8</option>
+                                            <option value="9">9</option>
                                         </select>
                                     </div>
                                     <div className="col-4">
@@ -138,7 +161,7 @@ export default class BlockMenu extends BaseComponent {
                                         <input type="text" className="form-control" value={x.urlCaption} readOnly="true" onClick={() => self.ChoosePage(x.id)}></input>
                                     </div>
                                     <div className="col-1">
-                                        <button className="btn btn-light" onClick={()=>self.DeleteItem(x.id)}>-</button>
+                                        <button className="btn btn-light" onClick={() => self.DeleteItem(x.id)}>-</button>
                                     </div>
 
                                 </div>
@@ -146,7 +169,8 @@ export default class BlockMenu extends BaseComponent {
                         }
                     </div>
                     <Dialog header="Избор страница" visible={self.state.ShowSelectPageDialog} style={{ width: '50vw' }} modal={true} onHide={() => { }}>
-                        <SelectPage choosePage={self.SetUrl}></SelectPage>
+                        <Blocks selectFunc={this.SetUrl} mode="select"></Blocks>
+
                     </Dialog>
                 </div>
             ]

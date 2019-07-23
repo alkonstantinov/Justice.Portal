@@ -11,17 +11,18 @@ import UIContext from '../modules/context'
 export default class Blocks extends BaseComponent {
     constructor(props) {
         super(props);
-        eventClient.emit(
-            "breadcrump",
-            [{
-                title: "Начало",
-                href: ""
-            },
-            {
-                title: "Части"
-            }
-            ]
-        );
+        if (this.props.mode !== "select")
+            eventClient.emit(
+                "breadcrump",
+                [{
+                    title: "Начало",
+                    href: ""
+                },
+                {
+                    title: "Части"
+                }
+                ]
+            );
 
 
         this.LoadData = this.LoadData.bind(this);
@@ -171,7 +172,7 @@ export default class Blocks extends BaseComponent {
                                                     <td>
                                                         {
                                                             self.props.mode === "select" ?
-                                                                <button className="btn btn-light" onClick={() => self.props.selectFunc(obj.blockId)}><i className="fas fa-check"></i></button>
+                                                                <button className="btn btn-light" onClick={() => self.props.selectFunc(obj.blockId, obj.name)}><i className="fas fa-check"></i></button>
                                                                 :
 
                                                                 [

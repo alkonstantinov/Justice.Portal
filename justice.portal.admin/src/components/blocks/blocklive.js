@@ -1,7 +1,7 @@
 import React from 'react';
 import BaseComponent from '../basecomponent';
 import { ToggleButton } from 'primereact/togglebutton';
-import ServerData from '../../data/serverdata.json';
+import Comm from '../../modules/comm'
 import WYSIWYG from '../editors/wysiwyg';
 import TB from '../editors/tb';
 

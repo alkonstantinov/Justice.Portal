@@ -25,7 +25,7 @@ class Header extends BaseComponent {
 
     AddBreadcrump(data) {
         var bc = this.state.breadcrumbs;
-        data.array.forEach(element => {
+        data.forEach(element => {
             bc.push(element);
         });
         this.setState({ breadcrumbs: bc });
@@ -88,6 +88,7 @@ class Header extends BaseComponent {
                     {
                         user === null ? null : <i className="fas fa-power-off" onClick={self.Logout}></i>
                     }
+
 
                 </div>
             </header>

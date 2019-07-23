@@ -20,6 +20,7 @@ import BlockBioMain from './blocks/blockbiomain';
 import BlockNews from './blocks/blocknews';
 import BlockAds from './blocks/blockads';
 import BlockMenu from './blocks/blockmenu';
+import BlockCollection from './blocks/blockcollection';
 
 export default class BlockEditor extends BaseComponent {
     constructor(props) {
@@ -33,10 +34,11 @@ export default class BlockEditor extends BaseComponent {
             {
                 title: "Части",
                 href: "blocks"
-            },
-            {
-                title: "Част",
             }
+                // ,
+                // {
+                //     title: "Част",
+                // }
             ]
         );
         this.Save = this.Save.bind(this);
@@ -55,8 +57,9 @@ export default class BlockEditor extends BaseComponent {
         this.GetNews = this.GetNews.bind(this);
         this.GetAds = this.GetAds.bind(this);
         this.GetMenu = this.GetMenu.bind(this);
-        
-                
+        this.GetCollection = this.GetCollection.bind(this);
+
+
         this.state = { mode: "loading" };
 
     }
@@ -66,7 +69,7 @@ export default class BlockEditor extends BaseComponent {
         );
 
     }
-    
+
     GetAds() {
         return (<BlockAds block={this.state.block} ref="Editor" />
         );
@@ -128,7 +131,7 @@ export default class BlockEditor extends BaseComponent {
         );
 
     }
-    
+
     GetBio() {
         return (
             <BlockBio block={this.state.block} ref="Editor" />
@@ -143,9 +146,16 @@ export default class BlockEditor extends BaseComponent {
 
     }
 
-    GetDocList(){
+    GetDocList() {
         return (
             <BlockDocList block={this.state.block} ref="Editor" />
+        );
+
+    }
+
+    GetCollection() {
+        return (
+            <BlockCollection block={this.state.block} ref="Editor" portalPartId={this.props.match.params.portalPartId} />
         );
 
     }
@@ -158,14 +168,15 @@ export default class BlockEditor extends BaseComponent {
             case "live": return this.GetLive();
             case "banner": return this.GetBanner();
             case "bio": return this.GetBio();
-            case "info": return this.GetInfo();            
-            case "doclist": return this.GetDocList();            
+            case "info": return this.GetInfo();
+            case "doclist": return this.GetDocList();
             case "main": return this.GetMain();
             case "biocabinet": return this.GetBioCabinet();
             case "biomain": return this.GetBioMain();
             case "news": return this.GetNews();
             case "ads": return this.GetAds();
             case "menu": return this.GetMenu();
+            case "collection": return this.GetCollection();
             default: return null;
         }
     }
@@ -258,13 +269,13 @@ export default class BlockEditor extends BaseComponent {
 
     }
 
-    Cancel(){
+    Cancel() {
         this.setState({ Saved: true });
     }
 
     render() {
         var self = this;
-        if(this.SM.IsSessionExpired()){
+        if (this.SM.IsSessionExpired()) {
             this.Logout();
             return (<Redirect to="/login"></Redirect>)
         }

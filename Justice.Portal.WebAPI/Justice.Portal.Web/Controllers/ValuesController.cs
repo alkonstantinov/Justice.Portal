@@ -2,19 +2,24 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Justice.Portal.DB.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Justice.Portal.Web.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ValuesController : ControllerBase
+    public class ValuesController : BaseController
     {
+        public ValuesController(JusticePortalContext jpc) : base(jpc)
+        {
+        }
+
         // GET api/values
         [HttpGet]
         public ActionResult<IEnumerable<string>> Get()
         {
-            return new string[] { "value1", "value2" };
+            return db.GetParts().Select(x => x.Name).ToArray();
         }
 
         // GET api/values/5

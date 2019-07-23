@@ -10,7 +10,6 @@ import eventClient from '../modules/eventclient';
 import uuidv4 from 'uuid/v4';
 import { ToggleButton } from 'primereact/togglebutton';
 import moment from 'moment';
-import ServerData from '../data/serverdata.json';
 
 export default class CollectionEditor extends BaseComponent {
     portalPartId;
@@ -187,7 +186,7 @@ export default class CollectionEditor extends BaseComponent {
             case 4: return (<input type="text" className="form-control" readOnly="true" value={data[structure.id] || ""}
 
 
-                onClick={() => self.UploadBlob((blobId) => self.SetValue("content", data.id, structure.id, false, ServerData.url + "part/GetBlob?hash=" + blobId))}></input>)
+                onClick={() => self.UploadBlob((blobId) => self.SetValue("content", data.id, structure.id, false, Comm.url + "part/GetBlob?hash=" + blobId))}></input>)
 
             case 5: return (<input type="text" className="form-control" value={data[structure.id] || ""} onChange={(e) => self.SetValue("content", data.id, structure.id, false, e.target.value)}></input>);
 

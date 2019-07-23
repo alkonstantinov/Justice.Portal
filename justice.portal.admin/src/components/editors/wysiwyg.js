@@ -1,9 +1,7 @@
 import React from 'react';
 import BaseComponent from '../basecomponent';
-import ServerData from '../../data/serverdata.json';
 import Comm from '../../modules/comm';
 import { Dialog } from 'primereact/dialog';
-import SelectPage from '../selectpage';
 import renderHTML from 'react-render-html';
 import CKEditor from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
@@ -46,7 +44,7 @@ export default class WYSIWYG extends BaseComponent {
         if (selContent === "")
             selContent = "link";
 
-        const content = '<a href="' + ServerData.url + "part/GetPage?pageId=" + pageId + '">' + selContent + '</a>';
+        const content = '<a href="' + Comm.url + "part/GetPage?pageId=" + pageId + '">' + selContent + '</a>';
 
         const viewFragment = this.editor.data.processor.toView(content);
         const modelFragment = this.editor.data.toModel(viewFragment);
@@ -61,7 +59,7 @@ export default class WYSIWYG extends BaseComponent {
 
 
 
-        const content = '<img alt="" src="' + ServerData.url + "part/GetBlob?hash=" + id + '"/>';
+        const content = '<img alt="" src="' + Comm.url + "part/GetBlob?hash=" + id + '"/>';
 
         const viewFragment = this.editor.data.processor.toView(content);
         const modelFragment = this.editor.data.toModel(viewFragment);
@@ -92,7 +90,7 @@ export default class WYSIWYG extends BaseComponent {
         if (selContent === "")
             selContent = "link";
 
-        const content = '<a href="' + ServerData.url + "part/GetBlob?hash=" + id + '">' + selContent + '</a>';
+        const content = '<a href="' + Comm.url + "part/GetBlob?hash=" + id + '">' + selContent + '</a>';
 
         const viewFragment = this.editor.data.processor.toView(content);
         const modelFragment = this.editor.data.toModel(viewFragment);

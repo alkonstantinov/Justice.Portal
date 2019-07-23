@@ -23,6 +23,7 @@ class App extends BaseComponent {
   constructor(props) {
     super(props);
 
+
     //this.SM.Logout()
 
 
@@ -79,7 +80,7 @@ class App extends BaseComponent {
                 <Route exact path='/collections' component={Collections} />
                 <Route exact path='/editcollection/:id?' component={CollectionEditor} />
                 <Route component={MainMenu} />
-                
+
 
 
               </Switch>

@@ -3,7 +3,7 @@ import BaseComponent from '../basecomponent';
 import { ToggleButton } from 'primereact/togglebutton';
 import 'react-quill/dist/quill.core.css';
 import 'react-quill/dist/quill.snow.css';
-import ServerData from '../../data/serverdata.json';
+import Comm from '../../modules/comm'
 import uuidv4 from 'uuid/v4';
 import WYSIWYG from '../editors/wysiwyg';
 import TB from '../editors/tb';
@@ -152,7 +152,7 @@ export default class BlockDocList extends BaseComponent {
                                     </div>
                                     <div className="col-4">
                                         {
-                                            i.docId ? <a href={ServerData.url + "part/getblob?hash=" + i.docId} target="_blank">документ</a> : null
+                                            i.docId ? <a href={Comm.url + "part/getblob?hash=" + i.docId} target="_blank">документ</a> : null
                                         }
                                         <button className="btn btn-light" onClick={() => self.UploadBlob((docId) => self.UploadDoc(i.id, docId))}>...</button>
                                     </div>
