@@ -10,8 +10,7 @@ namespace Justice.Portal.DB.JSModels
             
         }
 
-        public int UserRightId { get; set; }
-        public string Name { get; set; }
+        public string UserRightId { get; set; }
         public string Description { get; set; }
 
     }

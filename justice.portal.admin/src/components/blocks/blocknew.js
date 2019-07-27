@@ -3,16 +3,24 @@ import BaseComponent from '../basecomponent';
 import { ToggleButton } from 'primereact/togglebutton';
 import 'react-quill/dist/quill.core.css';
 import 'react-quill/dist/quill.snow.css';
-import ReactQuill from 'react-quill';
 import Comm from '../../modules/comm'
 import WYSIWYG from '../editors/wysiwyg';
 import TB from '../editors/tb';
+import eventClient from '../../modules/eventclient';
 
 export default class BlockNew extends BaseComponent {
 
 
     constructor(props) {
         super(props);
+        eventClient.emit(
+            "addbreadcrump",
+            [
+                {
+                    title: "Новина",
+                }
+            ]
+        );
         this.AddImage = this.AddImage.bind(this);
         this.Validate = this.Validate.bind(this);
         this.GetData = this.GetData.bind(this);

@@ -17,6 +17,8 @@ import WebPageEditor from './components/webpageeditor';
 import ChangePassword from './components/changepassword';
 import Collections from './components/collections';
 import CollectionEditor from './components/collectioneditor';
+import Institutions from './components/institutions';
+import InstitutionEditor from './components/institutioneditor';
 
 class App extends BaseComponent {
 
@@ -79,6 +81,8 @@ class App extends BaseComponent {
                 <Route exact path='/changepassword' component={ChangePassword} />
                 <Route exact path='/collections' component={Collections} />
                 <Route exact path='/editcollection/:id?' component={CollectionEditor} />
+                <Route exact path='/institutions' component={Institutions} />
+                <Route exact path='/editinstitution/:id?' component={InstitutionEditor} />
                 <Route component={MainMenu} />
 
 

@@ -21,6 +21,7 @@ namespace Justice.Portal.DB.Models
         public virtual DbSet<BlockTypeProperty> BlockTypeProperty { get; set; }
         public virtual DbSet<BlockTypePropertyValue> BlockTypePropertyValue { get; set; }
         public virtual DbSet<Collection> Collection { get; set; }
+        public virtual DbSet<Institution> Institution { get; set; }
         public virtual DbSet<PortalGroup> PortalGroup { get; set; }
         public virtual DbSet<PortalGroup2Part> PortalGroup2Part { get; set; }
         public virtual DbSet<PortalGroup2Right> PortalGroup2Right { get; set; }
@@ -179,6 +180,19 @@ namespace Justice.Portal.DB.Models
                 entity.Property(e => e.Structure).IsRequired();
             });
 
+            modelBuilder.Entity<Institution>(entity =>
+            {
+                entity.Property(e => e.InstitutionId)
+                    .HasMaxLength(20)
+                    .ValueGeneratedNever();
+
+                entity.Property(e => e.Content).IsRequired();
+
+                entity.Property(e => e.Name)
+                    .IsRequired()
+                    .HasMaxLength(200);
+            });
+
             modelBuilder.Entity<PortalGroup>(entity =>
             {
                 entity.Property(e => e.Name)
@@ -216,6 +230,10 @@ namespace Justice.Portal.DB.Models
 
                 entity.HasIndex(e => e.UserRightId)
                     .HasName("idx_PortalGroup2Right_UserRightId");
+
+                entity.Property(e => e.UserRightId)
+                    .IsRequired()
+                    .HasMaxLength(20);
 
                 entity.HasOne(d => d.PortalGroup)
                     .WithMany(p => p.PortalGroup2Right)
@@ -304,6 +322,10 @@ namespace Justice.Portal.DB.Models
                 entity.HasIndex(e => e.UserRightId)
                     .HasName("idx_PortalUser2Right_UserRightId");
 
+                entity.Property(e => e.UserRightId)
+                    .IsRequired()
+                    .HasMaxLength(20);
+
                 entity.HasOne(d => d.PortalUser)
                     .WithMany(p => p.PortalUser2Right)
                     .HasForeignKey(d => d.PortalUserId)
@@ -376,19 +398,13 @@ namespace Justice.Portal.DB.Models
 
             modelBuilder.Entity<UserRight>(entity =>
             {
-                entity.HasIndex(e => e.Name)
-                    .HasName("idx_UserRight_Name")
-                    .IsUnique();
-
-                entity.Property(e => e.UserRightId).ValueGeneratedNever();
+                entity.Property(e => e.UserRightId)
+                    .HasMaxLength(20)
+                    .ValueGeneratedNever();
 
                 entity.Property(e => e.Description)
                     .IsRequired()
                     .HasMaxLength(50);
-
-                entity.Property(e => e.Name)
-                    .IsRequired()
-                    .HasMaxLength(20);
             });
         }
     }

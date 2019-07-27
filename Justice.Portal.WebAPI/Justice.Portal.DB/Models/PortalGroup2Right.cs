@@ -7,7 +7,7 @@ namespace Justice.Portal.DB.Models
     {
         public int PortalGroup2RightId { get; set; }
         public int PortalGroupId { get; set; }
-        public int UserRightId { get; set; }
+        public string UserRightId { get; set; }
 
         public virtual PortalGroup PortalGroup { get; set; }
         public virtual UserRight UserRight { get; set; }

@@ -3,12 +3,21 @@ import BaseComponent from '../basecomponent';
 import { ToggleButton } from 'primereact/togglebutton';
 import Comm from '../../modules/comm';
 import { toast } from 'react-toastify';
+import eventClient from '../../modules/eventclient';
 
 export default class BlockCollection extends BaseComponent {
 
 
     constructor(props) {
         super(props);
+        eventClient.emit(
+            "addbreadcrump",
+            [
+                {
+                    title: "Колекция",
+                }
+            ]
+        );
         this.Validate = this.Validate.bind(this);
         this.GetData = this.GetData.bind(this);
         var state = { lang: "bg" };

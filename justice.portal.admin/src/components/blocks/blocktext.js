@@ -4,12 +4,21 @@ import { ToggleButton } from 'primereact/togglebutton';
 import Comm from '../../modules/comm'
 import WYSIWYG from '../editors/wysiwyg';
 import TB from '../editors/tb';
+import eventClient from '../../modules/eventclient';
 
 export default class BlockText extends BaseComponent {
 
 
     constructor(props) {
         super(props);
+        eventClient.emit(
+            "addbreadcrump",
+            [
+                {
+                    title: "Свободен текст",
+                }
+            ]
+        );
         this.AddImage = this.AddImage.bind(this);
         this.Validate = this.Validate.bind(this);
         this.GetData = this.GetData.bind(this);

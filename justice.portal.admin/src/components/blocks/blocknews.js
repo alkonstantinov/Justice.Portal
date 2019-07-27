@@ -1,12 +1,21 @@
 import React from 'react';
 import BaseComponent from '../basecomponent';
 import { ToggleButton } from 'primereact/togglebutton';
+import eventClient from '../../modules/eventclient';
 
 export default class BlockNews extends BaseComponent {
 
 
     constructor(props) {
         super(props);
+        eventClient.emit(
+            "addbreadcrump",
+            [
+                {
+                    title: "Новини",
+                }
+            ]
+        );
         this.Validate = this.Validate.bind(this);
         this.GetData = this.GetData.bind(this);
         var state = { lang: "bg" };

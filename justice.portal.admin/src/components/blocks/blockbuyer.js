@@ -12,7 +12,7 @@ import moment from 'moment';
 import eventClient from '../../modules/eventclient';
 
 
-export default class BlockDocList extends BaseComponent {
+export default class BlockBuyer extends BaseComponent {
 
 
     constructor(props) {
@@ -21,30 +21,31 @@ export default class BlockDocList extends BaseComponent {
             "addbreadcrump",
             [
                 {
-                    title: "Списък документи",
+                    title: "Профил на купувача",
                 }
             ]
         );
         this.Validate = this.Validate.bind(this);
         this.GetData = this.GetData.bind(this);
-        this.AddDoc = this.AddDoc.bind(this);
-        this.SetDocTitle = this.SetDocTitle.bind(this);
-        this.SetDocDate = this.SetDocDate.bind(this);
-        this.UploadDoc = this.UploadDoc.bind(this);
-        this.DeleteDoc = this.DeleteDoc.bind(this);
+        this.AddLink = this.AddLink.bind(this);
+        this.SetLinkTitle = this.SetLinkTitle.bind(this);
+        this.SetLink = this.SetLink.bind(this);
+        this.DeleteLink = this.DeleteLink.bind(this);
+        this.SetOrder = this.SetOrder.bind(this);
+
 
         var state = { lang: "bg" };
         if (this.props.block) {
             var obj = JSON.parse(this.props.block.jsonvalues);
             state.title = obj.title || {};
             state.body = obj.body || {};
-            state.docs = obj.docs || [];
-            state.docs = state.docs.sort((a, b) => a.date > b.date ? 1 : -1);
+            state.links = obj.links || [];
+            state.links = state.links.sort((a, b) => a.order - b.order);
         }
         else {
             state.title = {};
             state.body = {};
-            state.docs = [];
+            state.links = [];
         }
 
 
@@ -61,51 +62,56 @@ export default class BlockDocList extends BaseComponent {
         return {
             title: this.state.title,
             body: this.state.body,
-            docs: this.state.docs
+            links: this.state.links
         };
     }
 
-    AddDoc() {
+    AddLink() {
         var newDoc = {
             id: uuidv4(),
+            order: 0,
             title: {
                 bg: '',
                 en: ''
             },
-            docId: null,
-            date: new Date()
+            link: ""
         }
 
-        var docs = this.state.docs;
-        docs = [newDoc].concat(docs);
-        this.setState({ docs: docs });
+        var links = this.state.links;
+        links = [newDoc].concat(links);
+        this.setState({ links: links });
     }
 
-    SetDocTitle(id, value) {
-        var docs = this.state.docs;
-        docs.find(x => x.id === id).title[this.state.lang] = value;
-        this.setState({ docs: docs });
+    SetLinkTitle(id, value) {
+        var links = this.state.links;
+        links.find(x => x.id === id).title[this.state.lang] = value;
+        this.setState({ links: links });
 
     }
-    SetDocDate(id, value) {
-        var docs = this.state.docs;
-        docs.find(x => x.id === id).date = value;
-        this.setState({ docs: docs });
+    SetLink(id, value) {
+        var links = this.state.links;
+        links.find(x => x.id === id).link = value;
+        this.setState({ links: links });
 
     }
 
-    UploadDoc(id, docId) {
-        var docs = this.state.docs;
-        docs.find(x => x.id === id).docId = docId;
-        this.setState({ docs: docs });
+    SetOrder(id, value) {
+        var links = this.state.links;
+        value = parseInt(value || "0");
+        links.find(x => x.id === id).order = value;
+
+
+        this.setState({ links: links });
+
     }
 
-    DeleteDoc(id) {
-        var docs = this.state.docs;
-        var toDel = docs.find(x => x.id === id);
-        var i = docs.indexOf(toDel);
-        docs.splice(i, 1);
-        this.setState({ docs: docs });
+
+    DeleteLink(id) {
+        var links = this.state.links;
+        var toDel = links.find(x => x.id === id);
+        var i = links.indexOf(toDel);
+        links.splice(i, 1);
+        this.setState({ links: links });
     }
 
 
@@ -141,33 +147,30 @@ export default class BlockDocList extends BaseComponent {
                 </div>,
                 <div className="row">
                     <div className="col-2">
-                        <button className="btn btn-light" onClick={self.AddDoc}>+</button>
+                        <button className="btn btn-light" onClick={self.AddLink}>+</button>
                     </div>
                     <div className="col-10">
                         {
-                            self.state.docs.map((i, no) =>
+                            self.state.links.map((i, no) =>
                                 <div className="row" key={no}>
-                                    <div className="col-3">
+                                    <div className="col-1">
+                                        <label className="control-label" htmlFor="Date">No</label>
+                                        <input type="number" min="0" className="form-control" value={i.order}
+                                            onChange={(e) => self.SetOrder(i.id, e.target.value)}></input>
+                                    </div>
+                                    <div className="col-4">
                                         <label className="control-label" htmlFor="Date">Заглавие</label>
 
                                         <input type="text" className="form-control" value={i.title[self.state.lang]}
-                                            onChange={(e) => self.SetDocTitle(i.id, e.target.value)}></input>
+                                            onChange={(e) => self.SetLinkTitle(i.id, e.target.value)}></input>
                                     </div>
-                                    <div className="col-3">
-                                        <label className="control-label" htmlFor="Date">Дата</label>
-
-                                        <Calendar dateFormat="dd.mm.yy" value={moment(i.date, "YYYY-MM-DD").toDate()}
-                                            onChange={(e) => self.SetDocDate(i.id, moment(e.value).format("YYYY-MM-DD"))}
-                                            readOnlyInput="true" inputClassName="form-control" baseZIndex="0"></Calendar>
+                                    <div className="col-6">
+                                        <label className="control-label" htmlFor="Date">Връзка към правната система</label>
+                                        <input type="text" className="form-control" value={i.link}
+                                            onChange={(e) => self.SetLink(i.id, e.target.value)}></input>
                                     </div>
-                                    <div className="col-4">
-                                        {
-                                            i.docId ? <a href={Comm.url + "part/getblob?hash=" + i.docId} target="_blank">документ</a> : null
-                                        }
-                                        <button className="btn btn-light" onClick={() => self.UploadBlob((docId) => self.UploadDoc(i.id, docId))}>...</button>
-                                    </div>
-                                    <div className="col-2">
-                                        <button className="btn btn-light" onClick={() => self.DeleteDoc(i.id)}>-</button>
+                                    <div className="col-1">
+                                        <button className="btn btn-light" onClick={() => self.DeleteLink(i.id)}>-</button>
                                     </div>
                                 </div>
                             )

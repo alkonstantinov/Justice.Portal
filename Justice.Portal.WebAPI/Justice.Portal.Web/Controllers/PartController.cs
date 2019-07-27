@@ -188,48 +188,14 @@ namespace Justice.Portal.Web.Controllers
 
         }
 
-        [HttpGet("GetPagesForLinking")]
-        public async Task<IActionResult> GetPagesForLinking(string portalPartId, string webPageId)
-        {
-            string token = this.GetToken();
-            if (!db.IsAuthenticated(token))
-                return Unauthorized();
-
-
-            
-
-            List<PageInfo> lst = new List<PageInfo>();
-            lst.Add(new PageInfo()
-            {
-                PageId = 1,
-                Part = "Агенция по вписванията",
-                Title = "Page 1"
-            });
-            lst.Add(new PageInfo()
-            {
-                PageId = 2,
-                Part = "Министерство",
-                Title = "Page 2"
-            });
-            lst.AddRange(lst);
-            lst.AddRange(lst);
-            lst.AddRange(lst);
-            lst.AddRange(lst);
-            lst.AddRange(lst);
-            lst.AddRange(lst);
-            lst.AddRange(lst);
-            lst.AddRange(lst);
-            lst.AddRange(lst);
-            lst.AddRange(lst);
-            return Ok(lst);
-
-        }
-
+        
 
         [HttpGet("GetTemplate")]
 
         public async Task<IActionResult> GetTemplate(int templateId)
         {
+            if (!this.HasRight("admintemplates"))
+                return Unauthorized();
             string token = this.GetToken();
             if (!db.IsAuthenticated(token))
                 return Unauthorized();
@@ -241,6 +207,8 @@ namespace Justice.Portal.Web.Controllers
         [HttpPost("SetTemplate")]
         public async Task<IActionResult> SetTemplate([FromBody]JSTemplate template)
         {
+            if (!this.HasRight("admintemplates"))
+                return Unauthorized();            
             string token = this.GetToken();
             if (!db.IsAuthenticated(token))
                 return Unauthorized();
@@ -255,6 +223,8 @@ namespace Justice.Portal.Web.Controllers
         [HttpGet("GetCollections")]
         public async Task<IActionResult> GetCollections()
         {
+            if (!this.HasRight("admincollections"))
+                return Unauthorized();
             string token = this.GetToken();
             if (!db.IsAuthenticated(token))
                 return Unauthorized();
@@ -265,6 +235,8 @@ namespace Justice.Portal.Web.Controllers
         [HttpGet("GetCollection")]
         public async Task<IActionResult> GetCollection(int collectionId)
         {
+            if (!this.HasRight("admincollections"))
+                return Unauthorized();
             string token = this.GetToken();
             if (!db.IsAuthenticated(token))
                 return Unauthorized();
@@ -275,6 +247,8 @@ namespace Justice.Portal.Web.Controllers
         [HttpDelete("DeleteCollection/{collectionId}")]
         public async Task<IActionResult> DeleteCollection([FromRoute]int collectionId)
         {
+            if (!this.HasRight("admincollections"))
+                return Unauthorized();
             string token = this.GetToken();
             if (!db.IsAuthenticated(token))
                 return Unauthorized();
@@ -287,10 +261,50 @@ namespace Justice.Portal.Web.Controllers
         [HttpPost("SaveCollection")]
         public async Task<IActionResult> SaveCollection([FromBody]JSCollection collection)
         {
+            if (!this.HasRight("admincollections"))
+                return Unauthorized();
             string token = this.GetToken();
             if (!db.IsAuthenticated(token))
                 return Unauthorized();
             db.SaveCollection(collection);
+            return Ok();
+        }
+
+
+        [HttpGet("GetInstitutions")]
+        public async Task<IActionResult> GetInstitutions()
+        {
+            //if (!this.HasRight("admininstitutions"))
+            //    return Unauthorized();
+            string token = this.GetToken();
+            if (!db.IsAuthenticated(token))
+                return Unauthorized();
+
+            return Ok(db.GetInstitutions());
+        }
+
+        [HttpGet("GetInstitution")]
+        public async Task<IActionResult> GetInstitution(string institutionId)
+        {
+            if (!this.HasRight("admininstitutions"))
+                return Unauthorized();
+            string token = this.GetToken();
+            if (!db.IsAuthenticated(token))
+                return Unauthorized();
+
+            return Ok(db.GetInstitution(institutionId));
+        }
+
+
+        [HttpPost("SaveInstitution")]
+        public async Task<IActionResult> SaveInstitution([FromBody]JSInstitution institution)
+        {
+            if (!this.HasRight("admininstitutions"))
+                return Unauthorized();
+            string token = this.GetToken();
+            if (!db.IsAuthenticated(token))
+                return Unauthorized();
+            db.SaveInstitution(institution);
             return Ok();
         }
 

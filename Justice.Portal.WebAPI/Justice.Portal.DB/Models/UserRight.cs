@@ -11,8 +11,7 @@ namespace Justice.Portal.DB.Models
             PortalUser2Right = new HashSet<PortalUser2Right>();
         }
 
-        public int UserRightId { get; set; }
-        public string Name { get; set; }
+        public string UserRightId { get; set; }
         public string Description { get; set; }
 
         public virtual ICollection<PortalGroup2Right> PortalGroup2Right { get; set; }

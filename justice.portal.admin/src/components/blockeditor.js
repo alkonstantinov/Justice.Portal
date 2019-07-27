@@ -21,6 +21,8 @@ import BlockNews from './blocks/blocknews';
 import BlockAds from './blocks/blockads';
 import BlockMenu from './blocks/blockmenu';
 import BlockCollection from './blocks/blockcollection';
+import BlockCiela from './blocks/blockciela';
+import BlockBuyer from './blocks/blockbuyer';
 
 export default class BlockEditor extends BaseComponent {
     constructor(props) {
@@ -50,6 +52,7 @@ export default class BlockEditor extends BaseComponent {
         this.GetBio = this.GetBio.bind(this);
         this.GetInfo = this.GetInfo.bind(this);
         this.GetDocList = this.GetDocList.bind(this);
+        this.GetCiela = this.GetCiela.bind(this);
         this.GetMain = this.GetMain.bind(this);
         this.Cancel = this.Cancel.bind(this);
         this.GetBioCabinet = this.GetBioCabinet.bind(this);
@@ -58,6 +61,7 @@ export default class BlockEditor extends BaseComponent {
         this.GetAds = this.GetAds.bind(this);
         this.GetMenu = this.GetMenu.bind(this);
         this.GetCollection = this.GetCollection.bind(this);
+        this.GetBuyer = this.GetBuyer.bind(this);
 
 
         this.state = { mode: "loading" };
@@ -153,6 +157,21 @@ export default class BlockEditor extends BaseComponent {
 
     }
 
+    GetCiela() {
+        return (
+            <BlockCiela block={this.state.block} ref="Editor" />
+        );
+
+    }
+
+    GetBuyer() {
+        return (
+            <BlockBuyer block={this.state.block} ref="Editor" />
+        );
+
+    }
+
+
     GetCollection() {
         return (
             <BlockCollection block={this.state.block} ref="Editor" portalPartId={this.props.match.params.portalPartId} />
@@ -170,6 +189,7 @@ export default class BlockEditor extends BaseComponent {
             case "bio": return this.GetBio();
             case "info": return this.GetInfo();
             case "doclist": return this.GetDocList();
+            case "ciela": return this.GetCiela();
             case "main": return this.GetMain();
             case "biocabinet": return this.GetBioCabinet();
             case "biomain": return this.GetBioMain();
@@ -177,6 +197,8 @@ export default class BlockEditor extends BaseComponent {
             case "ads": return this.GetAds();
             case "menu": return this.GetMenu();
             case "collection": return this.GetCollection();
+            case "buyer": return this.GetBuyer();
+
             default: return null;
         }
     }

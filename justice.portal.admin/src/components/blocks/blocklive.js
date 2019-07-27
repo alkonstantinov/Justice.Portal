@@ -1,15 +1,22 @@
 import React from 'react';
 import BaseComponent from '../basecomponent';
 import { ToggleButton } from 'primereact/togglebutton';
-import Comm from '../../modules/comm'
-import WYSIWYG from '../editors/wysiwyg';
 import TB from '../editors/tb';
+import eventClient from '../../modules/eventclient';
 
 export default class BlockLive extends BaseComponent {
 
 
     constructor(props) {
         super(props);
+        eventClient.emit(
+            "addbreadcrump",
+            [
+                {
+                    title: "Емисия",
+                }
+            ]
+        );
         this.Validate = this.Validate.bind(this);
         this.GetData = this.GetData.bind(this);
         var state = { lang: "bg" };

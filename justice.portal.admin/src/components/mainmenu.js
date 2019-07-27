@@ -81,7 +81,7 @@ class MainMenu extends BaseComponent {
                     </div>
                     <div className="col-3">
                         {
-                            session.parts.length !== 0 ?
+                            session.rights.find(x => x === "admintemplates") !== null ?
                                 <Link className="btn btn-default fillSpace" to='/webpages'>
                                     <i className="far fa-file-alt"></i>
                                     <p>Страници</p>
@@ -90,13 +90,28 @@ class MainMenu extends BaseComponent {
                         }
                     </div>
                     <div className="col-3">
+                        {
+                            session.rights.find(x => x === "admincollections") !== null ?
+                                <Link className="btn btn-default fillSpace" to='/collections'>
+                                    <i className="fas fa-file-alt"></i>
+                                    <p>Колекции</p>
+                                </Link>
+                                : null
+                        }
+                    </div>
+                    <div className="col-3">
+                        {
+                            session.rights.find(x => x === "admininstitutions") !== null ?
+                                <Link className="btn btn-default fillSpace" to='/institutions'>
+                                    <i className="fas fa-file-alt"></i>
+                                    <p>Институции</p>
+                                </Link>
+                                : null
+                        }
 
-                        <Link className="btn btn-default fillSpace" to='/collections'>
-                            <i className="fas fa-file-alt"></i>
-                            <p>Колекции</p>
-                        </Link>
 
                     </div>
+
 
 
                 </div>

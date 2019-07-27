@@ -5,18 +5,40 @@ import 'primereact/resources/themes/nova-light/theme.css';
 import 'primereact/resources/primereact.min.css';
 import 'primeicons/primeicons.css';
 import moment from 'moment';
-
+import Comm from '../modules/comm';
+import { toast } from 'react-toastify';
+const notForExport = ["institutions"];
 export default class PropertyEditor extends BaseComponent {
     constructor(props) {
         super(props);
         this.GetPropertyElement = this.GetPropertyElement.bind(this);
         this.GetCheck = this.GetCheck.bind(this);
         this.GetDate = this.GetDate.bind(this);
+        this.GetInstitution = this.GetInstitution.bind(this);
         this.Validate = this.Validate.bind(this);
 
 
         this.InitializeState();
 
+    }
+
+    componentDidMount() {
+        var self = this;
+        Comm.Instance().get('part/GetInstitutions')
+            .then(result => {
+                self.setState({
+                    institutions: result.data
+                })
+            })
+            .catch(error => {
+                if (error.response && error.response.status === 401)
+                    toast.error("Липса на права", {
+                        onClose: this.Logout
+                    });
+                else
+                    toast.error(error.message);
+
+            });
     }
 
     InitializeState() {
@@ -55,9 +77,31 @@ export default class PropertyEditor extends BaseComponent {
                 // readOnlyInput="true" inputClassName="form-control" value={this.state.dddd}></Calendar>,
                 <label className="control-label" htmlFor="Date">{item.name}</label>,
 
-                <Calendar dateFormat="dd.mm.yy" value={(this.state[item.propertyId] || "")===""?"":moment(this.state[item.propertyId],"YYYY-MM-DD").toDate()} 
-                onChange={(e) => this.setState({ [item.propertyId]: moment(e.value).format("YYYY-MM-DD") })}
+                <Calendar dateFormat="dd.mm.yy" value={(this.state[item.propertyId] || "") === "" ? "" : moment(this.state[item.propertyId], "YYYY-MM-DD").toDate()}
+                    onChange={(e) => this.setState({ [item.propertyId]: moment(e.value).format("YYYY-MM-DD") })}
                     readOnlyInput="true" inputClassName="form-control"></Calendar>
+            ]
+
+        );
+    }
+
+    GetInstitution(item) {
+        var self = this;
+        return (
+
+            [
+                // <Calendar dateFormat="dd.mm.yy" onChange={(e) => this.setState({dddd:e.value}) }
+                // readOnlyInput="true" inputClassName="form-control" value={this.state.dddd}></Calendar>,
+                <label className="control-label" htmlFor="Date">{item.name}</label>,
+                <select className="form-control" value={this.state[item.propertyId]}
+                    onChange={(e) => this.setState({ [item.propertyId]: e.target.value })}>
+                    <option></option>
+                    {
+                        self.state.institutions ?
+                            self.state.institutions.map(x => <option value={x.institutionId}>{x.name}</option>)
+                            : null
+                    }
+                </select>
             ]
 
         );
@@ -68,6 +112,7 @@ export default class PropertyEditor extends BaseComponent {
         switch (item.propertyType) {
             case "check": return this.GetCheck(item);
             case "date": return this.GetDate(item);
+            case "institution": return this.GetInstitution(item);
             default: return null;
         }
     }
@@ -78,7 +123,13 @@ export default class PropertyEditor extends BaseComponent {
 
 
     GetValues() {
-        return this.state;
+        var data = {};
+        var self = this;
+        Object.keys(this.state).forEach(x => {
+            if (notForExport.indexOf(x) === -1)
+                data[x] = self.state[x]
+        });
+        return data;
     }
 
     render() {

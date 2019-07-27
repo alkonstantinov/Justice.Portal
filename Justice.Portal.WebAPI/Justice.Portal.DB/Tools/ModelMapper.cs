@@ -43,6 +43,8 @@ namespace Justice.Portal.DB.Tools
                     .ReverseMap();
                 cfg.CreateMap<JSCollection, Collection>()
                     .ReverseMap();
+                cfg.CreateMap<JSInstitution, Institution>()
+                    .ReverseMap();
 
             }
             );

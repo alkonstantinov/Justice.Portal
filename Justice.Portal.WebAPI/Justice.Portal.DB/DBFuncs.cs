@@ -23,7 +23,7 @@ namespace Justice.Portal.DB
 
         public HashSet<string> GetUserRights(int userId)
         {
-            return db.UserRight.FromSql($"select * from vwUserRights where PortalUserId={userId}").Select(x => x.Name).Distinct().ToHashSet();
+            return db.UserRight.FromSql($"select * from vwUserRights where PortalUserId={userId}").Select(x => x.UserRightId).Distinct().ToHashSet();
         }
 
         public HashSet<string> GetUserParts(int userId)
@@ -74,7 +74,7 @@ namespace Justice.Portal.DB
                 {
                     g.CanDel = !db.PortalUser2Group.Any(x => x.PortalGroupId == g.PortalGroupId);
                     g.Parts = db.PortalGroup2Part.Include(x => x.PortalPart).Where(x => x.PortalGroupId == g.PortalGroupId).Select(x => x.PortalPart.PortalPartId).ToArray();
-                    g.Rights = db.PortalGroup2Right.Include(x => x.UserRight).Where(x => x.PortalGroupId == g.PortalGroupId).Select(x => x.UserRight.Name).ToArray();
+                    g.Rights = db.PortalGroup2Right.Include(x => x.UserRight).Where(x => x.PortalGroupId == g.PortalGroupId).Select(x => x.UserRight.UserRightId).ToArray();
                 }
             }
 
@@ -88,7 +88,7 @@ namespace Justice.Portal.DB
             foreach (var u in usrs)
             {
                 u.Parts = db.PortalUser2Part.Include(x => x.PortalPart).Where(x => x.PortalUserId == u.PortalUserId).Select(x => x.PortalPart.PortalPartId).ToArray();
-                u.Rights = db.PortalUser2Right.Include(x => x.UserRight).Where(x => x.PortalUserId == u.PortalUserId).Select(x => x.UserRight.Name).ToArray();
+                u.Rights = db.PortalUser2Right.Include(x => x.UserRight).Where(x => x.PortalUserId == u.PortalUserId).Select(x => x.UserRight.UserRightId).ToArray();
                 u.Groups = db.PortalUser2Group.Where(x => x.PortalUserId == u.PortalUserId).Select(x => x.PortalGroupId).ToArray();
 
             }
@@ -138,7 +138,7 @@ namespace Justice.Portal.DB
             {
                 var rght = new PortalGroup2Right();
                 rght.PortalGroupId = newGroup.PortalGroupId;
-                rght.UserRightId = db.UserRight.First(x => x.Name == r).UserRightId;
+                rght.UserRightId = r;
                 db.PortalGroup2Right.Add(rght);
 
             }
@@ -226,7 +226,7 @@ namespace Justice.Portal.DB
             {
                 var rght = new PortalUser2Right();
                 rght.PortalUserId = newUser.PortalUserId;
-                rght.UserRightId = db.UserRight.First(x => x.Name == r).UserRightId;
+                rght.UserRightId = r;// db.UserRight.First(x => x.Name == r).UserRightId;
                 db.PortalUser2Right.Add(rght);
 
             }
@@ -478,6 +478,38 @@ namespace Justice.Portal.DB
             c.Structure = collection.Structure;
             db.SaveChanges();
         }
+
+
+        public JSInstitution[] GetInstitutions()
+        {
+            return db.Institution.Select(x =>
+            new JSInstitution()
+            {
+                InstitutionId = x.InstitutionId,
+                Name = x.Name
+            })
+                .ToArray();
+        }
+
+        public JSInstitution GetInstitution(string institutionId)
+        {
+            return ModelMapper.Instance.Mapper.Map<JSInstitution>(db.Institution.First(x => x.InstitutionId == institutionId));
+        }
+
+        public void SaveInstitution(JSInstitution institution)
+        {
+            Institution i;
+            if (string.IsNullOrEmpty(institution.InstitutionId))
+            {
+                i = new Institution();
+                db.Institution.Add(i);
+            }
+            else
+                i = db.Institution.First(x => x.InstitutionId == institution.InstitutionId);
+            i.Content = institution.Content;
+            db.SaveChanges();
+        }
+
 
 
     }
