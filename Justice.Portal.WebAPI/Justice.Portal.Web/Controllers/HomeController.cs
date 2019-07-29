@@ -7,10 +7,11 @@ using Justice.Portal.DB.JSModels;
 using Justice.Portal.DB.Models;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
+using Serilog;
 
 namespace Justice.Portal.Web.Controllers
 {
-    [Route("[controller]")]
+    //[Route("[controller]")]
     public class HomeController : Controller
     {
         protected DBFuncs db;
@@ -19,9 +20,10 @@ namespace Justice.Portal.Web.Controllers
         {
             this.db = new DBFuncs(jpc);
         }
-        [HttpGet("index/{url?}")]
-        public IActionResult Index(string url)
+        //[HttpGet("index/{url?}")]
+        public IActionResult Index([FromRoute]string url)
         {
+            
             JSBlock block;
             if (string.IsNullOrEmpty(url))
                 block = db.GetBlock();
@@ -40,7 +42,7 @@ namespace Justice.Portal.Web.Controllers
             JArray jaSources = JArray.Parse(template.Sources);
             foreach (var b in jaSources)
             {
-                
+
                 b["blockData"] = JObject.Parse(db.GetBlock(int.Parse(b["value"].ToString())).Jsonvalues);
                 joPageData["block_" + b["id"].ToString()] = b;
             }
@@ -55,5 +57,7 @@ namespace Justice.Portal.Web.Controllers
 
             return View("index", html);
         }
+
+        
     }
 }

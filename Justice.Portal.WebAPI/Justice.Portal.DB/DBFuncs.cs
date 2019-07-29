@@ -540,6 +540,11 @@ namespace Justice.Portal.DB
             return ModelMapper.Instance.Mapper.Map<JSTemplate>(db.Template.First(x => x.BlockTypeId == blockTypeId && x.PortalPartId == portalPartId));
         }
 
+        public JSBlockType GetBlockType(string blockTypeId)
+        {
+            return ModelMapper.Instance.Mapper.Map<JSBlockType>(db.BlockType.First(x => x.BlockTypeId == blockTypeId));
+        }
+
 
     }
 }

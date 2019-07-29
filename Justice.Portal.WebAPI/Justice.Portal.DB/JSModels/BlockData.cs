@@ -11,5 +11,7 @@ namespace Justice.Portal.DB.JSModels
         public JSProperty[] Properties { get; set; }
 
         public PropertyValue[] Values { get; set; }
+
+        public bool CanBePage { get; set; }
     }
 }

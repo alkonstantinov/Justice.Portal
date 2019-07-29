@@ -239,6 +239,7 @@ export default class BlockEditor extends BaseComponent {
                     values: result.data.values,
                     block: result.data.block,
                     Url: result.data.block ? result.data.block.url : uuidv4(),
+                    CanBePage: result.data.canBePage,
                     mode: "edit"
                 })
             })
@@ -378,12 +379,16 @@ export default class BlockEditor extends BaseComponent {
                             <input type="text" className="form-control" value={this.state.Name} onChange={(e) => self.setState({ Name: e.target.value })}></input>
                         </div>
                     </div>
-                    <div className="row">
-                        <div className="col-12">
-                            <label className="control-label" htmlFor="Date">URL</label>
-                            <input type="text" className="form-control" value={this.state.Url} onChange={(e) => self.setState({ Url: e.target.value })}></input>
-                        </div>
-                    </div>
+                    {
+                        self.state.CanBePage ?
+                            <div className="row">
+                                <div className="col-12">
+                                    <label className="control-label" htmlFor="Date">URL</label>
+                                    <input type="text" className="form-control" value={this.state.Url} onChange={(e) => self.setState({ Url: e.target.value })}></input>
+                                </div>
+                            </div>
+                            : null
+                    }
                     <div className="row">
                         <div className="col-12">
                             <PropertyEditor properties={self.state.properties} ref="Props" values={self.state.values}></PropertyEditor>

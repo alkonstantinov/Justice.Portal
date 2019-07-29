@@ -112,7 +112,7 @@ namespace Justice.Portal.Web.Controllers
                     return Unauthorized();
                 result.Values = db.GetBlockPropertyValues(blockId.Value);
             }
-
+            result.CanBePage = db.GetBlockType(blockTypeId).CanBePage;
             return Ok(result);
         }
 
