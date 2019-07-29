@@ -326,6 +326,19 @@ namespace Justice.Portal.DB
             return ModelMapper.Instance.Mapper.Map<JSBlock>(db.Block.First(x => x.BlockId == blockId));
         }
 
+
+        public JSBlock GetBlock(string url)
+        {
+            return ModelMapper.Instance.Mapper.Map<JSBlock>(db.Block.First(x => x.Url.Equals(url, StringComparison.InvariantCultureIgnoreCase)));
+        }
+
+
+        public JSBlock GetBlock()
+        {
+            return ModelMapper.Instance.Mapper.Map<JSBlock>(db.Block.First(x => x.PortalPartId == "min" && x.BlockTypeId == "main"));
+        }
+
+
         public JSPortalPart GetPart(string partId)
         {
             return ModelMapper.Instance.Mapper.Map<JSPortalPart>(db.PortalPart.First(x => x.PortalPartId == partId));
@@ -383,6 +396,7 @@ namespace Justice.Portal.DB
                 block = db.Block.First(x => x.BlockId == data.Block.BlockId);
                 block.Jsonvalues = data.Block.Jsonvalues;
                 block.Name = data.Block.Name;
+                block.Url = data.Block.Url;
 
             }
             db.SaveChanges();
@@ -454,7 +468,7 @@ namespace Justice.Portal.DB
 
         public JSCollection GetCollection(int collectionId)
         {
-            return ModelMapper.Instance.Mapper.Map<JSCollection>(db.Collection.First(x=>x.CollectionId == collectionId));
+            return ModelMapper.Instance.Mapper.Map<JSCollection>(db.Collection.First(x => x.CollectionId == collectionId));
         }
 
         public void DeleteCollection(int collectionId)
@@ -510,6 +524,21 @@ namespace Justice.Portal.DB
             db.SaveChanges();
         }
 
+        public bool UrlExists(string url, int? blockId)
+        {
+            return db.Block.Any(x => x.Url == url && (!blockId.HasValue || x.BlockId != blockId.Value));
+        }
+
+        public JSInstitution GetInstitutionByBlock(int blockId)
+        {
+            var iid = db.BlockTypePropertyValue.First(x => x.BlockId == blockId && x.PropertyId == "institution").Value;
+            return ModelMapper.Instance.Mapper.Map<JSInstitution>(db.Institution.First(x => x.InstitutionId == iid));
+        }
+
+        public JSTemplate GetTemplateByBlock(string blockTypeId, string portalPartId)
+        {
+            return ModelMapper.Instance.Mapper.Map<JSTemplate>(db.Template.First(x => x.BlockTypeId == blockTypeId && x.PortalPartId == portalPartId));
+        }
 
 
     }

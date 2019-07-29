@@ -79,6 +79,10 @@ namespace Justice.Portal.DB.Models
                 entity.HasIndex(e => e.PortalPartId)
                     .HasName("idx_Block_PortalPartId");
 
+                entity.HasIndex(e => e.Url)
+                    .HasName("ix_block_url")
+                    .IsUnique();
+
                 entity.Property(e => e.BlockTypeId)
                     .IsRequired()
                     .HasMaxLength(20);
@@ -92,6 +96,10 @@ namespace Justice.Portal.DB.Models
                 entity.Property(e => e.PortalPartId)
                     .IsRequired()
                     .HasMaxLength(20);
+
+                entity.Property(e => e.Url)
+                    .IsRequired()
+                    .HasMaxLength(500);
 
                 entity.HasOne(d => d.BlockType)
                     .WithMany(p => p.Block)

@@ -22,7 +22,10 @@ import BlockAds from './blocks/blockads';
 import BlockMenu from './blocks/blockmenu';
 import BlockCollection from './blocks/blockcollection';
 import BlockCiela from './blocks/blockciela';
+import uuidv4 from 'uuid/v4';
 import BlockBuyer from './blocks/blockbuyer';
+import BlockAdsSq from './blocks/blockadssq';
+import BlockNewsSq from './blocks/blocknewssq';
 
 export default class BlockEditor extends BaseComponent {
     constructor(props) {
@@ -59,6 +62,8 @@ export default class BlockEditor extends BaseComponent {
         this.GetBioMain = this.GetBioMain.bind(this);
         this.GetNews = this.GetNews.bind(this);
         this.GetAds = this.GetAds.bind(this);
+        this.GetNewsSq = this.GetNewsSq.bind(this);
+        this.GetAdsSq = this.GetAdsSq.bind(this);
         this.GetMenu = this.GetMenu.bind(this);
         this.GetCollection = this.GetCollection.bind(this);
         this.GetBuyer = this.GetBuyer.bind(this);
@@ -84,6 +89,20 @@ export default class BlockEditor extends BaseComponent {
         );
 
     }
+
+
+    GetAdsSq() {
+        return (<BlockAdsSq block={this.state.block} ref="Editor" />
+        );
+
+    }
+    GetNewsSq() {
+        return (<BlockNewsSq block={this.state.block} ref="Editor" />
+        );
+
+    }
+
+
     GetBioMain() {
         return (<BlockBioMain block={this.state.block} ref="Editor" />
         );
@@ -195,6 +214,8 @@ export default class BlockEditor extends BaseComponent {
             case "biomain": return this.GetBioMain();
             case "news": return this.GetNews();
             case "ads": return this.GetAds();
+            case "newssq": return this.GetNewsSq();
+            case "adssq": return this.GetAdsSq();
             case "menu": return this.GetMenu();
             case "collection": return this.GetCollection();
             case "buyer": return this.GetBuyer();
@@ -217,6 +238,7 @@ export default class BlockEditor extends BaseComponent {
                     properties: result.data.properties,
                     values: result.data.values,
                     block: result.data.block,
+                    Url: result.data.block ? result.data.block.url : uuidv4(),
                     mode: "edit"
                 })
             })
@@ -231,10 +253,34 @@ export default class BlockEditor extends BaseComponent {
             });
     }
 
-    Save() {
+    async Save() {
         var ok = (this.state.Name || "") !== "";
         if (!ok) {
             toast.error("Моля, въведете название");
+        }
+        if ((this.state.Url || "") === "") {
+            ok = false;
+            toast.error("Моля, въведете URL");
+        }
+
+
+        var urlExists = false;
+        await Comm.Instance().get('part/UrlExists?url=' + this.state.Url + (this.props.match.params.blockId ? "&blockId=" + this.props.match.params.blockId : ""))
+            .then(result => {
+                urlExists = result.data;
+            })
+            .catch(error => {
+                if (error.response && error.response.status === 401)
+                    toast.error("Липса на права", {
+                        onClose: this.Logout
+                    });
+                else
+                    toast.error(error.message);
+
+            });
+        if (urlExists) {
+            toast.error("URL вече е използвано");
+            ok = false;
         }
         var val = this.refs["Props"].Validate();
         ok = ok && (val === null);
@@ -269,6 +315,7 @@ export default class BlockEditor extends BaseComponent {
                 portalPartId: this.props.match.params.portalPartId,
                 BlockTypeId: this.props.match.params.blockTypeId,
                 Name: this.state.Name,
+                Url: this.state.Url,
                 Jsonvalues: JSON.stringify(partData)
             },
             Values: propArray
@@ -329,6 +376,12 @@ export default class BlockEditor extends BaseComponent {
                         <div className="col-12">
                             <label className="control-label" htmlFor="Date">Заглавие</label>
                             <input type="text" className="form-control" value={this.state.Name} onChange={(e) => self.setState({ Name: e.target.value })}></input>
+                        </div>
+                    </div>
+                    <div className="row">
+                        <div className="col-12">
+                            <label className="control-label" htmlFor="Date">URL</label>
+                            <input type="text" className="form-control" value={this.state.Url} onChange={(e) => self.setState({ Url: e.target.value })}></input>
                         </div>
                     </div>
                     <div className="row">

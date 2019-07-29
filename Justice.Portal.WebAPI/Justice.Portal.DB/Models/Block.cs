@@ -14,6 +14,7 @@ namespace Justice.Portal.DB.Models
         public string PortalPartId { get; set; }
         public string BlockTypeId { get; set; }
         public string Name { get; set; }
+        public string Url { get; set; }
         public string Jsonvalues { get; set; }
 
         public virtual BlockType BlockType { get; set; }

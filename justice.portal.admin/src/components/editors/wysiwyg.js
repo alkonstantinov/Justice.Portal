@@ -6,7 +6,6 @@ import renderHTML from 'react-render-html';
 import CKEditor from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import Blocks from '../blocks';
-
 //import ClassicEditor from '../../ckeditor/build/ckeditor';
 
 
@@ -22,11 +21,14 @@ export default class WYSIWYG extends BaseComponent {
         this.InsertImage = this.InsertImage.bind(this);
         this.InsertDocument = this.InsertDocument.bind(this);
         this.GetSelectedText = this.GetSelectedText.bind(this);
+        this.ShowHtml = this.ShowHtml.bind(this);
 
         var data = this.props.getData(this.props.stateId);
 
         this.state = {
             ShowSelectPageDialog: false,
+            ShowHtml: false,
+            htmlcode: false,
             Data: data
         };
     }
@@ -99,6 +101,7 @@ export default class WYSIWYG extends BaseComponent {
     }
 
     shouldComponentUpdate(nextProps, nextState) {
+
         var propData = nextProps.getData(this.props.stateId)
         var updText = propData !== this.editor.getData();
         var updDialog = this.state.ShowSelectPageDialog !== nextProps.ShowSelectPageDialog;
@@ -108,18 +111,34 @@ export default class WYSIWYG extends BaseComponent {
         return updText || updDialog;
     }
 
+    ShowHtml() {
+        this.setState({ ShowHtmlDialog: true, Html: this.editor.getData() });
+    }
+
+    SaveHtml() {
+        this.editor.setData(this.state.Html);
+        this.setState({ ShowHtmlDialog: false });
+    }
+
+
     render() {
         var self = this;
         return (
-            [
-
-                <button className="btn btn-light" onClick={() => self.UploadBlob(self.InsertImage)}>Изображение</button>,
-                <button className="btn btn-light" onClick={() => self.UploadBlob(self.InsertDocument)}>Документ</button>,
-                <button className="btn btn-light" onClick={() => self.InsertLinkToPage()}>Към страница</button>,
+            <div>
+                <button className="btn btn-light" onClick={() => self.UploadBlob(self.InsertImage)}>Изображение</button>
+                <button className="btn btn-light" onClick={() => self.UploadBlob(self.InsertDocument)}>Документ</button>
+                <button className="btn btn-light" onClick={() => self.InsertLinkToPage()}>Към страница</button>
+                <button className="btn btn-light" onClick={() => self.ShowHtml()}>HTML</button>
 
                 <Dialog header="Избор страница" visible={this.state.ShowSelectPageDialog} style={{ width: '50vw' }} modal={true} onHide={() => { self.setState({ ShowSelectPageDialog: false }) }}>
                     <Blocks selectFunc={this.ChoosePage} mode="select"></Blocks>
-                </Dialog>,
+                </Dialog>
+                <Dialog header="HTML" visible={this.state.ShowHtmlDialog} style={{ width: '50vw' }} modal={true} onHide={() => { self.setState({ ShowHtmlDialog: false }) }}>
+                    <textarea className="form-control" value={self.state.Html} onChange={(e) => self.setState({ Html: e.target.value })}></textarea>
+                    <button className="btn btn-light pull-right" onClick={() => self.SaveHtml()}>Запис</button>
+                </Dialog>
+
+
                 <CKEditor
                     id="ckEditor"
                     config={{
@@ -145,10 +164,8 @@ export default class WYSIWYG extends BaseComponent {
 
                 />
 
-
-
-            ]
-
+                }
+            </div>
         );
     }
 

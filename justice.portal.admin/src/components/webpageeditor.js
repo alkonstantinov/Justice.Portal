@@ -32,6 +32,7 @@ export default class WebPageEditor extends BaseComponent {
         this.ChangePage = this.ChangePage.bind(this);
         this.LoadData = this.LoadData.bind(this);
         this.DesignSources = this.DesignSources.bind(this);
+        this.SetSourceValue = this.SetSourceValue.bind(this);
 
         this.state = { mode: "loading", activeIndex: 0, templateChanged: false };
 
@@ -93,6 +94,9 @@ export default class WebPageEditor extends BaseComponent {
         var prevSources = this.state.sources;
         sources.forEach(element => {
             element.options = self.blocks[element.blocktype] || [];
+            console.log(element);
+            console.log(self.blocks[element.blocktype]);
+
             var prev = prevSources ? prevSources.find(x => x.id === element.id) : null;
             if (prev)
                 element.value = prev.value;
@@ -102,14 +106,14 @@ export default class WebPageEditor extends BaseComponent {
     }
 
     GetSourcesFromTemplate() {
-        let array = [...this.state.template.matchAll('###([\\w\\W]*?)###')];
+        let array = [...this.state.template.matchAll('###(\{[\\w\\W]*?\})###')];
         let sources = [];
         array.forEach(
             x => {
                 let jsn = JSON.parse(x[1]);
                 sources.push({
                     id: jsn.id,
-                    blocktype: jsn.type
+                    blocktype: jsn.blocktype
                 });
             });
         return sources;
@@ -160,11 +164,20 @@ export default class WebPageEditor extends BaseComponent {
 
     ChangePage(index) {
         var sources = this.state.sources;
+        console.log("1", sources);
         if (index === 1 && this.state.templateChanged) {
             sources = this.GetSourcesFromTemplate();
-            this.DesignSources(sources);
+            console.log("2", sources);
+            sources = this.DesignSources(sources);
+            console.log("3", sources);
         }
         this.setState({ activeIndex: index, sources: sources, templateChanged: false })
+    }
+
+    SetSourceValue(id, value) {
+        var sources = this.state.sources;
+        sources.find(x => x.id === id).value = value;
+        this.setState({ sources: sources });
     }
 
     render() {
@@ -223,7 +236,8 @@ export default class WebPageEditor extends BaseComponent {
                                                 {s.id}
                                             </div>
                                             <div className="col-11">
-                                                <select className="form-control">
+                                                <select className="form-control" value={s.value} onChange={(e) => self.SetSourceValue(s.id, e.target.value)}>
+                                                    <option></option>
                                                     {
                                                         s.options.map(v => <option value={v.blockId}>{v.name}</option>)
                                                     }

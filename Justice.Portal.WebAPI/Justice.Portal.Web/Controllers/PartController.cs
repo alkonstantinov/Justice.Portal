@@ -188,7 +188,7 @@ namespace Justice.Portal.Web.Controllers
 
         }
 
-        
+
 
         [HttpGet("GetTemplate")]
 
@@ -200,7 +200,7 @@ namespace Justice.Portal.Web.Controllers
             if (!db.IsAuthenticated(token))
                 return Unauthorized();
             var template = db.GetTemplate(templateId);
-            if(!this.CanDoPart(template.PortalPartId))
+            if (!this.CanDoPart(template.PortalPartId))
                 return Unauthorized();
             return Ok(template);
         }
@@ -208,7 +208,7 @@ namespace Justice.Portal.Web.Controllers
         public async Task<IActionResult> SetTemplate([FromBody]JSTemplate template)
         {
             if (!this.HasRight("admintemplates"))
-                return Unauthorized();            
+                return Unauthorized();
             string token = this.GetToken();
             if (!db.IsAuthenticated(token))
                 return Unauthorized();
@@ -296,6 +296,8 @@ namespace Justice.Portal.Web.Controllers
         }
 
 
+
+
         [HttpPost("SaveInstitution")]
         public async Task<IActionResult> SaveInstitution([FromBody]JSInstitution institution)
         {
@@ -308,7 +310,11 @@ namespace Justice.Portal.Web.Controllers
             return Ok();
         }
 
-
+        [HttpGet("UrlExists")]
+        public async Task<IActionResult> UrlExists([FromQuery]string url, [FromQuery]int? blockId)
+        {
+            return Ok(db.UrlExists(url, blockId));
+        }
 
 
     }
