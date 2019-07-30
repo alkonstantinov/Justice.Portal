@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Justice.Portal.DB.Models;
+using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Security.Cryptography;
 using System.Text;
@@ -29,6 +31,9 @@ namespace Justice.Portal.DB.Tools
                 return sBuilder.ToString();
             }
         }
+
+        
+        
 
     }
 }

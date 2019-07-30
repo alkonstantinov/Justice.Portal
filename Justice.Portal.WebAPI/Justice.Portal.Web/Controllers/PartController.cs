@@ -6,6 +6,7 @@ using System.Security.Cryptography;
 using System.Threading.Tasks;
 using Justice.Portal.DB.JSModels;
 using Justice.Portal.DB.Models;
+using Justice.Portal.Web.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -18,8 +19,10 @@ namespace Justice.Portal.Web.Controllers
     public class PartController : BaseController
     {
 
-        public PartController(JusticePortalContext jpc) : base(jpc)
+        ISOLRComm SolrComm;
+        public PartController(JusticePortalContext jpc, ISOLRComm solrComm) : base(jpc)
         {
+            this.SolrComm = solrComm;
         }
 
 
@@ -166,7 +169,8 @@ namespace Justice.Portal.Web.Controllers
             if (!this.CanDoPart(data.Block.PortalPartId))
                 return Unauthorized();
 
-            db.SetBlock(data);
+            var block = db.SetBlock(data);
+            await Task.Run(() => SolrComm.UpdateBlock(block));
 
             return Ok();
 
@@ -184,6 +188,7 @@ namespace Justice.Portal.Web.Controllers
             if (!this.CanDoPart(block.PortalPartId))
                 return Unauthorized();
             db.DeleteBlock(blockId);
+            await Task.Run(() => SolrComm.DeleteBlock(blockId));
             return Ok();
 
         }

@@ -382,7 +382,7 @@ namespace Justice.Portal.DB
             db.SaveChanges();
         }
 
-        public void SetBlock(BlockData data)
+        public Block SetBlock(BlockData data)
         {
             Block block;
             if (data.Block.BlockId == 0)
@@ -413,6 +413,7 @@ namespace Justice.Portal.DB
                     );
             }
             db.SaveChanges();
+            return block;
         }
 
 
