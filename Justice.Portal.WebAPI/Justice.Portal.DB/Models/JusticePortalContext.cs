@@ -22,6 +22,7 @@ namespace Justice.Portal.DB.Models
         public virtual DbSet<BlockTypePropertyValue> BlockTypePropertyValue { get; set; }
         public virtual DbSet<Collection> Collection { get; set; }
         public virtual DbSet<Institution> Institution { get; set; }
+        public virtual DbSet<Log> Log { get; set; }
         public virtual DbSet<PortalGroup> PortalGroup { get; set; }
         public virtual DbSet<PortalGroup2Part> PortalGroup2Part { get; set; }
         public virtual DbSet<PortalGroup2Right> PortalGroup2Right { get; set; }
@@ -199,6 +200,13 @@ namespace Justice.Portal.DB.Models
                 entity.Property(e => e.Name)
                     .IsRequired()
                     .HasMaxLength(200);
+            });
+
+            modelBuilder.Entity<Log>(entity =>
+            {
+                entity.Property(e => e.Level).HasMaxLength(128);
+
+                entity.Property(e => e.Properties).HasColumnType("xml");
             });
 
             modelBuilder.Entity<PortalGroup>(entity =>

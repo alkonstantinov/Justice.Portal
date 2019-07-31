@@ -26,6 +26,8 @@ import uuidv4 from 'uuid/v4';
 import BlockBuyer from './blocks/blockbuyer';
 import BlockAdsSq from './blocks/blockadssq';
 import BlockNewsSq from './blocks/blocknewssq';
+import BlockSearch from './blocks/blocksearch';
+import BlockSitemap from './blocks/blocksitemap';
 
 export default class BlockEditor extends BaseComponent {
     constructor(props) {
@@ -67,6 +69,8 @@ export default class BlockEditor extends BaseComponent {
         this.GetMenu = this.GetMenu.bind(this);
         this.GetCollection = this.GetCollection.bind(this);
         this.GetBuyer = this.GetBuyer.bind(this);
+        this.GetSearch = this.GetSearch.bind(this);
+        this.GetSitemap = this.GetSitemap.bind(this);
 
 
         this.state = { mode: "loading" };
@@ -198,6 +202,19 @@ export default class BlockEditor extends BaseComponent {
 
     }
 
+    GetSearch() {
+        return (<BlockSearch block={this.state.block} ref="Editor" />
+        );
+
+    }
+
+    GetSitemap() {
+        return (<BlockSitemap block={this.state.block} ref="Editor" />
+        );
+
+    }
+
+
     GetEditor() {
         switch (this.props.match.params.blockTypeId) {
             case "new": return this.GetNew();
@@ -219,6 +236,8 @@ export default class BlockEditor extends BaseComponent {
             case "menu": return this.GetMenu();
             case "collection": return this.GetCollection();
             case "buyer": return this.GetBuyer();
+            case "search": return this.GetSearch();
+            case "sitemap": return this.GetSitemap();
 
             default: return null;
         }

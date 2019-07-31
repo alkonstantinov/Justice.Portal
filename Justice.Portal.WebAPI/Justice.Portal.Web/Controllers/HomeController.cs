@@ -26,7 +26,7 @@ namespace Justice.Portal.Web.Controllers
             
             JSBlock block;
             if (string.IsNullOrEmpty(url))
-                block = db.GetBlock();
+                block = db.GetBlockForPart(null);
             else
                 block = db.GetBlock(url);
 

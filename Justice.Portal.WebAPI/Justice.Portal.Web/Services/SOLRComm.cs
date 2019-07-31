@@ -16,7 +16,7 @@ namespace Justice.Portal.Web.Services
         {
             wc = new WebClient();
             wc.BaseAddress = url;
-            
+
         }
 
         private JArray FormSOLRJson(Block block)
@@ -45,7 +45,8 @@ namespace Justice.Portal.Web.Services
         {
             JObject data = JObject.FromObject(new
             {
-                delete = new {
+                delete = new
+                {
                     id = blockId
                 }
             });
@@ -66,10 +67,11 @@ namespace Justice.Portal.Web.Services
             string response = wc.UploadString("update?commit=true", data.ToString());
         }
 
-        public string Search(string query, int from, int size)
+        public string Search(string query, int from, int size, string part)
         {
 
-            return wc.DownloadString($"query?q=content:{query}&rows={size}&start={from}&sort=id asc");
+            string q = string.IsNullOrEmpty(part) ? $"content:биография" : $"content:биография AND part: min";
+            return wc.DownloadString($"query?q={q}&rows={size}&start={from}&sort=id asc");
         }
     }
 }

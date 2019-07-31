@@ -28,9 +28,9 @@ namespace Justice.Portal.Web.Controllers
 
 
         [HttpGet("Search")]
-        public async Task<IActionResult> Search(string query, int from, int size)
+        public async Task<IActionResult> Search(string query, int from, int size, string part)
         {
-            return Ok(SolrComm.Search(query, from, size));
+            return Ok(SolrComm.Search(query, from, size, part));
         }
 
     }

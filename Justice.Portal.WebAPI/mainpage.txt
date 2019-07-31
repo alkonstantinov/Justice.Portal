@@ -1,0 +1,6 @@
+<div>
+###MJBlockContent###
+###{"id":1,"blocktype":"banner"}###
+###{"id":2,"blocktype":"new"}###
+###{"id":3,"blocktype":"bio"}###
+</div>

@@ -333,9 +333,9 @@ namespace Justice.Portal.DB
         }
 
 
-        public JSBlock GetBlock()
+        public JSBlock GetBlockForPart(string part)
         {
-            return ModelMapper.Instance.Mapper.Map<JSBlock>(db.Block.First(x => x.PortalPartId == "min" && x.BlockTypeId == "main"));
+            return ModelMapper.Instance.Mapper.Map<JSBlock>(db.Block.First(x => (string.IsNullOrEmpty(part) || x.PortalPartId == part) && x.BlockTypeId == "main"));
         }
 
 
@@ -538,7 +538,7 @@ namespace Justice.Portal.DB
 
         public JSTemplate GetTemplateByBlock(string blockTypeId, string portalPartId)
         {
-            return ModelMapper.Instance.Mapper.Map<JSTemplate>(db.Template.First(x => x.BlockTypeId == blockTypeId && x.PortalPartId == portalPartId));
+            return ModelMapper.Instance.Mapper.Map<JSTemplate>(db.Template.FirstOrDefault(x => x.BlockTypeId == blockTypeId && x.PortalPartId == portalPartId));
         }
 
         public JSBlockType GetBlockType(string blockTypeId)

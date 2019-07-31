@@ -170,7 +170,11 @@ namespace Justice.Portal.Web.Controllers
                 return Unauthorized();
 
             var block = db.SetBlock(data);
-            await Task.Run(() => SolrComm.UpdateBlock(block));
+            var bt = db.GetBlockType(block.BlockTypeId);
+
+            if (bt.IsSearchable)
+
+                await Task.Run(() => SolrComm.UpdateBlock(block));
 
             return Ok();
 
@@ -184,11 +188,17 @@ namespace Justice.Portal.Web.Controllers
                 return Unauthorized();
 
             var block = db.GetBlock(blockId);
+            var bt = db.GetBlockType(block.BlockTypeId);
 
             if (!this.CanDoPart(block.PortalPartId))
                 return Unauthorized();
-            db.DeleteBlock(blockId);
-            await Task.Run(() => SolrComm.DeleteBlock(blockId));
+            
+            
+
+            if (bt.IsSearchable)
+                await Task.Run(() => SolrComm.DeleteBlock(blockId));
+
+
             return Ok();
 
         }
