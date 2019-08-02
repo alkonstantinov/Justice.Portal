@@ -11,6 +11,8 @@ class MJProcess {
         this.PutBlocks = this.PutBlocks.bind(this);
         this.PutElement = this.PutElement.bind(this);
         this.PutLive = this.PutLive.bind(this);
+        this.PutHtml = this.PutHtml.bind(this);
+        
         this.LoadTranslations();
     }
 
@@ -58,6 +60,7 @@ class MJProcess {
         let blockTypeId = $(e).attr("mjblocktypeid");
         switch (blockTypeId) {
             case "live": this.PutLive(blockId); break;
+            case "html": this.PutHtml(blockId); break;
         }
     }
 
@@ -91,6 +94,15 @@ class MJProcess {
             </div>
 			</div>
              `));
+
+
+    }
+
+    PutHtml(divId) {
+        var oldDiv = $("#" + divId);
+        var obj = this.MJPageData["block_" + divId];
+        var self = this;
+        oldDiv.replaceWith($(obj.blockData.html[self.language]));
 
 
     }

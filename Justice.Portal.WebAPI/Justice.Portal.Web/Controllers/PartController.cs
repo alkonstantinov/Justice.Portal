@@ -192,8 +192,8 @@ namespace Justice.Portal.Web.Controllers
 
             if (!this.CanDoPart(block.PortalPartId))
                 return Unauthorized();
-            
-            
+
+            db.DeleteBlock(blockId);
 
             if (bt.IsSearchable)
                 await Task.Run(() => SolrComm.DeleteBlock(blockId));
