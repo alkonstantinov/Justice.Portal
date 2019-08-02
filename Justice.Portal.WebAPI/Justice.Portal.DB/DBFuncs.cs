@@ -546,6 +546,17 @@ namespace Justice.Portal.DB
             return ModelMapper.Instance.Mapper.Map<JSBlockType>(db.BlockType.First(x => x.BlockTypeId == blockTypeId));
         }
 
+        public string GetTranslation()
+        {
+            return db.Translation.First().Content;
+        }
+
+        public void SetTranslation(JSTranslation trans)
+        {
+            db.Translation.First().Content = trans.Content;
+            db.SaveChanges();
+        }
+
 
     }
 }

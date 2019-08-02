@@ -19,6 +19,7 @@ import Collections from './components/collections';
 import CollectionEditor from './components/collectioneditor';
 import Institutions from './components/institutions';
 import InstitutionEditor from './components/institutioneditor';
+import Translations from './components/translations';
 
 class App extends BaseComponent {
 
@@ -82,6 +83,7 @@ class App extends BaseComponent {
                 <Route exact path='/collections' component={Collections} />
                 <Route exact path='/editcollection/:id?' component={CollectionEditor} />
                 <Route exact path='/institutions' component={Institutions} />
+                <Route exact path='/translations' component={Translations} />
                 <Route exact path='/editinstitution/:id?' component={InstitutionEditor} />
                 <Route component={MainMenu} />
 

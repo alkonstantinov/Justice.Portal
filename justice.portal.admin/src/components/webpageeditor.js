@@ -105,15 +105,24 @@ export default class WebPageEditor extends BaseComponent {
 
     }
 
+    GetProp(content, propname) {
+        return content.match("\\s+" + propname + "\\s*=\\s*('|\\\")([\\w\\W]+?)('|\\\")")[2]
+    }
+
     GetSourcesFromTemplate() {
-        let array = [...this.state.template.matchAll('###(\{[\\w\\W]*?\})###')];
+        let array = [...this.state.template.matchAll('<div [^<]+ mjblocktypeid[\\w\\W]*?/>')];
         let sources = [];
         array.forEach(
             x => {
-                let jsn = JSON.parse(x[1]);
+
+                let blockId = this.GetProp(x[0], "id");
+                let blockTypeId = this.GetProp(x[0], "mjblocktypeid");
+
+
+
                 sources.push({
-                    id: jsn.id,
-                    blocktype: jsn.blocktype
+                    id: blockId,
+                    blocktype: blockTypeId
                 });
             });
         return sources;

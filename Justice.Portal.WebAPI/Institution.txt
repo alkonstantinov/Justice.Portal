@@ -1,14 +1,32 @@
-<!DOCTYPE html>
+﻿<!doctype html>
+<html lang="bg">    
+    <head>
+        <!-- META -->
+        <meta charset="UTF-8">
+        <meta name="author" content="author name" />
+        <meta name="description" content="Република България, Министерство на правосъдието">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name='robots' content='noindex,nofollow' />
 
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Index</title>
-</head>
-<body>
-    ###MJPageContent###
+        <!-- SITE TITLE -->
+        <title>Министерство на правосъдието - Република България</title>
+
+        <!-- FAVICON -->
+        <link rel="icon" href="images/favicon.png">
+		<link rel="icon" href="images/favicon.png" sizes="57x57">
+		<link rel="icon" href="images/favicon.png" sizes="72x72">
+		<link rel="icon" href="images/favicon.png" sizes="114x114">
+		<link rel="icon" href="images/favicon.png" sizes="144x144">
+        <!-- CSS -->
+        <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+        <link rel="stylesheet" type="text/css" href="css/style.css">
+        <link rel="stylesheet" type="text/css" href="css/dev-nav.css">
+        <link href="https://unpkg.com/gijgo@1.9.13/css/gijgo.min.css" rel="stylesheet" type="text/css" />
+        
+       
+    </head>
+    <body id="sectionTop">
+<div mjcontent="true" />
+
 </body>
-<script>
-var MJPageData = ###MJPageData###;
-</script>
 </html>

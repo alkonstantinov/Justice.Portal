@@ -1,6 +1,759 @@
-<div>
-###MJBlockContent###
-###{"id":1,"blocktype":"banner"}###
-###{"id":2,"blocktype":"new"}###
-###{"id":3,"blocktype":"bio"}###
+﻿	<div class="sticky-lg" id="sticky-nav">
+    <section class="header-wrapper home-head">
+    	<nav class="top-nav-wrapper">
+            <div class="container-fluid container--xl top-nav">
+                <ul>
+                    <li class="separator-white">
+                        <a href="#">Карта на сайта</a>
+                    </li>
+                    <li>
+                        <a href="#" class="mr-4">EN</a>
+                    </li>
+                    <li>
+                        <a href="#" class="abs-right" id="disabledVer">
+                            <span class="sr-only">Обратно към версия по подразбиране</span>
+                            <svg class="icon icon-disabled"><use xlink:href="images/disabled.svg#icon-disabled"></use></svg>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <div class="container-fluid container--xl flex-middle">
+            <header class="header-container header-container-inner">
+            	<div class="logo-separator">
+                	<svg id="dis-logo" class="icon icon-lion-form"><use xlink:href="images/symbol-defs.svg#icon-lion-form"></use></svg>
+                </div>
+                <div class="logo-title logo-title-inner">
+                    <h2 class="logo-title-main">
+                        Република България
+                    </h2>
+                    <h3 class="logo-title-sub">
+                        Министерство на правосъдието
+                    </h3>
+                </div>
+                
+            </header>
+            <div class="responsive-menu-container">
+                <div class="search-container" >
+                    <div class="input-group" id="showSearch">
+                        <input type="text" class="form-control border-white" placeholder="Търси в портала">
+                        <div class="input-group-append">
+                            <button class="btn btn-light border-0 site-search d-inline-flex" type="button">
+                                <span class="sr-only">Търсене</span>
+                                <svg class="icon icon-search"><use xlink:href="images/symbol-defs.svg#icon-search"></use></svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="brand-color mmenu-ham" id="disHam">
+                    <button class="hamburger-m hamburger--slider js-mmenu-toggler" type="button">
+                        <span class="hamburger-box">
+                            <span class="hamburger-inner"></span>
+                        </span>
+                        <span class="ham-mmenu-title">Меню</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <nav class="container-fluid container--xl site-nav inner-nav">
+            <div class="nav-areas">
+                
+                <div class="d-flex justify-content-center">
+                    <ul id="show-mmenu" class="nav-list">
+                        <li class=""><a href="index.html" class="">Начало</a></li>
+                        <li class=""><a href="#" data-toggle="modal" data-target="#ministry-modal" data-dismiss="modal">Министерство</a>
+                        <ul class="submenu-grid-container disabled">
+                            <li class="submenu-item">
+                                Министерство
+                                <ul>
+                                    <li><a href="#">Министър</a></li>
+                                    <li><a href="#">Политически кабинет</li>
+                                    <li><a href="#"  data-toggle="modal" data-target="#ministry-modal2" data-dismiss="modal">Дирекции</a>
+
+                                    <ul class="submenu-grid-container disabled">
+                    
+                                        <li class="submenu-item">
+                                            Обща администрация
+                                            <ul>
+                                                <li><a href="#">Дирекция "Канцелария"</a></li>
+                                                <li><a href="#">Дирекция "Правни дейности"</a></li>
+                                                <li><a href="#">Дирекция "Финанси и бюджет"</a></li>
+                                                <li><a href="#">Дирекция "Управление на собствеността"</a></li>
+                                                <li><a href="#">Дирекция "Управление на човешките ресурси"</a></li>
+                                                <li><a href="#">Дирекция "Връзки с обществеността и протокол"</a></li>
+                                             </ul>
+                                        </li>
+                                        <li class="submenu-item">
+                                            Специализирана администрация
+                                            <ul>
+                                                <li><a href="#">Инспекторат на министъра на правосъдието по Закона за съдебната власт</a></li>
+                                                <li><a href="#">Дирекция "Съвет по законодателство"</a></li>
+                                                <li><a href="#">Дирекция "Стратегическо развитие и програми"</a></li>
+                                                <li><a href="#">Дирекция "Международно правно сътрудничество и европейски въпроси"</a></li>
+                                                <li><a href="#">Дирекция "Взаимодействие със съдебната власт"</a></li>
+                                                <li><a href="#">Дирекция "Процесуално представителство на Република България пред Европейския съд по правата на човека"</a></li>
+                                                <li><a href="#">Дирекция "Електронно правосъдие и регистри"</a></li>
+                                                <li><a href="#">Дирекция "Българско гражданство"</a></li>
+                                                <li><a href="#">Дирекция "Международна правна закрила на детето и международни осиновявания"</a></li>
+                                            </ul>
+                                        </li>
+                                        
+                                    </ul>
+
+                                    </li>
+                                    <li><a href="#">Нормативни актове</a></li>
+                                    <li><a href="#">История</a></li>
+                                    <li><a href="#">Кариери</a></li>
+                                    <li><a href="#">Структура</a></li>
+                                    <li><a href="#">Декларации по ЗПКОНПИ</a></li>
+                                </ul>
+                            </li>
+                            <li class="submenu-item">
+                                Основни структури 
+                                <ul>
+                                    <li><a href="index-agency.html">Агенция по вписванията</a></li>
+                                    <li><a href="#">Национално бюро за правна помощ</a></li>
+                                    <li><a href="#">Централен регистър на особените залози</a></li>
+                                    <li><a href="#">ГД "Изпълнение на наказанията"</a></li>
+                                    <li><a href="#">ГД "Охрана"</a></li>
+                                </ul>
+                            </li>
+                            <li class="submenu-item">
+                                Проекти
+                                <ul>
+                                    <li><a href="#">НФМ</a></li>
+                                    <li><a href="#">ОПДУ</a></li>
+                                </ul>
+                            </li>
+                            <li class="submenu-item">
+                                Отчети и анализи
+                                <ul>
+                                    <li><a href="#">Финансови отчети</a></li>
+                                    <li><a href="#">СЕБРА бюлетини</a></li>
+                                </ul>
+                            </li>
+                            <li class="submenu-item">
+                                Профил на купувача
+                                <ul>
+                                    <li><a href="#">Пазарни консултации</a></li>
+                                    <li><a href="#">Процедури</a></li>
+                                    <li><a href="#">Събиране на оферти с обява или покана до определени лица</a></li>
+                                    <li><a href="#">Процедури по Рамкови споразумения на ЦОП към Министерство на финансите</a></li>
+                                    <li><a href="#">Обществени поръчки, открити преди 15.04.2016 г.</a></li>
+                                    <li><a href="#">Архив</a></li>
+                                </ul>
+                            </li>
+                            <li class="submenu-item">
+                                Достъп до информация
+                                <ul>
+                                    <li><a href="#">Достъп до информация</a></li>
+                                    <li><a href="#">Достъп до лични данни</a></li>
+                                </ul>
+                            </li>
+                            <li class="submenu-item">
+                                Раздел Антикорупция
+                                <ul>
+                                    <li><a href="#">Обща информация</a></li>
+                                    <li><a href="#">Обратна връзка</a></li>
+                                    <li><a href="#">Анкетна карта</a></li>
+                                    <li><a href="#">Регистър на постъпили жалби</a></li>
+                                    <li><a href="#">Отчети за дейността</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+
+                        </li>
+                        <li class=""><a href="#">Услуги</a></li>
+                        <li class=""><a href="#">Пресцентър</a></li>
+                        <li class=""><a href="#">Контакти</a></li>
+                    </ul>
+                </div>
+
+                <!-- SEARCH - Duplicated, invisible when handicape status -->
+                <div class="search-container1" id="disSearch">
+                    <div class="input-group">
+                        <input type="text" class="form-control border-white" placeholder="Търси в портала">
+                        <div class="input-group-append">
+                            <button class="btn btn-light border-0 site-search d-inline-flex" type="button">
+                                <span class="sr-only">Търсене</span>
+                                <svg class="icon icon-search"><use xlink:href="images/symbol-defs.svg#icon-search"></use></svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </section>
 </div>
+    
+<!-- Modal Sub-menus
+
+Will be shown in the none disabled verssion
+
+-->
+<div id="modalMenus">
+<div class="modal fade none-disabled" id="ministry-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-xl  modal-dialog-scrollable modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header m-head1">
+                <h5 class="modal-title" id="ModalCenterTitle">Министерство</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <ul class="submenu-grid-container">
+                    <li class="submenu-item">
+                        Министерство
+                        <ul>
+                            <li><a href="#">Министър</a></li>
+                            <li><a href="#">Политически кабинет</li>
+                            <li><a href="#"  data-toggle="modal" data-target="#ministry-modal2" data-dismiss="modal">Дирекции</a></li>
+                            <li><a href="#">Нормативни актове</a></li>
+                            <li><a href="#">История</a></li>
+                            <li><a href="#">Кариери</a></li>
+                            <li><a href="#">Структура</a></li>
+                            <li><a href="#">Декларации по ЗПКОНПИ</a></li>
+                        </ul>
+                    </li>
+                    <li class="submenu-item">
+                        Основни структури 
+                        <ul>
+                            <li><a href="index-agency.html">Агенция по вписванията</a></li>
+                            <li><a href="#">Национално бюро за правна помощ</a></li>
+                            <li><a href="#">Централен регистър на особените залози</a></li>
+                            <li><a href="#">ГД "Изпълнение на наказанията"</a></li>
+                            <li><a href="#">ГД "Охрана"</a></li>
+                        </ul>
+                    </li>
+                    <li class="submenu-item">
+                        Проекти
+                        <ul>
+                            <li><a href="#">НФМ</a></li>
+                            <li><a href="#">ОПДУ</a></li>
+                        </ul>
+                    </li>
+                    <li class="submenu-item">
+                        Отчети и анализи
+                        <ul>
+                            <li><a href="#">Финансови отчети</a></li>
+                            <li><a href="#">СЕБРА бюлетини</a></li>
+                        </ul>
+                    </li>
+                    <li class="submenu-item">
+                        Профил на купувача
+                        <ul>
+                            <li><a href="#">Пазарни консултации</a></li>
+                            <li><a href="#">Процедури</a></li>
+                            <li><a href="#">Събиране на оферти с обява или покана до определени лица</a></li>
+                            <li><a href="#">Процедури по Рамкови споразумения на ЦОП към Министерство на финансите</a></li>
+                            <li><a href="#">Обществени поръчки, открити преди 15.04.2016 г.</a></li>
+                            <li><a href="#">Архив</a></li>
+                        </ul>
+                    </li>
+                    <li class="submenu-item">
+                        Достъп до информация
+                        <ul>
+                            <li><a href="#">Достъп до информация</a></li>
+                            <li><a href="#">Достъп до лични данни</a></li>
+                        </ul>
+                    </li>
+                    <li class="submenu-item">
+                        Раздел Антикорупция
+                        <ul>
+                            <li><a href="#">Обща информация</a></li>
+                            <li><a href="#">Обратна връзка</a></li>
+                            <li><a href="#">Анкетна карта</a></li>
+                            <li><a href="#">Регистър на постъпили жалби</a></li>
+                            <li><a href="#">Отчети за дейността</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade none-disabled" id="ministry-modal2" tabindex="-1" role="dialog" aria-labelledby="ModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-xl  modal-dialog-scrollable modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header m-head2">
+                <h5 class="modal-title" id="ModalCenterTitle">Дирекции</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                 <a href="#" class="font-regular" data-toggle="modal" data-target="#ministry-modal" data-dismiss="modal">
+                            <span class="d-flex align-items-center">
+                                <svg class="icon icon-arrow-back"><use xlink:href="images/symbol-defs.svg#icon-angle-arrow-down"></use></svg>
+                                <span class="pl-2 size17">Обратно</span>
+                            </span>
+                            
+                        </a>
+                <ul class="submenu-grid-container">
+                    
+                    <li class="submenu-item">
+                        Обща администрация
+                        <ul>
+                            <li><a href="#">Дирекция "Канцелария"</a></li>
+                            <li><a href="#">Дирекция "Правни дейности"</a></li>
+                            <li><a href="#">Дирекция "Финанси и бюджет"</a></li>
+                            <li><a href="#">Дирекция "Управление на собствеността"</a></li>
+                            <li><a href="#">Дирекция "Управление на човешките ресурси"</a></li>
+                            <li><a href="#">Дирекция "Връзки с обществеността и протокол"</a></li>
+                         </ul>
+                    </li>
+                    <li class="submenu-item">
+                        Специализирана администрация
+                        <ul>
+                            <li><a href="#">Инспекторат на министъра на правосъдието по Закона за съдебната власт</a></li>
+                            <li><a href="#">Дирекция "Съвет по законодателство"</a></li>
+                            <li><a href="#">Дирекция "Стратегическо развитие и програми"</a></li>
+                            <li><a href="#">Дирекция "Международно правно сътрудничество и европейски въпроси"</a></li>
+                            <li><a href="#">Дирекция "Взаимодействие със съдебната власт"</a></li>
+                            <li><a href="#">Дирекция "Процесуално представителство на Република България пред Европейския съд по правата на човека"</a></li>
+                            <li><a href="#">Дирекция "Електронно правосъдие и регистри"</a></li>
+                            <li><a href="#">Дирекция "Българско гражданство"</a></li>
+                            <li><a href="#">Дирекция "Международна правна закрила на детето и международни осиновявания"</a></li>
+                        </ul>
+                    </li>
+                    
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+
+
+<section class="container-fluid container--xl mt-4" id="sectionNext">
+	<div class="row">
+		<div class="col-lg-8">
+		
+		<div class="port-wrapper">
+			<div class="port-head">
+				<h3 class="port-title">Новини</h3>
+				<div class="port-link-item">
+					<a href="news-list.html" class="port-head-link">Всички новини
+					<svg class="icon icon-arrow-right"><use xlink:href="images/symbol-defs.svg#icon-angle-arrow-down"></use></svg>
+					</a>
+				</div>
+			</div>
+			<div class="port-box box-border height-350">
+				<div id="carouselIndicators" class="carousel slide" data-ride="carousel">
+					<ol class="carousel-indicators" id="carIndicators">
+						<li data-target="#carouselIndicators" data-slide-to="0" class="active"></li>
+						<li data-target="#carouselIndicators" data-slide-to="1"></li>
+						<li data-target="#carouselIndicators" data-slide-to="2"></li>
+					</ol>
+					<div class="carousel-inner">
+						<div class="carousel-item active">
+							<h6 class="date">21 Юли 2019 г.</h6>
+							<h2>Министър Данаил Кирилов насрочи конкурс за съдии по вписванията</h2>
+							<div class="port-content">
+								<img src="images/news/img-02-07-2019-1.jpg" class="list-article-img img-prime" alt="">
+								<div>
+									<p>Министърът на правосъдието Данаил Кирилов днес подписа заповед, с която насрочи конкурс за длъжността „съдия по вписванията“, която предстои да бъде обнародвана в Държавен вестник. 
+									</p>
+									<a class="btn btn-primary" href="#" role="button">Научи повече</a>
+								</div>
+							</div>
+						</div>
+						<div class="carousel-item">
+							<h6 class="date">20 Юли 2019 г.</h6>
+							<h2>Министър Кирилов се срещна с посланика на Нидерландия по случая на българско дете с наложена мярка за закрила в Нидерландия</h2>
+							<div class="port-content">
+								<img src="images/news/img-02-07-2019-3.jpg" class="list-article-img img-prime" alt="">
+								<div>
+									<p>Министърът на правосъдието Данаил Кирилов инициира среща с посланика на Нидерландия Н.Пр.
+									</p>
+									<a class="btn btn-primary" href="#" role="button">Научи повече</a>
+								</div>
+							</div>
+						</div>
+						<div class="carousel-item">
+							<h6 class="date">19 Юни 2019 г.</h6>
+							<h2>Министър Кирилов: Изпълнението на решенията на ЕСПЧ е сред основните ни приоритети</h2>
+							<div class="port-content">
+								<img src="images/news/img-02-07-2019-2.jpg" class="list-article-img img-prime" alt="">
+								<div>
+									<p>Изпълнението на решенията на Европейския съд по правата на човека (ЕСПЧ) е сред основните приоритети на българската държава през последните години.
+									</p>
+									<a class="btn btn-primary" href="#" role="button">Научи повече</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		</div>
+		<div class="col-lg-4">
+			<div class="port-wrapper grid-item-emission">
+				<div class="port-head">
+					<h3 class="port-title">Емисии</h3>
+					<div class="port-link-item">
+					</div>
+				</div>
+				<div class="port-box p-0 bgr-black box-border height-350">
+					<div class="abs-content">
+						<div class="abs-cover"></div>
+						<div class="emission-label">
+							<img src="images/live-symbol.png">
+							<span>На живо</span>
+						</div>
+						<div class="emission-title">
+							<h2 class="white">
+								Дебат на междуведомствената работна група за разследванията срещу „тримата големи“
+							</h2>
+							<a role="button" class="btn btn-emission js-video" data-toggle="modal" data-src="https://www.youtube.com/embed/A-twOC3W558" data-target="#liveEmission">
+								<svg class="icon icon-play-button"><use xlink:href="images/symbol-defs.svg#icon-play-button"></use></svg>
+	  								Гледай на живо
+							</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-lg-8">
+		<div class="port-wrapper">
+			<div class="port-head">
+				<h3 class="port-title">Обявления</h3>
+				<div class="port-link-item">
+					<a href="#" class="port-head-link">Всички обявления
+						<svg class="icon icon-arrow-right"><use xlink:href="images/symbol-defs.svg#icon-angle-arrow-down"></use></svg>
+					</a>	
+				</div>
+			</div>
+			<div class="port-box box-border">
+				<ul class="announce-list list-unstyled">
+					<li>
+						<h3><span>14 дек 2019</span> 
+							<a href="">Обявление за провеждане на процедура за подбор на кандидати за европейски прокурор от Република България</a></h3>
+					</li>
+					<li>
+						<h3><span>6 ное 2019</span> 
+							<a href="">Обявление за провеждане на процедура за подбор на кандидати за европейски прокурор от Република България</a></h3>
+					</li>
+					<li>
+						<h3><span>22 окт 2019</span> 
+							<a href="">Обявление за провеждане на процедура за подбор на кандидати за европейски прокурор от Република България</a></h3>
+					</li>
+					<li>
+						<h3><span>1 сеп 2019</span> 
+							<a href="">Обявление за провеждане на процедура за подбор на кандидати за европейски прокурор от Република България</a></h3>
+					</li>
+					<li>
+						<h3><span>4 сеп 2019</span> 
+							<a href="">Обявление за провеждане на процедура за подбор на кандидати за европейски прокурор от Република България</a></h3>
+					</li>
+					<li>
+						<h3><span>12 авг 2019</span> 
+							<a href="">Обявление за провеждане на процедура за подбор на кандидати за европейски прокурор от Република България</a></h3>
+					</li>
+				</ul>
+			</div>
+		</div>
+		</div>
+		<div class="col-lg-4 d-flex flex-column">
+		<div class="port-wrapper flex-grow-1">
+			<div class="port-head show-hide-toggle">
+				<h3 class="port-title">Телефони</h3>
+				<div class="port-link-item">
+				<!-- content -->	
+				</div>
+			</div>
+			<div class="box-border h-100 d-flex flex-column justify-content-center align-items-center p-4">
+				<h4 class="caps-title red txt-center mb-3">Антикорупция - горещ телефон</h4>
+				<span class="mega-txt-thin red">02 987 0697</span>
+			</div>
+		</div>
+
+		<div class="port-wrapper flex-grow-1">
+			
+			<div class="box-border h-100 d-flex flex-column justify-content-center align-items-center p-4">
+				<h4 class="caps-title txt-center mb-3">Национален телефон за 
+правна помощ</h4>
+				<span class="mega-txt-thin">070018250</span>
+				<span class="my-3 text-center">всеки делничен ден  от 9:00 ч. до 17:00</span>
+
+				<a href="#" class="js-video" role="button" class="show-pointer" data-toggle="modal" data-src="https://www.youtube.com/embed/A-twOC3W558" data-target="#liveEmission">
+					<svg class="icon icon-play-video"><use xlink:href="images/symbol-defs.svg#icon-play-button"></use></svg>
+  								Видео
+				</a>
+
+			</div>
+		</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-lg-8 d-flex flex-column">
+			<div class="row">
+				<div class="col-lg-6 d-flex flex-column">
+					<div class="port-wrapper flex-grow-1">
+						<div class="box-border h-100 bgr-light-gray">
+							<div class="in-box-title bgr-gradient-brown">
+								<h4 class="caps-title white">
+									Профил на купувача
+								</h4>
+								<div class="port-link-item white">
+									<a href="#" class="port-head-link">Още
+										<svg class="icon icon-arrow-right"><use xlink:href="images/symbol-defs.svg#icon-angle-arrow-down"></use></svg>
+									</a>	
+								</div>
+							</div>
+							<div class="box-container">
+								<ul class="list-unstyled">
+									<li>
+										<a href="">Пазарни консултации</a>
+									</li>
+									<li>
+										<a href="">Процедури</a>
+									</li>
+									<li>
+										<a href="">Събиране на оферти с обява или покана до определени лица</a>
+									</li>
+									<li>
+										<a href="">Процедури по Рамкови споразумения на ЦОП към Министерство на финансите</a>
+									</li>
+								</ul>
+							</div>
+							
+						</div>
+					</div>
+				</div>
+				<div class="col-lg-6 d-flex flex-column">
+					<div class="port-wrapper  flex-grow-1 bgr-blue-gray">
+						<div class="box-border h-100">
+							<a href="#">
+								<div class="box-container">
+									<img src="images/port-compansation.jpg" class="box-image" alt="">
+									<h3 class="white">
+										
+											Национален съвет за подпомагане и компенсация на пострадали от престъпления
+										
+									</h3>
+								</div>
+							</a>
+						</div>
+
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-lg-6 d-flex flex-column">
+					<div class="port-wrapper flex-grow-1">
+						<div class="box-border h-100 bgr-brown">
+							<div class="in-box-title bgr-white-transparent">
+								<h4 class="caps-title brand-color">
+									Държавно предприятие ”Фонд затворно дело”
+								</h4>
+								<div style="width: 100px"></div>
+								<div class="image-after">
+									
+								</div>
+							</div>
+							<div class="box-container white">
+								<p>Oсъществява управление на дейностите, свързани с подобряване на условията за изпълнение на наказанието лишаване от свобода, повишаване обхвата на трудовата заетост на лишените от свобода. </p>
+
+								<a class="btn btn-white" href="#" role="button">Прочети повече</a>
+
+							</div>
+							
+						</div>
+					</div>
+				</div>
+				<div class="col-lg-6 d-flex flex-column">
+					<div class="port-wrapper flex-grow-1 bgr-yellow">
+						<div class="box-border h-100">
+							<a href="#">
+								<div class="in-box-title-less">
+								<h4 class="caps-title white">
+									Кариери
+								</h4>
+								<div class="port-link-item white">
+									
+									</div>
+								</div>
+								<div class="box-container">
+									<img src="images/careers.jpg" class="box-image" alt="">
+									<h3 class="white">
+										
+											Конкурси за незаети длъжности по служебно и трудово правоотношение.
+										
+									</h3>
+								</div>
+							</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-lg-4 d-flex flex-column">
+			<div class="port-wrapper flex-grow-1">
+			
+			<div class="box-border h-100">
+				<div class="in-box-title bgr-light-gray">
+					<h4 class="caps-title">
+						Услуги
+					</h4>
+					<div class="port-link-item">
+						
+					</div>
+				</div>
+				<div class="box-container">
+					<ul class="list-unstyled">
+						<li>
+							<h3 class="font-bold">Електронно свидетелство за съдимост</h3>
+							<p>Издаване на свидетелства за съдимост и справки за съдимостта на лица, родени в чужбина или с неизвестно месторождение</p>
+
+							<div class="buttons-config">
+								<a class="btn btn-primary" href="#" role="button">Вход за граждани</a>
+								<a class="btn btn-outline-primary" href="#" role="button">Служебен достъп</a>
+							</div>
+						</li>
+						<li><a href="#">Правила за организацията на работа в Министерството на правосъдието за приложение на Закона за достъп до обществена информация</a></li>
+						<li><a href="#">Анализ на резултати от анкетата за проучване на удовлетвореността на потребителите на административни услуги, предоставяни от Министерство на правосъдието, за 2014 г.</a></li>
+					</ul>
+					
+				</div>
+				
+			</div>
+			
+		</div>
+
+		</div>
+	</div>
+</section>
+
+<!-- Live Emission Modal -->
+<!-- Modal -->
+<div class="modal fade" id="liveEmission" tabindex="-1" role="dialog" aria-labelledby="liveEmission" aria-hidden="true">
+  	<div class="modal-dialog m-video-dialog" role="document">
+    	<div class="modal-content">
+		    <div class="modal-body modal-video">
+
+       			<button type="button" class="close-video" data-dismiss="modal" aria-label="Close">
+          			<span aria-hidden="true">&times;</span>
+        		</button>        
+        <!-- 16:9 aspect ratio -->
+				<div class="embed-responsive embed-responsive-16by9">
+  					<iframe class="embed-responsive-item" src="" id="video"  allowscriptaccess="always" allow="autoplay"></iframe>
+				</div>
+		    </div>
+    	</div>
+  	</div>
+</div> 
+
+<section class="footer-section py-4" id="disFooter">
+	<a href="#sectionTop">
+	<div class="arrow-up">
+        
+        <svg class="icon icon-angle-arrow-up"><use xlink:href="images/symbol-defs.svg#icon-angle-arrow-down"></use></svg>
+        
+    </div></a>
+	<div class="container-fluid container--xl d-flex flex-wrap">
+		<div class="logo-footer opacity-50 mr-4">
+        	<svg class="icon icon-lion-form-small"><use xlink:href="images/symbol-defs.svg#icon-lion-form"></use></svg>
+        </div>
+        <div class="d-flex flex-wrap">
+	        <div class="footer-menu-list">
+	        	<ul class="white list-unstyled m-0">
+                    <li><a href="#">Министерство</a></li>
+                    <li><a href="#">Услуги</a></li>
+                    <li><a href="#">Пресцентър</a></li>
+                    <li><a href="#">Контакти</a></li>
+                </ul>
+	        </div>
+	        <div class="footer-menu-list">
+	        	<ul class="white list-unstyled m-0">
+                    <li><a href="#">Закрила на детето</a></li>
+                    <li><a href="#">Регистри</a></li>
+                    <li><a href="#">Права на човека</a></li>
+                    <li><a href="#">Международна дейност</a></li>
+                </ul>
+	        </div>
+	        <div class="footer-menu-list">
+	        	<ul class="white list-unstyled m-0">
+                    <li><a href="#">Юридическа правоспособност</a></li>
+                    <li><a href="#">Електронно свидетелство за съдимост</a></li>
+                    <li><a href="#">Достъп до информация</a></li>
+                </ul>
+	        </div>
+	        <div class="footer-menu-list">
+	        	<ul class="white list-unstyled m-0">
+                    <li><a href="#">Карта на сайта
+                    <li class="mb-3"><a href="#">Кариери</a></li>
+                    <li class="f-flex">
+                    	<a href="#">
+                            <svg class="icon icon-facebook"><use xlink:href="images/symbol-defs.svg#icon-facebook"></use></svg>
+                        </a>
+                        <a href="#">
+                            <svg class="icon icon-twitter"><use xlink:href="images/symbol-defs.svg#icon-twitter"></use></svg>
+                        </a>
+                        <a href="#">
+                            <svg class="icon icon-gplus"><use xlink:href="images/symbol-defs.svg#icon-gplus"></use></svg>
+                        </a>
+                    </li>
+                </ul>
+	        </div>
+	    </div>
+	</div>
+
+</section>
+<footer class="bg-light">
+	<div class="container-fluid container--xl">
+		<div>
+			<a href="#">Условия за ползване</a> | 
+			<a href="#">Политика за конфиденциалност</a> | 
+			<a href="#">Политика за ползване на бисквитки</a>
+		</div>
+
+		<span>© 2019 Министерство на правосъдието на РБ</span>
+	</div>
+</footer>
+<!-- JQUERY LIBRARY -->
+<script src="js/jquery-3.4.1.min.js"></script>
+<script src="js/custom.js"></script>
+<!-- BOOTSTRAP -->
+<!-- <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script> -->
+
+<script src="js/bootstrap.min.js"></script>
+
+<script defer src="js/svgxuse.js"></script>
+
+<!-- date picker -->
+<script src="https://unpkg.com/gijgo@1.9.13/js/gijgo.min.js" type="text/javascript"></script>
+
+<script>
+        $('#datepicker').datepicker({
+            uiLibrary: 'bootstrap4'
+        });
+    </script>
+
+<div class="dev-nav-container" title="Тази навигация не е част от сайта!">
+            <input id="dev-nav-toggle" type="checkbox">
+            <label class="dev-nav-toggle" for="dev-nav-toggle" data-nav-close="×" data-nav-open="☰"></label>
+
+            <ul class="dev-nav list-unstyled" tabindex="-1">
+                <li><a href="./index.html">Начална - портал</a></li>
+                <li><a href="./index-agency.html">Начална - ВРБ</a></li>
+                <li><a href="./news-list.html">Новини - списък</a></li>
+                <li><a href="./news-single.html">Новини - статия</a></li>
+                <li><a href="./inner-direkcia.html">Дирекция</a></li>
+                <li><a href="./inner-minister.html">Вътрешна - Министър</a></li>
+
+                <!-- <li>------</li>
+
+                <li><a href="./blog-listing.html"></a></li> -->
+               
+            </ul>
+        </div>
+
+
+<script src="js/mjprocess.js"></script>

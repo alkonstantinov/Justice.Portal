@@ -49,6 +49,8 @@ namespace Justice.Portal.Web.Controllers
 
             string strTemplate = template.TemplateJson;
             html = html.Replace("###MJPageData###", joPageData.ToString());
+
+
             html = html.Replace("###MJPageContent###", strTemplate);
 
 

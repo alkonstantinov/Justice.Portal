@@ -5,6 +5,7 @@ import eventClient from '../modules/eventclient';
 import Loader from 'react-loader-spinner';
 import Comm from '../modules/comm';
 import { toast } from 'react-toastify';
+import UIContext from '../modules/context'
 
 
 export default class WebPages extends BaseComponent {
@@ -34,6 +35,8 @@ export default class WebPages extends BaseComponent {
         var self = this;
         this.setState({ mode: "loading" });
 
+        UIContext.LastPortalPartId = this.state.portalPartId;
+
         Comm.Instance().get('part/GetTemplates?portalPartId=' + self.state.portalPartId)
             .then(result => {
                 self.setState({
@@ -56,10 +59,10 @@ export default class WebPages extends BaseComponent {
         this.setState({ mode: "loading" });
         Comm.Instance().get('part/GetBlockRequisites')
             .then(result => {
-                
+
                 self.setState({
                     parts: result.data.parts,
-                    portalPartId: result.data.parts[0].portalPartId
+                    portalPartId: UIContext.LastPortalPartId || result.data.parts[0].portalPartId
                 }, () => self.LoadData());
             })
             .catch(error => {
@@ -83,12 +86,12 @@ export default class WebPages extends BaseComponent {
         })
     }
 
-    
+
 
 
     render() {
         var self = this;
-        if(this.SM.IsSessionExpired()){
+        if (this.SM.IsSessionExpired()) {
             this.Logout();
             return (<Redirect to="/login"></Redirect>)
         }
@@ -118,7 +121,7 @@ export default class WebPages extends BaseComponent {
                                     }
                                 </select>
                             </div>
-                            
+
                         </div>
                         <div className="row">
                             <div className="col-12">
@@ -133,7 +136,7 @@ export default class WebPages extends BaseComponent {
                                                 <tr>
                                                     <td>
 
-                                                        
+
                                                         <button className="btn btn-info" onClick={() => self.EditPage(obj.templateId)}><i class="fas fa-edit"></i></button>
                                                     </td>
                                                     <td>{obj.title}</td>

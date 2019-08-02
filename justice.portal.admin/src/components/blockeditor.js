@@ -28,6 +28,7 @@ import BlockAdsSq from './blocks/blockadssq';
 import BlockNewsSq from './blocks/blocknewssq';
 import BlockSearch from './blocks/blocksearch';
 import BlockSitemap from './blocks/blocksitemap';
+import BlockHtml from './blocks/blockhtml';
 
 export default class BlockEditor extends BaseComponent {
     constructor(props) {
@@ -71,6 +72,7 @@ export default class BlockEditor extends BaseComponent {
         this.GetBuyer = this.GetBuyer.bind(this);
         this.GetSearch = this.GetSearch.bind(this);
         this.GetSitemap = this.GetSitemap.bind(this);
+        this.GetHtml = this.GetHtml.bind(this);
 
 
         this.state = { mode: "loading" };
@@ -214,6 +216,11 @@ export default class BlockEditor extends BaseComponent {
 
     }
 
+    GetHtml() {
+        return (<BlockHtml block={this.state.block} ref="Editor" />
+        );
+
+    }
 
     GetEditor() {
         switch (this.props.match.params.blockTypeId) {
@@ -238,6 +245,7 @@ export default class BlockEditor extends BaseComponent {
             case "buyer": return this.GetBuyer();
             case "search": return this.GetSearch();
             case "sitemap": return this.GetSitemap();
+            case "html": return this.GetHtml();
 
             default: return null;
         }

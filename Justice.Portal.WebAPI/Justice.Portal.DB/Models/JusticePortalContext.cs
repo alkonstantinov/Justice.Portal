@@ -34,6 +34,7 @@ namespace Justice.Portal.DB.Models
         public virtual DbSet<Property> Property { get; set; }
         public virtual DbSet<Session> Session { get; set; }
         public virtual DbSet<Template> Template { get; set; }
+        public virtual DbSet<Translation> Translation { get; set; }
         public virtual DbSet<UserRight> UserRight { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -410,6 +411,13 @@ namespace Justice.Portal.DB.Models
                     .WithMany(p => p.Template)
                     .HasForeignKey(d => d.PortalPartId)
                     .HasConstraintName("fk_PortalPart2Block_PortalPartId");
+            });
+
+            modelBuilder.Entity<Translation>(entity =>
+            {
+                entity.Property(e => e.TranslationId).ValueGeneratedNever();
+
+                entity.Property(e => e.Content).IsRequired();
             });
 
             modelBuilder.Entity<UserRight>(entity =>
