@@ -164,7 +164,7 @@ export default class WYSIWYG extends BaseComponent {
 
                 />
 
-                }
+
             </div>
         );
     }

@@ -558,5 +558,18 @@ namespace Justice.Portal.DB
         }
 
 
+        public AdSQItem[] GetAdsSQData(int count, string portalPartId)
+        {
+            return (from b in db.Block
+                    join btpv in db.BlockTypePropertyValue on new { bid = b.BlockId, pid = "date" } equals new { bid = btpv.BlockId, pid = btpv.PropertyId }
+                    orderby btpv.Value descending
+                    select new AdSQItem()
+                    {
+                        BlockId = b.BlockId,
+                        Date = btpv.Value,
+                        JSONContent = b.Jsonvalues
+                    }).Take(count).ToArray();
+        }
+
     }
 }
