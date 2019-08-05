@@ -39,6 +39,8 @@ namespace Justice.Portal.Web.Controllers
             JObject joPageData = new JObject();
             joPageData["main"] = JObject.Parse(block.Jsonvalues);
             joPageData["maintype"] = block.BlockTypeId;
+            joPageData["mainid"] = block.BlockId;
+
             JArray jaSources = JArray.Parse(template.Sources);
             foreach (var b in jaSources)
             {

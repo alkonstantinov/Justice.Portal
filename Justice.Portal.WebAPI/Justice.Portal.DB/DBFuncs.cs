@@ -557,11 +557,11 @@ namespace Justice.Portal.DB
             db.SaveChanges();
         }
 
-
         public AdSQItem[] GetAdsSQData(int count, string portalPartId)
         {
             return (from b in db.Block
                     join btpv in db.BlockTypePropertyValue on new { bid = b.BlockId, pid = "date" } equals new { bid = btpv.BlockId, pid = btpv.PropertyId }
+                    where b.PortalPartId == portalPartId && b.BlockTypeId == "ad"
                     orderby btpv.Value descending
                     select new AdSQItem()
                     {
@@ -569,6 +569,60 @@ namespace Justice.Portal.DB
                         Date = btpv.Value,
                         JSONContent = b.Jsonvalues
                     }).Take(count).ToArray();
+        }
+
+        public NewSQItem[] GetNewsSQData(int count, string portalPartId)
+        {
+            return (from b in db.Block
+                    join btpv in db.BlockTypePropertyValue on new { bid = b.BlockId, pid = "date" } equals new { bid = btpv.BlockId, pid = btpv.PropertyId }
+                    where b.PortalPartId == portalPartId && b.BlockTypeId == "new"
+                    orderby btpv.Value descending
+                    select new NewSQItem()
+                    {
+                        BlockId = b.BlockId,
+                        Date = btpv.Value,
+                        JSONContent = b.Jsonvalues
+                    }).Take(count).ToArray();
+        }
+
+
+        public AdsData GetAdsData(int top, int count, string portalPartId)
+        {
+            var rows = (from b in db.Block
+                        join btpv in db.BlockTypePropertyValue on new { bid = b.BlockId, pid = "date" } equals new { bid = btpv.BlockId, pid = btpv.PropertyId }
+                        where b.PortalPartId == portalPartId && b.BlockTypeId == "ad"
+                        orderby btpv.Value descending
+                        select new AdSQItem()
+                        {
+                            BlockId = b.BlockId,
+                            Date = btpv.Value,
+                            JSONContent = b.Jsonvalues
+                        }).ToArray();
+            return new AdsData()
+            {
+                Count = rows.Length,
+                Rows = rows.Skip(top).Take(count).ToArray()
+            };
+        }
+
+
+        public NewsData GetNewsData(int top, int count, string portalPartId)
+        {
+            var rows = (from b in db.Block
+                        join btpv in db.BlockTypePropertyValue on new { bid = b.BlockId, pid = "date" } equals new { bid = btpv.BlockId, pid = btpv.PropertyId }
+                        where b.PortalPartId == portalPartId && b.BlockTypeId == "new"
+                        orderby btpv.Value descending
+                        select new NewSQItem()
+                        {
+                            BlockId = b.BlockId,
+                            Date = btpv.Value,
+                            JSONContent = b.Jsonvalues
+                        }).ToArray();
+            return new NewsData()
+            {
+                Count = rows.Length,
+                Rows = rows.Skip(top).Take(count).ToArray()
+            };
         }
 
     }

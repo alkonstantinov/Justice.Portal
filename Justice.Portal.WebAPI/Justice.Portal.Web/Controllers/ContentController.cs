@@ -19,10 +19,10 @@ namespace Justice.Portal.Web.Controllers
     public class ContentController : BaseController
     {
 
-        
+
         public ContentController(JusticePortalContext jpc, ISOLRComm solrComm) : base(jpc)
         {
-            
+
         }
 
 
@@ -33,6 +33,34 @@ namespace Justice.Portal.Web.Controllers
 
 
             return Ok(db.GetAdsSQData(count, portalPartId));
+        }
+
+        [HttpGet("GetNewsSQData")]
+        public async Task<IActionResult> GetNewsSQData(int count, int blockId)
+        {
+            string portalPartId = db.GetBlock(blockId).PortalPartId;
+
+
+            return Ok(db.GetNewsSQData(count, portalPartId));
+        }
+
+
+        [HttpGet("GetAdsData")]
+        public async Task<IActionResult> GetAdsData(int top, int count, int blockId)
+        {
+            string portalPartId = db.GetBlock(blockId).PortalPartId;
+
+
+            return Ok(db.GetAdsData(top, count, portalPartId));
+        }
+
+        [HttpGet("GetNewsData")]
+        public async Task<IActionResult> GetNewsData(int top, int count, int blockId)
+        {
+            string portalPartId = db.GetBlock(blockId).PortalPartId;
+
+
+            return Ok(db.GetNewsData(top, count, portalPartId));
         }
 
     }

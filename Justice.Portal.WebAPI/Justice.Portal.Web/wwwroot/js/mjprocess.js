@@ -1,9 +1,13 @@
-﻿const lsLastBannerTime = "LastBannerTime";
+﻿
+const lsLastBannerTime = "LastBannerTime";
 class MJProcess {
     translation = {};
     language = "bg";
     MJPageData = {};
     LastBanner = null;
+    Top = 0;
+    ItemsContentId = "";
+    NextItemsLinkId = "";
 
     constructor() {
         this.LoadTranslations = this.LoadTranslations.bind(this);
@@ -11,16 +15,36 @@ class MJProcess {
         this.DoProcess = this.DoProcess.bind(this);
         this.ShowBannerIfNeeded = this.ShowBannerIfNeeded.bind(this);
         this.NarrowText = this.NarrowText.bind(this);
+        this.Guid = this.Guid.bind(this);
 
         this.PutBlocks = this.PutBlocks.bind(this);
         this.PutElement = this.PutElement.bind(this);
         this.PutLive = this.PutLive.bind(this);
         this.PutHtml = this.PutHtml.bind(this);
         this.PutAdsSQ = this.PutAdsSQ.bind(this);
+        this.PutNewsSQ = this.PutNewsSQ.bind(this);
+        this.PutAds = this.PutAds.bind(this);
+        this.PutNews = this.PutNews.bind(this);
+        this.PutNew = this.PutNew.bind(this);
+        this.PutAd = this.PutAd.bind(this);
+        this.PutText = this.PutText.bind(this);
+        this.PutBio = this.PutBio.bind(this);
+
 
         this.LoadTranslations();
     }
 
+
+
+    Guid() {
+        function s4() {
+            return Math.floor((1 + Math.random()) * 0x10000)
+                .toString(16)
+                .substring(1);
+        }
+        return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
+            s4() + '-' + s4() + s4() + s4();
+    }
 
     NarrowText(text, length) {
         if (!text)
@@ -28,7 +52,7 @@ class MJProcess {
         text = $(text).text();
         if (text.length <= length)
             return text;
-        
+
         return text.substring(0, length) + "...";
     }
 
@@ -71,21 +95,34 @@ class MJProcess {
 
     }
 
-    PutElement(e) {
+    PutElement(e, isMain) {
         let blockId = $(e).attr("id");
         let blockTypeId = $(e).attr("mjblocktypeid");
+        if (isMain) {
+            blockId = "dMain";
+            blockTypeId = this.MJPageData.maintype;
+        }
+
         switch (blockTypeId) {
-            case "live": this.PutLive(blockId); break;
-            case "html": this.PutHtml(blockId); break;
-            case "banner": this.PutBanner(blockId); this.LastBanner = blockId; break;
-            case "adssq": this.PutAdsSQ(blockId); break;
+            case "live": this.PutLive(blockId, isMain); break;
+            case "html": this.PutHtml(blockId, isMain); break;
+            case "banner": this.PutBanner(blockId, isMain); this.LastBanner = blockId; break;
+            case "adssq": this.PutAdsSQ(blockId, isMain); break;
+            case "newssq": this.PutNewsSQ(blockId, isMain); break;
+            case "ads": this.PutAds(blockId, isMain); break;
+            case "news": this.PutNews(blockId, isMain); break;
+            case "new": this.PutNew(blockId, isMain); break;
+            case "ad": this.PutAd(blockId, isMain); break;
+            case "text": this.PutText(blockId, isMain); break;
+            case "bio": this.PutBio(blockId, isMain); break;
+
 
         }
     }
 
-    PutLive(divId) {
+    PutLive(divId, isMain) {
         var oldDiv = $("#" + divId);
-        var obj = this.MJPageData["block_" + divId];
+        var obj = isMain ? this.MJPageData.main : this.MJPageData["block_" + divId].blockData;
         var self = this;
         oldDiv.replaceWith($(`
             <div class= "port-wrapper grid-item-emission" >
@@ -95,16 +132,16 @@ class MJProcess {
                 </div>
             </div>
             <div class="port-box p-0 bgr-black box-border height-350">
-                <div class="abs-content" style='background-image: url("api/part/GetBlob?hash=`+ obj.blockData.imageId + `");'>
+                <div class="abs-content" style='background-image: url("/api/part/GetBlob?hash=`+ obj.imageId + `");'>
                     <div class="abs-cover"></div>
                     <div class="emission-label">
-                        <img src="images/live-symbol.png">
+                        <img src="/images/live-symbol.png">
                             <span><t>live</t></span>
 						</div>
                         <div class="emission-title">
-                            <h2 class="white">`+ obj.blockData.title[self.language] + `                                
+                            <h2 class="white">`+ obj.title[self.language] + `                                
 							</h2>
-                            <a role="button" class="btn btn-emission js-video" data-toggle="modal" data-src="`+ obj.blockData.url + `" data-target="#liveEmission">
+                            <a role="button" class="btn btn-emission js-video" data-toggle="modal" data-src="`+ obj.url + `" data-target="#liveEmission">
                                 <svg class="icon icon-play-button"><use xlink: href="images/symbol-defs.svg#icon-play-button"></use></svg>
                             <t>watchlive</t>
 							</a>
@@ -117,9 +154,9 @@ class MJProcess {
 
     }
 
-    PutBanner(divId) {
+    PutBanner(divId, isMain) {
         var oldDiv = $("#" + divId);
-        var obj = this.MJPageData["block_" + divId];
+        var obj = isMain ? this.MJPageData.main : this.MJPageData["block_" + divId].blockData;
         var self = this;
         oldDiv.replaceWith($(`
             <div class="modal fade" id="`+ divId + `" tabindex="-1" role="dialog" aria-labelledby="liveEmission" aria-hidden="true">
@@ -136,10 +173,10 @@ class MJProcess {
                 </div>
                 <div class="row">
                     <div class="col-6">
-                        <img src="api/part/GetBlob?hash=`+ obj.blockData.imageId + `" alt="" style="max-width:100%;max-height:100%;"/>
+                        <img src="/api/part/GetBlob?hash=`+ obj.imageId + `" alt="" style="max-width:100%;max-height:100%;"/>
                     </div>
                     <div class="col-6">
-                        `+ (obj.blockData.body[self.language] || "") + `
+                        `+ (obj.body[self.language] || "") + `
                     </div>
                 </div>
                 
@@ -155,18 +192,18 @@ class MJProcess {
     }
 
 
-    PutHtml(divId) {
+    PutHtml(divId, isMain) {
         var oldDiv = $("#" + divId);
-        var obj = this.MJPageData["block_" + divId];
+        var obj = isMain ? this.MJPageData.main : this.MJPageData["block_" + divId].blockData;
         var self = this;
-        oldDiv.replaceWith($(obj.blockData.html[self.language]));
+        oldDiv.replaceWith($(obj.html[self.language]));
 
 
     }
 
-    PutAdsSQ(divId) {
+    PutAdsSQ(divId, isMain) {
         var oldDiv = $("#" + divId);
-        var obj = this.MJPageData["block_" + divId];
+        var obj = isMain ? this.MJPageData.main : this.MJPageData["block_" + divId].blockData;
         var self = this;
         var lis = "";
 
@@ -206,11 +243,303 @@ class MJProcess {
     }
 
 
+    PutNextAds(blockId) {
+        var self = this;
+        var divs = "";
+        var showMore = false;
+        $.ajax({
+            url: "/api/content/GetAdsData?count=6&blockId=" + blockId + "&top=" + self.Top,
+            dataType: 'json',
+            async: false,
+
+            success: function (data) {
+                self.Top += data.rows.length;
+                showMore = self.Top < data.count;
+                data.rows.forEach(x =>
+                    divs += `<div class="list-box">
+						<div class="port-content">
+							`+ (JSON.parse(x.jsonContent).imageId ? '<img src="/api/part/GetBlob?hash=' + JSON.parse(x.jsonContent).imageId + '" alt="" style="max-width:100%;max-height:100%;"  class="list-article-img img-list"/>' : '') +
+                    `<div>
+								<h6 class="date">`+ x.date + `</h6>
+								<h3><a href="#">`+ self.NarrowText(JSON.parse(x.jsonContent).body[self.language], 100) + `</a></h3>
+							</div>
+						</div>
+					</div>
+					`
+                );
+
+            }
+        });
+
+        $("#" + this.ItemsContentId).append($(divs));
+        if (!showMore)
+            $("#" + this.NextItemsLinkId).hide();
+
+    }
+
+    PutAds(divId, isMain) {
+        var oldDiv = $("#" + divId);
+        var obj = isMain ? this.MJPageData.main : this.MJPageData["block_" + divId].blockData;
+        var blockId = isMain ? this.MJPageData.mainid : this.MJPageData["block_" + divId].value;
+        this.ItemsContentId = this.Guid();
+        this.NextItemsLinkId = this.Guid();
+        var self = this;
+
+        var newContent = `<div class="port-wrapper">
+				<div class="port-head">
+					<h3 class="port-title"><t>ads</t></h3>
+					
+				</div>
+				<div class="port-box box-border" id="` + this.ItemsContentId + `">
+					
+				</div>
+                <div class="port-footer">
+						<div class="port-link-item">
+							<span class="port-head-link" id="` + this.NextItemsLinkId + `" onclick="mjProcess.PutNextAds(` + blockId + `)">
+                                Още
+							</span>
+						</div>
+			</div>`;
+
+        oldDiv.replaceWith($(newContent));
+        this.PutNextAds(blockId);
+
+
+    }
+
+
+    PutNextNews(blockId) {
+        var self = this;
+        var divs = "";
+        var showMore = false;
+        $.ajax({
+            url: "/api/content/GetNewsData?count=6&blockId=" + blockId + "&top=" + self.Top,
+            dataType: 'json',
+            async: false,
+
+            success: function (data) {
+                self.Top += data.rows.length;
+                showMore = self.Top < data.count;
+                data.rows.forEach(x =>
+                    divs += `<div class="list-box">
+						<div class="port-content">
+							`+ (JSON.parse(x.jsonContent).imageId ? '<img src="/api/part/GetBlob?hash=' + JSON.parse(x.jsonContent).imageId + '" alt="" style="max-width:100%;max-height:100%;"  class="list-article-img img-list"/>' : '') +
+                    `<div>
+								<h6 class="date">`+ x.date + `</h6>
+								<h3><a href="#">`+ self.NarrowText(JSON.parse(x.jsonContent).body[self.language], 100) + `</a></h3>
+							</div>
+						</div>
+					</div>
+					`
+                );
+
+            }
+        });
+
+        $("#" + this.ItemsContentId).append($(divs));
+        if (!showMore)
+            $("#" + this.NextItemsLinkId).hide();
+
+    }
+
+    PutNews(divId, isMain) {
+        var oldDiv = $("#" + divId);
+        var obj = isMain ? this.MJPageData.main : this.MJPageData["block_" + divId].blockData;
+        var blockId = isMain ? this.MJPageData.mainid : this.MJPageData["block_" + divId].value;
+        this.ItemsContentId = this.Guid();
+        this.NextItemsLinkId = this.Guid();
+        var self = this;
+
+        var newContent = `<div class="port-wrapper">
+				<div class="port-head">
+					<h3 class="port-title"><t>news</t></h3>
+					
+				</div>
+				<div class="port-box box-border" id="` + this.ItemsContentId + `">
+					
+				</div>
+                <div class="port-footer">
+						<div class="port-link-item">
+							<span class="port-head-link" id="` + this.NextItemsLinkId + `" onclick="mjProcess.PutNextAds(` + blockId + `)">
+                                Още
+							</span>
+						</div>
+			</div>`;
+
+        oldDiv.replaceWith($(newContent));
+        this.PutNextNews(blockId);
+
+
+    }
+
+
+    PutNewsSQ(divId, isMain) {
+        var oldDiv = $("#" + divId);
+        var obj = isMain ? this.MJPageData.main : this.MJPageData["block_" + divId].blockData;
+        var self = this;
+
+
+        var divs = "";
+
+        $.ajax({
+            url: "/api/content/GetNewsSQData?count=3&blockId=" + obj.value,
+            dataType: 'json',
+            async: false,
+
+            success: function (data) {
+                data.forEach((x, idx) => {
+                    var data = JSON.parse(x.jsonContent);
+                    divs += `<div class="carousel-item ` + (idx === 0 ? "active" : "") + `">
+                        <h6 class="date">`+ x.date + `</h6>
+                        <h2>`+ (data.title[self.language] || "") + `</h2>
+                        <div class="port-content">
+                            <img src="/api/part/GetBlob?hash=`+ data.imageId + `" alt="" class="list-article-img img-prime" style="max-width:100%;max-height:100%;"/>
+                        <div>
+                            
+                                    `+ self.NarrowText(data.body[self.language], 400) + `
+                                    <a class="btn btn-primary" href="#" role="button">Научи повече</a>
+                                </div>
+							</div>
+                        </div>`;
+                }
+
+                );
+
+            }
+        });
+
+
+
+        var newContent = `<div class="port-wrapper">
+			<div class="port-head">
+				<h3 class="port-title">Новини</h3>
+				<div class="port-link-item">
+					<a href="news-list.html" class="port-head-link">Всички новини
+					<svg class="icon icon-arrow-right"><use xlink:href="images/symbol-defs.svg#icon-angle-arrow-down"></use></svg>
+					</a>
+				</div>
+			</div>
+			<div class="port-box box-border height-350">
+				<div id="carouselIndicators" class="carousel slide" data-ride="carousel">
+					<ol class="carousel-indicators" id="carIndicators">
+						<li data-target="#carouselIndicators" data-slide-to="0" class="active"></li>
+						<li data-target="#carouselIndicators" data-slide-to="1"></li>
+						<li data-target="#carouselIndicators" data-slide-to="2"></li>
+					</ol>
+					<div class="carousel-inner">
+						`+ divs + `
+					</div>
+				</div>
+			</div>
+		</div>
+		`;
+
+
+        oldDiv.replaceWith($(newContent));
+
+        //$('.carousel').carousel();
+    }
+
+
+    PutNew(divId, isMain) {
+        var oldDiv = $("#" + divId);
+        var obj = isMain ? this.MJPageData.main : this.MJPageData["block_" + divId].blockData;
+        var self = this;
+        oldDiv.replaceWith($(`<article class="article-container">
+
+				<h1>`+ obj.title[self.language] + `				
+				</h1>
+				
+				<figure>
+
+					<img class="half-pic" src="/api/part/GetBlob?hash=`+ obj.imageId + `">
+				</figure>
+				<div class="article-content">
+					`+ obj.body[self.language] + `
+				</div>
+			</article>`));
+
+
+    }
+
+    PutAd(divId, isMain) {
+        var oldDiv = $("#" + divId);
+        var obj = isMain ? this.MJPageData.main : this.MJPageData["block_" + divId].blockData;
+        var self = this;
+        oldDiv.replaceWith($(`<article class="article-container">
+
+				<h1>`+ obj.title[self.language] + `				
+				</h1>
+				
+				<figure>
+
+					<img class="half-pic" src="/api/part/GetBlob?hash=`+ obj.imageId + `">
+				</figure>
+				<div class="article-content">
+					`+ obj.body[self.language] + `
+				</div>
+			</article>`));
+
+
+    }
+
+    PutText(divId, isMain) {
+        var oldDiv = $("#" + divId);
+        var obj = isMain ? this.MJPageData.main : this.MJPageData["block_" + divId].blockData;
+        var self = this;
+        oldDiv.replaceWith($(`<article class="article-container">
+
+				<h1>`+ obj.title[self.language] + `				
+				</h1>
+				
+				<figure>
+
+					<img class="half-pic" src="/api/part/GetBlob?hash=`+ obj.imageId + `">
+				</figure>
+				<div class="article-content">
+					`+ obj.body[self.language] + `
+				</div>
+			</article>`));
+
+
+    }
+
+
+    PutBio(divId, isMain) {
+        var oldDiv = $("#" + divId);
+        var obj = isMain ? this.MJPageData.main : this.MJPageData["block_" + divId].blockData;
+        var self = this;
+        oldDiv.replaceWith($(`<article class="article-container">
+
+				<h1>`+ obj.title[self.language] +
+            (obj.prime ? "<span><t>minister</t></span>" : "") +
+
+
+            `				
+
+				</h1>
+				
+				<figure>
+
+					<img class="half-pic" src="/api/part/GetBlob?hash=`+ obj.imageId + `">
+				</figure>
+				<div class="article-content">
+					`+ obj.body[self.language] + `
+				</div>
+			</article>`));
+
+
+    }
+
+
+
+
     PutBlocks() {
+        this.PutElement(null, true);
         let array = $("div[mjblocktypeid]").each(
             (i, e) => {
 
-                this.PutElement(e);
+                this.PutElement(e, false);
 
             });
     }
