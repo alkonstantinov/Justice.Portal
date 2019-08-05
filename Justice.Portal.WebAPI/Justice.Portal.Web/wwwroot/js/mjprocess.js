@@ -1,5 +1,7 @@
 ﻿
 const lsLastBannerTime = "LastBannerTime";
+const lsBreadcrumbs = "Breadcrumbs";
+const bcKeyMain = "___main"
 class MJProcess {
     translation = {};
     language = "bg";
@@ -16,6 +18,10 @@ class MJProcess {
         this.ShowBannerIfNeeded = this.ShowBannerIfNeeded.bind(this);
         this.NarrowText = this.NarrowText.bind(this);
         this.Guid = this.Guid.bind(this);
+        this.ClearBreadCrumbs = this.ClearBreadCrumbs.bind(this);
+        this.FindMeOrAddMeInBreadCrumbs = this.FindMeOrAddMeInBreadCrumbs.bind(this);
+        this.DisplayBreadCrumbs = this.DisplayBreadCrumbs.bind(this);
+        
 
         this.PutBlocks = this.PutBlocks.bind(this);
         this.PutElement = this.PutElement.bind(this);
@@ -568,6 +574,8 @@ class MJProcess {
 
     DoProcess(MJPageData) {
         this.MJPageData = MJPageData;
+        //this.ClearBreadCrumbs();
+        this.FindMeOrAddMeInBreadCrumbs();
         this.PutBlocks();
         var self = this;
         $("T").each(function (i, e) {
@@ -575,6 +583,7 @@ class MJProcess {
         });
 
         self.ShowBannerIfNeeded();
+        self.DisplayBreadCrumbs();
     }
 
 
@@ -583,6 +592,57 @@ class MJProcess {
     SwitchLanguage() {
         localStorage.setItem("language", this.language === "bg" ? "en" : "bg");
         location.reload();
+    }
+
+
+    ClearBreadCrumbs() {
+        var bc = [];
+        bc.push({
+            key: bcKeyMain,
+            title: { bg: this.translation.bg.start, en: this.translation.en.start }
+        });
+        localStorage.setItem(lsBreadcrumbs, JSON.stringify(bc));
+
+    }
+
+    FindMeOrAddMeInBreadCrumbs() {
+        var bc = JSON.parse(localStorage.getItem(lsBreadcrumbs) || "[]");
+        if (bc.length === 0)
+            bc.push({
+                key: bcKeyMain,
+                title: { bg: this.translation.bg.start, en: this.translation.en.start }
+            });
+        var urlParts = window.location.href.split('/');
+        var key = ((urlParts.length === 4 || urlParts[urlParts.length - 1] === "") ? bcKeyMain : urlParts[urlParts.length - 1]).toLowerCase();
+        var me = bc.find(x => x.key === key);
+        if (me) {
+            bc.splice(bc.indexOf(me) + 1);
+        }
+        else {
+            bc.push({
+                key: key,
+                title: this.MJPageData.main.title
+            });
+        }
+
+
+        localStorage.setItem(lsBreadcrumbs, JSON.stringify(bc));
+    }
+
+    DisplayBreadCrumbs() {
+        
+        var self = this;
+        var olbc = $("#olBC");
+        if (olbc.length > 0) {
+            $("#olBC li").remove();
+            var bc = JSON.parse(localStorage.getItem(lsBreadcrumbs) || "[]");
+            bc.forEach((x, i) =>
+                $("#olBC").append($('<li class="breadcrumb - item" aria-current="page"><a href="' + (x.key === bcKeyMain ? '/' : '/home/index/' + x.key) + '">' + x.title[self.language] + '</a></li>'))
+                );
+            
+        }
+
+
     }
 
 }
