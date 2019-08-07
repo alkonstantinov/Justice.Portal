@@ -2,6 +2,7 @@
 using Justice.Portal.DB.Models;
 using Justice.Portal.DB.Tools;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -623,6 +624,21 @@ namespace Justice.Portal.DB
                 Count = rows.Length,
                 Rows = rows.Skip(top).Take(count).ToArray()
             };
+        }
+
+        public JSBlock GetSearchResultBlock(string portalPartId)
+        {
+            return ModelMapper.Instance.Mapper.Map<JSBlock>(db.Block.First(x => x.PortalPartId == portalPartId && x.BlockTypeId == "search"));
+        }
+
+
+        public JSBlock[] GetCabinetBios()
+        {
+
+            var result = ModelMapper.Instance.Mapper.Map<ICollection<Block>, ICollection<JSBlock>>(db.Block.Where(x =>
+                         x.BlockTypeId == "bio" && !bool.Parse(JObject.Parse(x.Jsonvalues)["prime"].ToString())
+            ).ToList()).ToArray();
+            return result;
         }
 
     }

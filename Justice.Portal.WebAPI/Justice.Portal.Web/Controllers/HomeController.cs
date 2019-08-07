@@ -40,6 +40,7 @@ namespace Justice.Portal.Web.Controllers
             joPageData["main"] = JObject.Parse(block.Jsonvalues);
             joPageData["maintype"] = block.BlockTypeId;
             joPageData["mainid"] = block.BlockId;
+            joPageData["mainpartid"] = block.PortalPartId;
 
             JArray jaSources = JArray.Parse(template.Sources);
             foreach (var b in jaSources)

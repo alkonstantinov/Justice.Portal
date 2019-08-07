@@ -154,7 +154,7 @@ namespace Justice.Portal.Web.Controllers
         public async Task<FileContentResult> GetBlob(string hash)
         {
             var b = db.GetBlob(hash);
-            var response = File(b?.Content, b?.ContentType); // FileStreamResult
+            var response = b!=null ? File(b?.Content, b?.ContentType) : null; // FileStreamResult
             return response;
         }
 

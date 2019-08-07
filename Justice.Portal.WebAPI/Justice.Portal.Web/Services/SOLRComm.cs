@@ -27,6 +27,7 @@ namespace Justice.Portal.Web.Services
                 JObject jo = JObject.Parse(block.Jsonvalues);
                 JObject result = new JObject();
                 result["id"] = block.BlockId;
+                result["urlhash"] = block.Url;
                 result["part"] = block.PortalPartId;
                 result["titleBG"] = jo["title"]["bg"]?.ToString();
                 result["titleEN"] = jo["title"]["en"]?.ToString();
@@ -70,7 +71,7 @@ namespace Justice.Portal.Web.Services
         public string Search(string query, int from, int size, string part)
         {
 
-            string q = string.IsNullOrEmpty(part) ? $"content:биография" : $"content:биография AND part: min";
+            string q = string.IsNullOrEmpty(part) ? $"content:{query}" : $"content:биография AND part: {part}";
             return wc.DownloadString($"query?q={q}&rows={size}&start={from}&sort=id asc");
         }
     }

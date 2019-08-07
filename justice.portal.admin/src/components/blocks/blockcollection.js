@@ -4,6 +4,7 @@ import { ToggleButton } from 'primereact/togglebutton';
 import Comm from '../../modules/comm';
 import { toast } from 'react-toastify';
 import eventClient from '../../modules/eventclient';
+import TB from '../editors/tb';
 
 export default class BlockCollection extends BaseComponent {
 
@@ -21,12 +22,15 @@ export default class BlockCollection extends BaseComponent {
         this.Validate = this.Validate.bind(this);
         this.GetData = this.GetData.bind(this);
         var state = { lang: "bg" };
+
         if (this.props.block) {
             var obj = JSON.parse(this.props.block.jsonvalues);
+            state.title = obj.title || {};
             state.collectionId = obj.collectionId;
         }
         else {
             state.collectionId = null;
+            state.title = {};
         }
 
 
@@ -77,7 +81,18 @@ export default class BlockCollection extends BaseComponent {
                         <ToggleButton checked={self.state.lang === "bg"} onChange={(e) => this.setState({ lang: "bg" })} onLabel="БГ" offLabel="БГ"></ToggleButton>
                         <ToggleButton checked={self.state.lang === "en"} onChange={(e) => this.setState({ lang: "en" })} onLabel="EN" offLabel="EN"></ToggleButton>
                     </div>
-                    <div className="col-2">
+                    <div className="col-10">
+                        <label className="control-label">Заглавие</label>
+                        <TB
+                            getData={self.GetStateMLData}
+                            setData={self.SetStateMLData}
+                            stateId="title"
+                        ></TB>
+
+                    </div>
+                </div>,
+                <div className="row">
+                    <div className="col-12">
                         <label className="control-label">Колекция</label>
                         {
                             self.state.collections ?

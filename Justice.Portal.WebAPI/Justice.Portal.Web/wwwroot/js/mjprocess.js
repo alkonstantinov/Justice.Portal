@@ -1,7 +1,9 @@
-﻿
-const lsLastBannerTime = "LastBannerTime";
+﻿const lsLastBannerTime = "LastBannerTime";
 const lsBreadcrumbs = "Breadcrumbs";
-const bcKeyMain = "___main"
+const lsSearchString = "SearchString";
+const bcKeyMain = "___main";
+
+
 class MJProcess {
     translation = {};
     language = "bg";
@@ -10,6 +12,7 @@ class MJProcess {
     Top = 0;
     ItemsContentId = "";
     NextItemsLinkId = "";
+    years = [];
 
     constructor() {
         this.LoadTranslations = this.LoadTranslations.bind(this);
@@ -21,7 +24,8 @@ class MJProcess {
         this.ClearBreadCrumbs = this.ClearBreadCrumbs.bind(this);
         this.FindMeOrAddMeInBreadCrumbs = this.FindMeOrAddMeInBreadCrumbs.bind(this);
         this.DisplayBreadCrumbs = this.DisplayBreadCrumbs.bind(this);
-        
+        this.ShowMonth = this.ShowMonth.bind(this);
+
 
         this.PutBlocks = this.PutBlocks.bind(this);
         this.PutElement = this.PutElement.bind(this);
@@ -35,6 +39,12 @@ class MJProcess {
         this.PutAd = this.PutAd.bind(this);
         this.PutText = this.PutText.bind(this);
         this.PutBio = this.PutBio.bind(this);
+        this.PutInfo = this.PutInfo.bind(this);
+        this.PutSearch = this.PutSearch.bind(this);
+        this.PutBiographies = this.PutBiographies.bind(this);
+        this.PutDocList = this.PutDocList.bind(this);
+
+
 
 
         this.LoadTranslations();
@@ -119,9 +129,12 @@ class MJProcess {
             case "news": this.PutNews(blockId, isMain); break;
             case "new": this.PutNew(blockId, isMain); break;
             case "ad": this.PutAd(blockId, isMain); break;
+            case "info": this.PutInfo(blockId, isMain); break;
             case "text": this.PutText(blockId, isMain); break;
             case "bio": this.PutBio(blockId, isMain); break;
-
+            case "search": this.PutSearch(blockId, isMain); break;
+            case "biocabinet": this.PutBiographies(blockId, isMain); break;
+            case "doclist": this.PutDocList(blockId, isMain); break;
 
         }
     }
@@ -314,6 +327,11 @@ class MJProcess {
     }
 
 
+
+
+
+
+
     PutNextNews(blockId) {
         var self = this;
         var divs = "";
@@ -447,6 +465,71 @@ class MJProcess {
     }
 
 
+
+    PutNextSearch() {
+        var self = this;
+        var divs = "";
+        var showMore = false;
+        var query = localStorage.getItem(lsSearchString) || "";
+        $.ajax({
+            url: "/api/content/search?size=10&query=" + query + "&top=" + self.Top + "&part=" + (this.MJPageData.mainpartid === "min" ? "" : this.MJPageData.mainpartid),
+            dataType: 'json',
+            async: false,
+
+            success: function (data) {
+                self.Top += data.response.numFound;
+                showMore = self.Top < data.response.numFound;
+                data.response.docs.forEach(x =>
+                    divs += `<div class="list-box">
+						<div class="port-content">
+                    <div>
+								<h3><a href="`+ x.urlhash[0] + `">` + JSON.parse(x.content).title[self.language] + `</a></h3>
+							</div>
+						</div>
+					</div>
+					`
+                );
+
+            }
+        });
+
+        $("#" + this.ItemsContentId).append($(divs));
+        if (!showMore)
+            $("#" + this.NextItemsLinkId).hide();
+
+    }
+
+    PutSearch(divId, isMain) {
+        var oldDiv = $("#" + divId);
+        var obj = isMain ? this.MJPageData.main : this.MJPageData["block_" + divId].blockData;
+        var blockId = isMain ? this.MJPageData.mainid : this.MJPageData["block_" + divId].value;
+        this.ItemsContentId = this.Guid();
+        this.NextItemsLinkId = this.Guid();
+        var self = this;
+
+        var newContent = `<div class="port-wrapper">
+				<div class="port-head">
+					<h3 class="port-title"><t>searchresult</t></h3>
+					
+				</div>
+				<div class="port-box box-border" id="` + this.ItemsContentId + `">
+					
+				</div>
+                <div class="port-footer">
+						<div class="port-link-item">
+							<span class="port-head-link" id="` + this.NextItemsLinkId + `" onclick="mjProcess.PutNextAds(` + blockId + `)">
+                                Още
+							</span>
+						</div>
+			</div>`;
+
+        oldDiv.replaceWith($(newContent));
+        this.PutNextSearch();
+
+
+    }
+
+
     PutNew(divId, isMain) {
         var oldDiv = $("#" + divId);
         var obj = isMain ? this.MJPageData.main : this.MJPageData["block_" + divId].blockData;
@@ -538,6 +621,163 @@ class MJProcess {
     }
 
 
+    PutInfo(divId, isMain) {
+        var oldDiv = $("#" + divId);
+        var obj = isMain ? this.MJPageData.main : this.MJPageData["block_" + divId].blockData;
+        var self = this;
+        oldDiv.replaceWith($(`<article class="article-container">
+
+				<h1>`+ obj.title[self.language] + `				
+				</h1>
+				
+				<figure>
+
+					<img class="half-pic" src="/api/part/GetBlob?hash=`+ obj.imageId + `">
+				</figure>
+				<div class="article-content" style="max-width:100%">
+					`+ obj.body[self.language] + `
+				</div>
+			</article>`));
+
+
+    }
+
+
+
+    PutBiographies(divId, isMain) {
+        var oldDiv = $("#" + divId);
+        var obj = isMain ? this.MJPageData.main : this.MJPageData["block_" + divId].blockData;
+        var blockId = isMain ? this.MJPageData.mainid : this.MJPageData["block_" + divId].value;
+        this.ItemsContentId = this.Guid();
+        this.NextItemsLinkId = this.Guid();
+        var self = this;
+        var divs = "";
+        $.ajax({
+            url: "/api/content/GetCabinetBios",
+            dataType: 'json',
+            async: false,
+
+            success: function (data) {
+                data.forEach(x =>
+                    divs += `<div class="list-box">
+						<div class="port-content">
+							`+ (JSON.parse(x.jsonvalues).imageId ? '<img src="/api/part/GetBlob?hash=' + JSON.parse(x.jsonvalues).imageId + '" alt="" style="max-width:100%;max-height:100%;"  class="list-article-img img-list"/>' : '') +
+                    `<div>
+								
+								<h3><a href="`+ x.url + `">` + self.NarrowText(JSON.parse(x.jsonvalues).body[self.language], 100) + `</a></h3>
+							</div>
+						</div>
+					</div>
+					`
+                );
+
+            }
+        });
+
+
+        var newContent = `<div class="port-wrapper">
+				<div class="port-head">
+					<h3 class="port-title"><t>bios</t></h3>
+					
+				</div>
+				<div class="port-box box-border" id="` + this.ItemsContentId + `">
+					`+ divs + `
+				</div>
+                <div class="port-footer">
+						
+			</div>`;
+
+        oldDiv.replaceWith($(newContent));
+
+
+    }
+
+    FormatDate(d) {
+        var currentDt = new Date(d);
+        var mm = currentDt.getMonth() + 1;
+        if (mm < 10) mm = '0' + mm;
+        var dd = currentDt.getDate();
+        if (dd < 10) dd = '0' + dd;
+        var yyyy = currentDt.getFullYear();
+        var date = dd + '.' + mm + '.' + yyyy;
+        return date;
+    }
+
+    ShowMonth(year, month, divId) {
+        $("div[id^=dMonth_]").hide();
+        var self = this;
+
+        var ul = "<ul class='list-group'>";
+        this.years.find(x => x.year === year).months.find(x => x.month === month).docs.forEach(x =>
+            ul += "<li class='list-group-item'>" + self.FormatDate(x.date) + " <a href='/api/part/getblob?hash=" + x.docId + "'>" + x.title[self.language] + "</a></li>"
+        );
+        ul += "</ul>";
+        console.log("ul", ul);
+        //$("#" + divId).empty();
+        $("#" + divId).html(ul);
+
+        $("#" + divId).show();
+    }
+
+    PutDocList(divId, isMain) {
+        var oldDiv = $("#" + divId);
+        var obj = isMain ? this.MJPageData.main : this.MJPageData["block_" + divId].blockData;
+        var self = this;
+
+
+        var list = obj.docs.sort((a, b) => a.date < b.date ? 1 : -1);
+        list.forEach(i => {
+            var date = new Date(i.date);
+            var y = self.years.find(x => parseInt(x.year) === date.getFullYear());
+            if (!y) {
+                y = {
+                    year: date.getFullYear(),
+                    months: [{ month: 1, docs: [] }, { month: 2, docs: [] }, { month: 3, docs: [] }, { month: 4, docs: [] }, { month: 5, docs: [] }, { month: 6, docs: [] },
+                    { month: 7, docs: [] }, { month: 8, docs: [] }, { month: 9, docs: [] }, { month: 10, docs: [] }, { month: 11, docs: [] }, { month: 12, docs: [] }]
+                };
+                self.years.push(y);
+            }
+
+            var m = y.months.find(x => parseInt(x.month) === date.getMonth() + 1);
+            m.docs.push({
+                title: i.title,
+                docId: i.docId,
+                date: i.date
+            });
+
+
+        });
+
+        var divYears = "";
+        self.years.forEach(x => {
+            var hiddenDivId = "dMonth_" + this.Guid();
+            divYears += `<br/><div class="article-content">
+                         `;
+            divYears += '<h2>' + x.year + '</h2>';
+            x.months.forEach(m => divYears += '<a onclick="mjProcess.ShowMonth(' + x.year + ', ' + m.month + ',\'' + hiddenDivId + '\')">' + m.month + '</a>&nbsp;&nbsp;');
+            divYears += '<br/><div id="' + hiddenDivId + '" />';
+
+            divYears += `</div>`;
+        });
+
+
+
+
+        oldDiv.replaceWith($(`<article class="article-container">
+
+				<h1>`+ obj.title[self.language] + `				
+				</h1>
+				
+				<div class="article-content">
+					`+ obj.body[self.language] + `
+				</div>
+                `+ divYears + `
+			</article>`));
+
+
+
+
+    }
 
 
     PutBlocks() {
@@ -630,7 +870,7 @@ class MJProcess {
     }
 
     DisplayBreadCrumbs() {
-        
+
         var self = this;
         var olbc = $("#olBC");
         if (olbc.length > 0) {
@@ -638,9 +878,28 @@ class MJProcess {
             var bc = JSON.parse(localStorage.getItem(lsBreadcrumbs) || "[]");
             bc.forEach((x, i) =>
                 $("#olBC").append($('<li class="breadcrumb - item" aria-current="page"><a href="' + (x.key === bcKeyMain ? '/' : '/home/index/' + x.key) + '">' + x.title[self.language] + '</a></li>'))
-                );
-            
+            );
+
         }
+
+
+    }
+
+
+    InitiateSearch(str) {
+        if ((str || "") === "")
+            return;
+        localStorage.setItem(lsSearchString, str);
+
+        $.ajax({
+            url: "/api/content/GetSearchResultBlock?portalPartId=" + this.MJPageData.mainpartid,
+            dataType: 'json',
+            async: false,
+            success: function (data) {
+                window.location.href = "/home/index/" + data.url;
+
+            }
+        });
 
 
     }

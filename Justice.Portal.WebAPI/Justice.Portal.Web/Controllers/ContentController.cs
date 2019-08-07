@@ -19,10 +19,11 @@ namespace Justice.Portal.Web.Controllers
     public class ContentController : BaseController
     {
 
+        ISOLRComm solr;
 
         public ContentController(JusticePortalContext jpc, ISOLRComm solrComm) : base(jpc)
         {
-
+            this.solr = solrComm;
         }
 
 
@@ -62,6 +63,25 @@ namespace Justice.Portal.Web.Controllers
 
             return Ok(db.GetNewsData(top, count, portalPartId));
         }
+
+        [HttpGet("GetSearchResultBlock")]
+        public async Task<IActionResult> GetSearchResultBlock(string portalPartId)
+        {
+            return Ok(db.GetSearchResultBlock(portalPartId));
+        }
+
+        [HttpGet("Search")]
+        public async Task<IActionResult> Search(string query, int from, int size, string part)
+        {
+            return Ok(this.solr.Search(query, from, size, part));
+        }
+
+        [HttpGet("GetCabinetBios")]
+        public async Task<IActionResult> GetCabinetBios()
+        {
+            return Ok(this.db.GetCabinetBios());
+        }
+
 
     }
 }
