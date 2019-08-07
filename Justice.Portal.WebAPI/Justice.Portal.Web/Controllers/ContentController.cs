@@ -82,6 +82,13 @@ namespace Justice.Portal.Web.Controllers
             return Ok(this.db.GetCabinetBios());
         }
 
+        [HttpGet("GetCollection")]
+        public async Task<IActionResult> GetCollection(int collectionId)
+        {
+            return Ok(db.GetCollection(collectionId));
+        }
+
+
 
     }
 }

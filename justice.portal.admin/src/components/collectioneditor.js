@@ -186,7 +186,7 @@ export default class CollectionEditor extends BaseComponent {
             case 4: return (<input type="text" className="form-control" readOnly="true" value={data[structure.id] || ""}
 
 
-                onClick={() => self.UploadBlob((blobId) => self.SetValue("content", data.id, structure.id, false, Comm.url + "part/GetBlob?hash=" + blobId))}></input>)
+                onClick={() => self.UploadBlob((blobId) => self.SetValue("content", data.id, structure.id, false, blobId))}></input>)
 
             case 5: return (<input type="text" className="form-control" value={data[structure.id] || ""} onChange={(e) => self.SetValue("content", data.id, structure.id, false, e.target.value)}></input>);
 

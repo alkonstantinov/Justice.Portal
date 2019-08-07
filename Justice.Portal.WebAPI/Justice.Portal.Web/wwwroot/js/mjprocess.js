@@ -13,6 +13,8 @@ class MJProcess {
     ItemsContentId = "";
     NextItemsLinkId = "";
     years = [];
+    CollectionStructure;
+    CollectionContent;
 
     constructor() {
         this.LoadTranslations = this.LoadTranslations.bind(this);
@@ -25,6 +27,7 @@ class MJProcess {
         this.FindMeOrAddMeInBreadCrumbs = this.FindMeOrAddMeInBreadCrumbs.bind(this);
         this.DisplayBreadCrumbs = this.DisplayBreadCrumbs.bind(this);
         this.ShowMonth = this.ShowMonth.bind(this);
+        this.SearchCollection = this.SearchCollection.bind(this);
 
 
         this.PutBlocks = this.PutBlocks.bind(this);
@@ -43,6 +46,7 @@ class MJProcess {
         this.PutSearch = this.PutSearch.bind(this);
         this.PutBiographies = this.PutBiographies.bind(this);
         this.PutDocList = this.PutDocList.bind(this);
+        this.PutCollection = this.PutCollection.bind(this);
 
 
 
@@ -135,6 +139,7 @@ class MJProcess {
             case "search": this.PutSearch(blockId, isMain); break;
             case "biocabinet": this.PutBiographies(blockId, isMain); break;
             case "doclist": this.PutDocList(blockId, isMain); break;
+            case "collection": this.PutCollection(blockId, isMain); break;
 
         }
     }
@@ -384,7 +389,7 @@ class MJProcess {
 				</div>
                 <div class="port-footer">
 						<div class="port-link-item">
-							<span class="port-head-link" id="` + this.NextItemsLinkId + `" onclick="mjProcess.PutNextAds(` + blockId + `)">
+							<span class="port-head-link" id="` + this.NextItemsLinkId + `" onclick="mjProcess.PutNextNews(` + blockId + `)">
                                 Още
 							</span>
 						</div>
@@ -517,7 +522,7 @@ class MJProcess {
 				</div>
                 <div class="port-footer">
 						<div class="port-link-item">
-							<span class="port-head-link" id="` + this.NextItemsLinkId + `" onclick="mjProcess.PutNextAds(` + blockId + `)">
+							<span class="port-head-link" id="` + this.NextItemsLinkId + `" onclick="mjProcess.PutNextSearch(` + blockId + `)">
                                 Още
 							</span>
 						</div>
@@ -717,6 +722,130 @@ class MJProcess {
         $("#" + divId).html(ul);
 
         $("#" + divId).show();
+    }
+
+    SearchCollection() {
+        var searchResult = [];
+        var self = this;
+
+        self.CollectionContent.forEach(r => {
+            var ok = true;
+
+            self.CollectionStructure.forEach(ss => {
+                var src = "";
+                switch (parseInt(ss.type)) {
+                    case 1:
+                        src = $("#" + ss.id).val();
+                        if ((src || "") !== "" && r[ss.id].indexOf(src) === -1)
+                            ok = false;
+                        break;
+                    case 2:
+                        src = $("#" + ss.id).val();
+                        if ((src || "") !== "" && r[ss.id][self.language].indexOf(src) === -1)
+                            ok = false;
+                        break;
+                };
+                
+            });
+            if (ok)
+                searchResult.push(r);
+        });
+
+        var resultTbl = "<table class='table table-bordered table-striped'><thead><tr>";
+        
+        self.CollectionStructure.forEach(x => {
+            resultTbl += "<th>" + x.name[self.language] + "</th>";
+
+        });
+        resultTbl += "</tr></thead><tbody>";
+        searchResult.forEach(x => {
+            resultTbl += "<tr>";
+            self.CollectionStructure.forEach(ss => {
+                switch (parseInt(ss.type)) {
+                    case 1:
+                        resultTbl += "<td>" + x[ss.id] + "</td>"; break;
+                    case 2:
+                        resultTbl += "<td>" + x[ss.id][self.language] + "</td>"; break;
+                    case 3:
+                        resultTbl += "<td>" + x[ss.id] + "</td>"; break;
+                    case 4:
+                        resultTbl += "<td><a href='/api/part/getblob?hash=" + x[ss.id] + "'><t>link</t></a></td>"; break;
+                    case 5:
+                        resultTbl += "<td><a href='http://" + x[ss.id] + "'><t>link</t></a></td>"; break;
+                }
+
+            });
+            resultTbl += "</tr>";
+        });
+        resultTbl += "</tbody></table>";
+        $("#dSearchResult").html(resultTbl);
+
+    }
+
+    PutCollection(divId, isMain) {
+        var oldDiv = $("#" + divId);
+        var obj = isMain ? this.MJPageData.main : this.MJPageData["block_" + divId].blockData;
+        var self = this;
+
+        $.ajax({
+            url: "/api/content/GetCollection?collectionId=" + self.MJPageData.main.collectionId,
+            dataType: 'json',
+            async: false,
+
+            success: function (data) {
+                self.CollectionStructure = JSON.parse(data.structure);
+                self.CollectionContent = JSON.parse(data.content);
+            }
+        });
+        var divSearchControls = "";
+        self.CollectionStructure.forEach(x => {
+            switch (parseInt(x.type)) {
+                case 1:
+                    divSearchControls += `
+                <div class="row">
+                    <div class="col-12">
+                        <label class="control-label">`+ x.name[self.language] + `</label>
+                        <input type="text" id="`+ x.id + `" class="form-control"/>
+                    </div>
+                </div>
+                `;
+                    break;
+                case 2:
+                    divSearchControls += `
+                <div class="row">
+                    <div class="col-12">
+                        <label class="control-label">`+ x.name[self.language] + `</label>
+                        <input type="text" id="`+ x.id + `" class="form-control"/>
+                    </div>
+                </div>
+                `;
+                    break;
+
+            }
+
+        });
+
+        divSearchControls += `
+                <div class="row">
+                    <div class="col-12">
+                        <button class="btn btn-primary" onclick="mjProcess.SearchCollection()"><t>search</t></label>
+                    </div>
+                </div>
+                `;
+        oldDiv.replaceWith($(`<article class="article-container">
+
+				<h1>`+ (obj.title ? obj.title[self.language] : "") + `				
+				</h1>
+				
+				<div class="article-content">
+					`+ divSearchControls + `
+				</div>
+                <div class="article-content" id="dSearchResult"></div>
+			</article>`));
+
+
+        this.SearchCollection();
+
     }
 
     PutDocList(divId, isMain) {
