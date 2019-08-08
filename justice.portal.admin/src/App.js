@@ -17,8 +17,8 @@ import WebPageEditor from './components/webpageeditor';
 import ChangePassword from './components/changepassword';
 import Collections from './components/collections';
 import CollectionEditor from './components/collectioneditor';
-import Institutions from './components/institutions';
-import InstitutionEditor from './components/institutioneditor';
+import Headers from './components/headers';
+import HeaderEditor from './components/headereditor';
 import Translations from './components/translations';
 
 class App extends BaseComponent {
@@ -82,9 +82,9 @@ class App extends BaseComponent {
                 <Route exact path='/changepassword' component={ChangePassword} />
                 <Route exact path='/collections' component={Collections} />
                 <Route exact path='/editcollection/:id?' component={CollectionEditor} />
-                <Route exact path='/institutions' component={Institutions} />
+                <Route exact path='/headers' component={Headers} />
                 <Route exact path='/translations' component={Translations} />
-                <Route exact path='/editinstitution/:id?' component={InstitutionEditor} />
+                <Route exact path='/editheader/:id?' component={HeaderEditor} />
                 <Route component={MainMenu} />
 
 

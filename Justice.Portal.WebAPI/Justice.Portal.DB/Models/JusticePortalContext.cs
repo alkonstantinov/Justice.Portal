@@ -21,7 +21,7 @@ namespace Justice.Portal.DB.Models
         public virtual DbSet<BlockTypeProperty> BlockTypeProperty { get; set; }
         public virtual DbSet<BlockTypePropertyValue> BlockTypePropertyValue { get; set; }
         public virtual DbSet<Collection> Collection { get; set; }
-        public virtual DbSet<Institution> Institution { get; set; }
+        public virtual DbSet<Header> Header { get; set; }
         public virtual DbSet<Log> Log { get; set; }
         public virtual DbSet<PortalGroup> PortalGroup { get; set; }
         public virtual DbSet<PortalGroup2Part> PortalGroup2Part { get; set; }
@@ -190,17 +190,11 @@ namespace Justice.Portal.DB.Models
                 entity.Property(e => e.Structure).IsRequired();
             });
 
-            modelBuilder.Entity<Institution>(entity =>
+            modelBuilder.Entity<Header>(entity =>
             {
-                entity.Property(e => e.InstitutionId)
-                    .HasMaxLength(20)
-                    .ValueGeneratedNever();
-
                 entity.Property(e => e.Content).IsRequired();
 
-                entity.Property(e => e.Name)
-                    .IsRequired()
-                    .HasMaxLength(200);
+                entity.Property(e => e.Title).IsRequired();
             });
 
             modelBuilder.Entity<Log>(entity =>

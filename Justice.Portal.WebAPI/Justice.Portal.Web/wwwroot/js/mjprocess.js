@@ -28,7 +28,7 @@ class MJProcess {
         this.DisplayBreadCrumbs = this.DisplayBreadCrumbs.bind(this);
         this.ShowMonth = this.ShowMonth.bind(this);
         this.SearchCollection = this.SearchCollection.bind(this);
-
+        this.PutHeader = this.PutHeader.bind(this);
 
         this.PutBlocks = this.PutBlocks.bind(this);
         this.PutElement = this.PutElement.bind(this);
@@ -944,6 +944,7 @@ class MJProcess {
     DoProcess(MJPageData) {
         this.MJPageData = MJPageData;
         //this.ClearBreadCrumbs();
+        this.PutHeader();
         this.FindMeOrAddMeInBreadCrumbs();
         this.PutBlocks();
         var self = this;
@@ -1031,6 +1032,23 @@ class MJProcess {
         });
 
 
+    }
+
+
+    PutHeader() {
+        var self = this;
+        $.ajax({
+            url: "/api/content/GetHeaderByBlockid?blockId=" + self.MJPageData.mainid,
+            dataType: 'json',
+            async: false,
+
+            success: function (data) {
+                $("div[mjheader]").replaceWith(data.content);
+                
+            }
+        });
+
+        
     }
 
 }

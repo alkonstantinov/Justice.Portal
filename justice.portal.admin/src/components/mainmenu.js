@@ -101,10 +101,10 @@ class MainMenu extends BaseComponent {
                     </div>
                     <div className="col-3">
                         {
-                            session.rights.find(x => x === "admininstitutions") !== null ?
-                                <Link className="btn btn-default fillSpace" to='/institutions'>
+                            session.rights.find(x => x === "adminheaders") !== null ?
+                                <Link className="btn btn-default fillSpace" to='/headers'>
                                     <i className="fas fa-file-alt"></i>
-                                    <p>Институции</p>
+                                    <p>Заглавни части</p>
                                 </Link>
                                 : null
                         }

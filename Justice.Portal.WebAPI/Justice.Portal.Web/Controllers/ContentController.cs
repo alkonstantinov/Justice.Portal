@@ -88,6 +88,11 @@ namespace Justice.Portal.Web.Controllers
             return Ok(db.GetCollection(collectionId));
         }
 
+        [HttpGet("GetHeaderByBlockid")]
+        public async Task<IActionResult> GetHeaderByBlockid(int blockId)
+        {
+            return Ok(db.GetHeaderByBlockId(blockId));
+        }
 
 
     }

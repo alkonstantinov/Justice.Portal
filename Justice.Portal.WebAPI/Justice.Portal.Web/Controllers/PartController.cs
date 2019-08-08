@@ -180,30 +180,7 @@ namespace Justice.Portal.Web.Controllers
 
         }
 
-        [HttpDelete("DeleteBlock/{blockId}")]
-        public async Task<IActionResult> DeleteBlock([FromRoute]int blockId)
-        {
-            string token = this.GetToken();
-            if (!db.IsAuthenticated(token))
-                return Unauthorized();
-
-            var block = db.GetBlock(blockId);
-            var bt = db.GetBlockType(block.BlockTypeId);
-
-            if (!this.CanDoPart(block.PortalPartId))
-                return Unauthorized();
-
-            db.DeleteBlock(blockId);
-
-            if (bt.IsSearchable)
-                await Task.Run(() => SolrComm.DeleteBlock(blockId));
-
-
-            return Ok();
-
-        }
-
-
+        
 
         [HttpGet("GetTemplate")]
 
@@ -286,44 +263,8 @@ namespace Justice.Portal.Web.Controllers
         }
 
 
-        [HttpGet("GetInstitutions")]
-        public async Task<IActionResult> GetInstitutions()
-        {
-            //if (!this.HasRight("admininstitutions"))
-            //    return Unauthorized();
-            string token = this.GetToken();
-            if (!db.IsAuthenticated(token))
-                return Unauthorized();
-
-            return Ok(db.GetInstitutions());
-        }
-
-        [HttpGet("GetInstitution")]
-        public async Task<IActionResult> GetInstitution(string institutionId)
-        {
-            if (!this.HasRight("admininstitutions"))
-                return Unauthorized();
-            string token = this.GetToken();
-            if (!db.IsAuthenticated(token))
-                return Unauthorized();
-
-            return Ok(db.GetInstitution(institutionId));
-        }
-
-
-
-
-        [HttpPost("SaveInstitution")]
-        public async Task<IActionResult> SaveInstitution([FromBody]JSInstitution institution)
-        {
-            if (!this.HasRight("admininstitutions"))
-                return Unauthorized();
-            string token = this.GetToken();
-            if (!db.IsAuthenticated(token))
-                return Unauthorized();
-            db.SaveInstitution(institution);
-            return Ok();
-        }
+        
+        
 
         [HttpGet("UrlExists")]
         public async Task<IActionResult> UrlExists([FromQuery]string url, [FromQuery]int? blockId)
@@ -331,6 +272,45 @@ namespace Justice.Portal.Web.Controllers
             return Ok(db.UrlExists(url, blockId));
         }
 
+        [HttpGet("GetHeaders")]
+        public async Task<IActionResult> GetHeaders()
+        {
+            if (!this.HasRight("adminheaders"))
+                return Unauthorized();
+            return Ok(db.GetHeaders());
+        }
+
+        [HttpGet("GetHeader")]
+        public async Task<IActionResult> GetHeader(int headerId)
+        {
+            if (!this.HasRight("adminheaders"))
+                return Unauthorized();
+            return Ok(db.GetHeader(headerId));
+        }
+
+        [HttpPost("SaveHeader")]
+        public async Task<IActionResult> SaveHeader([FromBody]JSHeader header)
+        {
+            if (!this.HasRight("adminheaders"))
+                return Unauthorized();
+            db.SaveHeader(header);
+            return Ok();
+        }
+
+        [HttpDelete("DeleteHeader/{headerId}")]
+        public async Task<IActionResult> DeleteHeader([FromRoute]int headerId)
+        {
+            string token = this.GetToken();
+            if (!db.IsAuthenticated(token))
+                return Unauthorized();
+            if (!this.HasRight("adminheaders"))
+                return Unauthorized();
+            db.DeleteHeader(headerId);
+
+
+            return Ok();
+
+        }
 
     }
 }

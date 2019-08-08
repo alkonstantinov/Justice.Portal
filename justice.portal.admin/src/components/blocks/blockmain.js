@@ -21,8 +21,11 @@ export default class BlockMain extends BaseComponent {
         this.GetData = this.GetData.bind(this);
         var state = { lang: "bg" };
         if (this.props.block) {
+            var obj = JSON.parse(this.props.block.jsonvalues);
+            state.title = obj.title || {};
         }
         else {
+            state.title = {};
         }
 
 

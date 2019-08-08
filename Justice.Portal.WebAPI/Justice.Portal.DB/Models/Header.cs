@@ -3,10 +3,10 @@ using System.Collections.Generic;
 
 namespace Justice.Portal.DB.Models
 {
-    public partial class Institution
+    public partial class Header
     {
-        public string InstitutionId { get; set; }
-        public string Name { get; set; }
+        public int HeaderId { get; set; }
+        public string Title { get; set; }
         public string Content { get; set; }
     }
 }

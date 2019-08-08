@@ -7,7 +7,7 @@ import 'primeicons/primeicons.css';
 import moment from 'moment';
 import Comm from '../modules/comm';
 import { toast } from 'react-toastify';
-const notForExport = ["institutions"];
+const notForExport = ["institutions", "headers"];
 export default class PropertyEditor extends BaseComponent {
     constructor(props) {
         super(props);
@@ -24,10 +24,11 @@ export default class PropertyEditor extends BaseComponent {
 
     componentDidMount() {
         var self = this;
-        Comm.Instance().get('part/GetInstitutions')
+        Comm.Instance().get('part/GetHeaders')
             .then(result => {
                 self.setState({
-                    institutions: result.data
+                    headers: result.data,
+                    header: self.state.header || result.data[0].headerId
                 })
             })
             .catch(error => {
@@ -70,6 +71,10 @@ export default class PropertyEditor extends BaseComponent {
 
 
     GetDate(item) {
+
+        if ((this.state.date || "") === "")
+            this.setState({ date: moment().format("YYYY-MM-DD") });
+
         return (
 
             [
@@ -107,12 +112,33 @@ export default class PropertyEditor extends BaseComponent {
         );
     }
 
+    GetHeader(item) {
+        var self = this;
+
+        return (
+
+            [
+                <label className="control-label" htmlFor="Date">{item.name}</label>,
+                <select className="form-control" value={this.state[item.propertyId]}
+                    onChange={(e) => this.setState({ [item.propertyId]: e.target.value })}>
+                    {
+                        self.state.headers ?
+                            self.state.headers.map(x => <option value={x.headerId}>{x.title}</option>)
+                            : null
+                    }
+                </select>
+            ]
+
+        );
+    }
+
 
     GetPropertyElement(item) {
         switch (item.propertyType) {
             case "check": return this.GetCheck(item);
             case "date": return this.GetDate(item);
             case "institution": return this.GetInstitution(item);
+            case "header": return this.GetHeader(item);
             default: return null;
         }
     }

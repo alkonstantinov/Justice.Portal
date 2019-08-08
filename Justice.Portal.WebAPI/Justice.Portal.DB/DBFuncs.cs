@@ -496,46 +496,13 @@ namespace Justice.Portal.DB
         }
 
 
-        public JSInstitution[] GetInstitutions()
-        {
-            return db.Institution.Select(x =>
-            new JSInstitution()
-            {
-                InstitutionId = x.InstitutionId,
-                Name = x.Name
-            })
-                .ToArray();
-        }
 
-        public JSInstitution GetInstitution(string institutionId)
-        {
-            return ModelMapper.Instance.Mapper.Map<JSInstitution>(db.Institution.First(x => x.InstitutionId == institutionId));
-        }
-
-        public void SaveInstitution(JSInstitution institution)
-        {
-            Institution i;
-            if (string.IsNullOrEmpty(institution.InstitutionId))
-            {
-                i = new Institution();
-                db.Institution.Add(i);
-            }
-            else
-                i = db.Institution.First(x => x.InstitutionId == institution.InstitutionId);
-            i.Content = institution.Content;
-            db.SaveChanges();
-        }
 
         public bool UrlExists(string url, int? blockId)
         {
             return db.Block.Any(x => x.Url == url && (!blockId.HasValue || x.BlockId != blockId.Value));
         }
 
-        public JSInstitution GetInstitutionByBlock(int blockId)
-        {
-            var iid = db.BlockTypePropertyValue.First(x => x.BlockId == blockId && x.PropertyId == "institution").Value;
-            return ModelMapper.Instance.Mapper.Map<JSInstitution>(db.Institution.First(x => x.InstitutionId == iid));
-        }
 
         public JSTemplate GetTemplateByBlock(string blockTypeId, string portalPartId)
         {
@@ -640,6 +607,54 @@ namespace Justice.Portal.DB
             ).ToList()).ToArray();
             return result;
         }
+
+
+        public JSHeader[] GetHeaders()
+        {
+
+            return db.Header.Select(x => new JSHeader() { HeaderId = x.HeaderId, Title = x.Title }).ToArray();
+        }
+
+        public JSHeader GetHeader(int headerId)
+        {
+
+            return ModelMapper.Instance.Mapper.Map<JSHeader>(db.Header.First(x => x.HeaderId == headerId));
+        }
+
+        public void SaveHeader(JSHeader header)
+        {
+            Header h;
+            if (header.HeaderId == 0)
+            {
+                h = ModelMapper.Instance.Mapper.Map<Header>(header);
+                db.Header.Add(h);
+
+
+            }
+            else
+            {
+                h = db.Header.First(x => x.HeaderId == header.HeaderId);
+                h.Content = header.Content;
+                h.Title = header.Title;
+
+            }
+            db.SaveChanges();
+        }
+
+        public void DeleteHeader(int headerId)
+        {
+
+            db.Header.Remove(db.Header.First(x => x.HeaderId == headerId));
+            db.SaveChanges();
+        }
+
+        public JSHeader GetHeaderByBlockId(int blockId)
+        {
+            var headerId = db.BlockTypePropertyValue.First(x => x.BlockId == blockId && x.PropertyId == "header").Value;
+            var result = ModelMapper.Instance.Mapper.Map<JSHeader>(db.Header.First(x => x.HeaderId == int.Parse(headerId)));
+            return result;
+        }
+
 
     }
 }

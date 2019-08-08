@@ -32,9 +32,9 @@ namespace Justice.Portal.Web.Controllers
 
 
 
-            var institution = db.GetInstitutionByBlock(block.BlockId);
+            //var institution = db.GetInstitutionByBlock(block.BlockId);
             var template = db.GetTemplateByBlock(block.BlockTypeId, block.PortalPartId);
-            string html = institution.Content;
+            string html = template.TemplateJson;
 
             JObject joPageData = new JObject();
             joPageData["main"] = JObject.Parse(block.Jsonvalues);

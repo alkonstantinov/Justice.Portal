@@ -11,7 +11,7 @@ import uuidv4 from 'uuid/v4';
 import { ToggleButton } from 'primereact/togglebutton';
 import moment from 'moment';
 
-export default class InstitutionEditor extends BaseComponent {
+export default class HeaderEditor extends BaseComponent {
 
     constructor(props) {
         super(props);
@@ -22,8 +22,8 @@ export default class InstitutionEditor extends BaseComponent {
                 href: ""
             },
             {
-                title: "Институции",
-                href: "institutions"
+                title: "Заглавни части",
+                href: "headers"
             }
             ]
         );
@@ -42,31 +42,38 @@ export default class InstitutionEditor extends BaseComponent {
 
     componentDidMount() {
         var self = this;
-        Comm.Instance().get('part/GetInstitution?institutionId=' + self.props.match.params.id)
-            .then(result => {
-                self.setState({
-                    content: result.data.content,
-                    mode: "edit"
-                });
-
-                eventClient.emit(
-                    "addbreadcrump",
-                    [
-                        {
-                            title: result.data.name
-                        }
-                    ]);
-
-            })
-            .catch(error => {
-                if (error.response && error.response.status === 401)
-                    toast.error("Липса на права", {
-                        onClose: this.Logout
+        if (self.props.match.params.id) {
+            Comm.Instance().get('part/GetHeader?headerId=' + self.props.match.params.id)
+                .then(result => {
+                    self.setState({
+                        content: result.data.content,
+                        title: result.data.title,
+                        mode: "edit"
                     });
-                else
-                    toast.error(error.message);
 
+                    eventClient.emit(
+                        "addbreadcrump",
+                        [
+                            {
+                                title: result.data.title
+                            }
+                        ]);
+
+                })
+                .catch(error => {
+                    if (error.response && error.response.status === 401)
+                        toast.error("Липса на права", {
+                            onClose: this.Logout
+                        });
+                    else
+                        toast.error(error.message);
+
+                });
+        } else {
+            self.setState({
+                mode: "edit"
             });
+        }
     }
 
 
@@ -76,10 +83,11 @@ export default class InstitutionEditor extends BaseComponent {
     Save() {
         var self = this;
         var data = {
-            InstitutionId: self.props.match.params.id,
-            Content: self.state.content
+            HeaderId: self.props.match.params.id,
+            Content: self.state.content || "",
+            Title: self.state.title || ""
         };
-        Comm.Instance().post('part/SaveInstitution', data)
+        Comm.Instance().post('part/SaveHeader', data)
             .then(result => {
                 self.setState({ Saved: true });
             })
@@ -109,7 +117,7 @@ export default class InstitutionEditor extends BaseComponent {
         }
         if (self.state.Saved)
             return (
-                <Redirect to={"/institutions"}>
+                <Redirect to={"/headers"}>
                 </Redirect>
             );
         return (
@@ -132,6 +140,13 @@ export default class InstitutionEditor extends BaseComponent {
                         </div>
                         <div className="col-2">
                             <button className="btn btn-danger" onClick={self.Cancel}>Отказ</button>
+                        </div>
+                    </div>
+                    <div className="row">
+                        <div className="col-12">
+                            <label className="control-label">Название</label>
+                            <input type="text" className="form-control" value={this.state.title} onChange={(e) => self.setState({ title: e.target.value })}></input>
+
                         </div>
                     </div>
                     <div className="row">
