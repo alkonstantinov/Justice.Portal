@@ -232,13 +232,13 @@ class MJProcess {
         var lis = "";
 
         $.ajax({
-            url: "/api/content/GetAdsSQData?count=6&blockId=" + obj.value,
+            url: "/api/content/GetAdsSQData?count=6&blockId=" + this.MJPageData["block_" + divId].value,
             dataType: 'json',
             async: false,
 
             success: function (data) {
                 data.forEach(x =>
-                    lis += '<li><h3><span>' + x.date + '</span><a href="home/index/' + x.blockId + '">' + self.NarrowText(JSON.parse(x.jsonContent).body[self.language], 140) + '</a></h3></li>'
+                    lis += '<li><h3><span>' + x.date + '</span><a href="home/index/' + x.url + '">' + self.NarrowText(JSON.parse(x.jsonContent).body[self.language], 140) + '</a></h3></li>'
                 );
 
             }
@@ -411,25 +411,25 @@ class MJProcess {
         var divs = "";
 
         $.ajax({
-            url: "/api/content/GetNewsSQData?count=3&blockId=" + obj.value,
+            url: "/api/content/GetNewsSQData?count=3&blockId=" + this.MJPageData["block_" + divId].value,
             dataType: 'json',
             async: false,
 
             success: function (data) {
                 data.forEach((x, idx) => {
                     var data = JSON.parse(x.jsonContent);
-                    divs += `<div class="carousel-item ` + (idx === 0 ? "active" : "") + `">
+                    divs +=
+                        `<div class="carousel-item ` + (idx === 0 ? "active" : "") + `">
                         <h6 class="date">`+ x.date + `</h6>
                         <h2>`+ (data.title[self.language] || "") + `</h2>
                         <div class="port-content">
                             <img src="/api/part/GetBlob?hash=`+ data.imageId + `" alt="" class="list-article-img img-prime" style="max-width:100%;max-height:100%;"/>
-                        <div>
-                            
-                                    `+ self.NarrowText(data.body[self.language], 400) + `
-                                    <a class="btn btn-primary" href="#" role="button">Научи повече</a>
-                                </div>
-							</div>
-                        </div>`;
+                            <div>
+                                `+ self.NarrowText(data.body[self.language], 400) + `
+                                <a class="btn btn-primary" href="/home/index/`+ x.url + `" role="button"><t>learnmore</t></a>
+                            </div>
+						</div>
+                    </div>`;
                 }
 
                 );
@@ -439,28 +439,29 @@ class MJProcess {
 
 
 
-        var newContent = `<div class="port-wrapper">
-			<div class="port-head">
-				<h3 class="port-title">Новини</h3>
-				<div class="port-link-item">
-					<a href="news-list.html" class="port-head-link">Всички новини
-					<svg class="icon icon-arrow-right"><use xlink:href="images/symbol-defs.svg#icon-angle-arrow-down"></use></svg>
-					</a>
-				</div>
-			</div>
-			<div class="port-box box-border height-350">
-				<div id="carouselIndicators" class="carousel slide" data-ride="carousel">
-					<ol class="carousel-indicators" id="carIndicators">
-						<li data-target="#carouselIndicators" data-slide-to="0" class="active"></li>
-						<li data-target="#carouselIndicators" data-slide-to="1"></li>
-						<li data-target="#carouselIndicators" data-slide-to="2"></li>
-					</ol>
-					<div class="carousel-inner">
-						`+ divs + `
-					</div>
-				</div>
-			</div>
-		</div>
+        var newContent =
+            `<div class="port-wrapper">
+			    <div class="port-head">
+				    <h3 class="port-title"><t>news</t></h3>
+				    <div class="port-link-item">
+					    <a href="news-list.html" class="port-head-link"><t>allnews</t>
+					        <svg class="icon icon-arrow-right"><use xlink:href="images/symbol-defs.svg#icon-angle-arrow-down"></use></svg>
+					    </a>
+				    </div>
+			    </div>
+			    <div class="port-box box-border height-350">
+				    <div id="carouselIndicators" class="carousel slide" data-ride="carousel">
+					    <ol class="carousel-indicators" id="carIndicators">
+						    <li data-target="#carouselIndicators" data-slide-to="0" class="active"></li>
+						    <li data-target="#carouselIndicators" data-slide-to="1"></li>
+						    <li data-target="#carouselIndicators" data-slide-to="2"></li>
+					    </ol>
+					    <div class="carousel-inner">
+						    `+ divs + `
+					    </div>
+				    </div>
+			    </div>
+		    </div>
 		`;
 
 
@@ -745,14 +746,14 @@ class MJProcess {
                             ok = false;
                         break;
                 };
-                
+
             });
             if (ok)
                 searchResult.push(r);
         });
 
         var resultTbl = "<table class='table table-bordered table-striped'><thead><tr>";
-        
+
         self.CollectionStructure.forEach(x => {
             resultTbl += "<th>" + x.name[self.language] + "</th>";
 
@@ -1044,11 +1045,11 @@ class MJProcess {
 
             success: function (data) {
                 $("div[mjheader]").replaceWith(data.content);
-                
+
             }
         });
 
-        
+
     }
 
 }

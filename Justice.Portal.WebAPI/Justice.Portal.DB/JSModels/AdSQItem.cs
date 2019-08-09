@@ -8,6 +8,7 @@ namespace Justice.Portal.DB.JSModels
     {
         public int BlockId { get; set; }
         public string Date { get; set; }
+        public string Url { get; set; }
         public string JSONContent { get; set; }
     }
 }

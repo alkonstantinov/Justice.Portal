@@ -535,6 +535,7 @@ namespace Justice.Portal.DB
                     {
                         BlockId = b.BlockId,
                         Date = btpv.Value,
+                        Url = b.Url,
                         JSONContent = b.Jsonvalues
                     }).Take(count).ToArray();
         }
@@ -549,6 +550,7 @@ namespace Justice.Portal.DB
                     {
                         BlockId = b.BlockId,
                         Date = btpv.Value,
+                        Url = b.Url,
                         JSONContent = b.Jsonvalues
                     }).Take(count).ToArray();
         }

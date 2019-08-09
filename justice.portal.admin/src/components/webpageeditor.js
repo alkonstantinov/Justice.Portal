@@ -110,7 +110,7 @@ export default class WebPageEditor extends BaseComponent {
     }
 
     GetSourcesFromTemplate() {
-        let array = [...this.state.template.matchAll('<div [^<]+ mjblocktypeid[\\w\\W]*?/>')];
+        let array = [...this.state.template.matchAll('<div[^<]*mjblocktypeid[^>]*?>')];
         let sources = [];
         array.forEach(
             x => {
