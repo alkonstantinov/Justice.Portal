@@ -933,13 +933,15 @@ class MJProcess {
                 show = DaysDiff > 1;
             }
             else show = true;
-
+            if (show) {
+                $('#' + self.LastBanner).modal('show');
+                localStorage.setItem(lsLastBannerTime, new Date().toISOString());
+            }
+            else
+                $('#' + self.LastBanner).modal('hide');
         }
 
-        if (show) {
-            $('#' + self.LastBanner).modal('show');
-            localStorage.setItem(lsLastBannerTime, new Date().toISOString());
-        }
+
     }
 
     DoProcess(MJPageData) {
@@ -1048,6 +1050,24 @@ class MJProcess {
 
             }
         });
+
+
+    }
+
+    ShareOn(platform) {
+        var url = window.location.href;
+        switch (platform) {
+            case "twitter":
+                var text = this.MJPageData.main.title ? this.MJPageData.main.title[this.language] : "";
+                window.open('http://twitter.com/share?url=' + encodeURIComponent(url) + '&text=' + encodeURIComponent(text), '', 'left=0,top=0,width=550,height=450,personalbar=0,toolbar=0,scrollbars=0,resizable=0');
+                break;
+            case "fb":
+                window.open('https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(url));
+                break;
+            case "googleplus":
+                window.open('https://plus.google.com/share?url=' + encodeURIComponent(url));
+                break;
+        }
 
 
     }
