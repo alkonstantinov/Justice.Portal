@@ -19,6 +19,8 @@ class MJProcess {
     constructor() {
         this.LoadTranslations = this.LoadTranslations.bind(this);
         this.Translate = this.Translate.bind(this);
+        this.TranslateAttribs = this.TranslateAttribs.bind(this);
+
         this.DoProcess = this.DoProcess.bind(this);
         this.ShowBannerIfNeeded = this.ShowBannerIfNeeded.bind(this);
         this.NarrowText = this.NarrowText.bind(this);
@@ -110,8 +112,26 @@ class MJProcess {
             return;
         }
         element.replaceWith(wording);
-        var self = this;
-        $("#lTranslate").text(self.language === "bg" ? "EN" : "BG");
+
+
+
+    }
+
+    TranslateAttribs(element) {
+        var lng = this.translation[this.language];
+        if (!lng) {
+            $(element).attr("placeholder", "");
+            return;
+        }
+
+        var wording = lng[$(element).attr("placeholder").toLowerCase()];
+        if (!wording) {
+            $(element).attr("placeholder", "");
+            return;
+        }
+        $(element).attr("placeholder", wording);
+
+
 
     }
 
@@ -568,7 +588,7 @@ class MJProcess {
 				
 				<figure>
 
-					<img class="half-pic" src="/api/part/GetBlob?hash=`+ obj.imageId + `">
+					`+ (obj.imageId ? '<img class="half-pic" src="/api/part/GetBlob?hash=' + obj.imageId + '">' : "") + `
 				</figure>
 				<div class="article-content">
 					`+ obj.body[self.language] + `
@@ -954,7 +974,11 @@ class MJProcess {
         $("T").each(function (i, e) {
             self.Translate(e);
         });
+        $("input").each(function (i, e) {
 
+            self.TranslateAttribs(e);
+        });
+        $("#lTranslate").text(self.language === "bg" ? "EN" : "BG");
         self.ShowBannerIfNeeded();
         self.DisplayBreadCrumbs();
     }

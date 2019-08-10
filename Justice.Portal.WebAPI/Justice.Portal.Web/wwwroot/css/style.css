@@ -1,4 +1,4 @@
-@charset "UTF-8";
+﻿@charset "UTF-8";
 /* STYLE */
 @import url("//hello.myfonts.net/count/39adf9");
 .icon {
@@ -1380,4 +1380,8 @@ html .disabled-ver {
   html .disabled-ver #disHam, html .disabled-ver #disFooter, html .disabled-ver #liveEmission, html .disabled-ver #disSearch, html .disabled-ver #carIndicators {
     display: none; }
 
+
+  .pnt{
+      cursor:pointer;
+  }
 /*# sourceMappingURL=style.css.map */
