@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Justice.Portal.DB.Models;
@@ -19,9 +20,11 @@ namespace Justice.Portal.Web
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        IHostingEnvironment hostenv;
+        public Startup(IConfiguration configuration, IHostingEnvironment environment)
         {
             Configuration = configuration;
+            this.hostenv = environment;
             Serilog.Log.Logger = new LoggerConfiguration()
             .ReadFrom.Configuration(Configuration)
             .CreateLogger();
@@ -36,6 +39,7 @@ namespace Justice.Portal.Web
 
             services.AddDbContext<JusticePortalContext>(options => options.UseSqlServer(Configuration["ConnectionStrings:DefaultConnection"]));
             services.AddSingleton<ISOLRComm>(new SOLRComm(Configuration["SOLR:Url"]));
+            services.AddSingleton<ICielaComm>(new CielaComm(Configuration["Ciela:Url"], Configuration["Ciela:Credentials"], File.ReadAllText(Path.Combine(this.hostenv.WebRootPath,"xslt", "XSLTCielaDoc.xslt"))));
             services.AddCors();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);

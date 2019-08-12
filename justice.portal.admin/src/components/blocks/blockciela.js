@@ -10,6 +10,7 @@ import TB from '../editors/tb';
 import { Calendar } from 'primereact/calendar';
 import moment from 'moment';
 import eventClient from '../../modules/eventclient';
+import { toast } from 'react-toastify';
 
 
 export default class BlockCiela extends BaseComponent {
@@ -74,7 +75,7 @@ export default class BlockCiela extends BaseComponent {
                 bg: '',
                 en: ''
             },
-            link: ""
+            link: this.state.docs[0].id
         }
 
         var links = this.state.links;
@@ -112,6 +113,26 @@ export default class BlockCiela extends BaseComponent {
         var i = links.indexOf(toDel);
         links.splice(i, 1);
         this.setState({ links: links });
+    }
+
+    componentDidMount() {
+        var self = this;
+        Comm.Instance().get('ciela/GetDocLIst')
+            .then(result => {
+                self.setState({
+                    docs: result.data
+                })
+            })
+            .catch(error => {
+                if (error.response && error.response.status === 401)
+                    toast.error("Липса на права", {
+                        onClose: this.Logout
+                    });
+                else
+                    toast.error(error.message);
+
+            });
+
     }
 
 
@@ -166,8 +187,15 @@ export default class BlockCiela extends BaseComponent {
                                     </div>
                                     <div className="col-6">
                                         <label className="control-label" htmlFor="Date">Връзка към правната система</label>
-                                        <input type="text" className="form-control" value={i.link}
-                                            onChange={(e) => self.SetLink(i.id, e.target.value)}></input>
+                                        <select className="form-control" value={i.link}
+                                            onChange={(e) => self.SetLink(i.id, e.target.value)}>
+                                            {
+                                                this.state.docs.map(x => <option value={x.id}>{x.name}</option>)
+                                            }
+
+
+                                        </select>
+
                                     </div>
                                     <div className="col-1">
                                         <button className="btn btn-light" onClick={() => self.DeleteLink(i.id)}>-</button>
