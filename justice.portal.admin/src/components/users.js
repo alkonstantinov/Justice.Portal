@@ -28,7 +28,7 @@ export default class Users extends BaseComponent {
         this.Save = this.Save.bind(this);
         this.Delete = this.Delete.bind(this);
         this.CheckGroup = this.CheckGroup.bind(this);
-        
+
         this.state.mode = "loading";
 
 
@@ -191,7 +191,10 @@ export default class Users extends BaseComponent {
 
     render() {
         var self = this;
-        if(this.SM.IsSessionExpired()){
+        console.log("self.state.obj", self.state.obj);
+        console.log("self.state.rights", self.state.rights);
+
+        if (this.SM.IsSessionExpired()) {
             this.Logout();
             return (<Redirect to="/login"></Redirect>)
         }
@@ -310,8 +313,8 @@ export default class Users extends BaseComponent {
                                                 <li className="list-group-item">
                                                     <div className="form-check">
                                                         <input className="form-check-input" type="checkbox"
-                                                            checked={self.state.obj.rights.indexOf(obj.name) > -1}
-                                                            onChange={(e) => self.CheckRight(obj.name, e.target.checked)}
+                                                            checked={self.state.obj.rights.indexOf(obj.userRightId) > -1}
+                                                            onChange={(e) => self.CheckRight(obj.userRightId, e.target.checked)}
                                                         ></input>
                                                         <label className="form-check-label">
                                                             {obj.description}
@@ -329,8 +332,8 @@ export default class Users extends BaseComponent {
                                                 <li className="list-group-item">
                                                     <div className="form-check">
                                                         <input className="form-check-input" type="checkbox"
-                                                            checked={self.state.obj.parts.indexOf(obj.partKey) > -1}
-                                                            onChange={(e) => self.CheckPart(obj.partKey, e.target.checked)}
+                                                            checked={self.state.obj.parts.indexOf(obj.portalPartId) > -1}
+                                                            onChange={(e) => self.CheckPart(obj.portalPartId, e.target.checked)}
 
 
                                                         ></input>

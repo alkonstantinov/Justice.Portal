@@ -11,17 +11,15 @@ namespace Justice.Portal.Web.Services
     public class SOLRComm : ISOLRComm
     {
 
-        WebClient wc;
+        string url;
         public SOLRComm(string url)
         {
-            wc = new WebClient();
-            wc.BaseAddress = url;
-
+            this.url = url;
         }
 
         private JArray FormSOLRJson(Block block)
         {
-
+            
             try
             {
                 JObject jo = JObject.Parse(block.Jsonvalues);
@@ -51,6 +49,8 @@ namespace Justice.Portal.Web.Services
                     id = blockId
                 }
             });
+            WebClient wc = new WebClient();
+            wc.BaseAddress = url;
 
             wc.Headers[HttpRequestHeader.ContentType] = "application/json";
 
@@ -63,6 +63,8 @@ namespace Justice.Portal.Web.Services
             if (data == null)
                 return;
 
+            WebClient wc = new WebClient();
+            wc.BaseAddress = url;
             wc.Headers[HttpRequestHeader.ContentType] = "application/json";
 
             string response = wc.UploadString("update?commit=true", data.ToString());
@@ -71,7 +73,9 @@ namespace Justice.Portal.Web.Services
         public string Search(string query, int from, int size, string part)
         {
 
-            string q = string.IsNullOrEmpty(part) ? $"content:{query}" : $"content:биография AND part: {part}";
+            string q = string.IsNullOrEmpty(part) ? $"content:{query}" : $"content:{query} AND part: {part}";
+            WebClient wc = new WebClient();
+            wc.BaseAddress = url;
             return wc.DownloadString($"query?q={q}&rows={size}&start={from}&sort=id asc");
         }
     }

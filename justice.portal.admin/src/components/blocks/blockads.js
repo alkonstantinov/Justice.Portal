@@ -41,7 +41,7 @@ export default class BlockAds extends BaseComponent {
 
     GetData() {
         return {
-
+            title: this.state.title || {}
         };
     }
 

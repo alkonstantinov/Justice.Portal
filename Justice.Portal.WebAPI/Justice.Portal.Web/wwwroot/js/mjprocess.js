@@ -71,7 +71,7 @@ class MJProcess {
     NarrowText(text, length) {
         if (!text)
             return "";
-        text = $(text).text();
+        //text = $(text).text();
         if (text.length <= length)
             return text;
 
@@ -142,6 +142,9 @@ class MJProcess {
             blockId = "dMain";
             blockTypeId = this.MJPageData.maintype;
         }
+        if (!isMain && !this.MJPageData["block_" + blockId]) return;
+
+
 
         switch (blockTypeId) {
             case "live": this.PutLive(blockId, isMain); break;
@@ -269,7 +272,7 @@ class MJProcess {
 			<div class="port-head">
 				<h3 class="port-title"><t>ads</t></h3>
 				<div class="port-link-item">
-					<a href="#" class="port-head-link"><t>allads</t>
+					<a href="#" autolink="ads" class="port-head-link"><t>allads</t>
 						<svg class="icon icon-arrow-right"><use xlink:href="images/symbol-defs.svg#icon-angle-arrow-down"></use></svg>
 					</a>	
 				</div>
@@ -292,7 +295,7 @@ class MJProcess {
         var divs = "";
         var showMore = false;
         $.ajax({
-            url: "/api/content/GetAdsData?count=6&blockId=" + blockId + "&top=" + self.Top,
+            url: "/api/content/GetAdsData?count=3&blockId=" + blockId + "&top=" + self.Top,
             dataType: 'json',
             async: false,
 
@@ -305,7 +308,7 @@ class MJProcess {
 							`+ (JSON.parse(x.jsonContent).imageId ? '<img src="/api/part/GetBlob?hash=' + JSON.parse(x.jsonContent).imageId + '" alt="" style="max-width:100%;max-height:100%;"  class="list-article-img img-list"/>' : '') +
                     `<div>
 								<h6 class="date">`+ x.date + `</h6>
-								<h3><a href="#">`+ self.NarrowText(JSON.parse(x.jsonContent).body[self.language], 100) + `</a></h3>
+								<h3><a href="`+ x.url + `">` + self.NarrowText(JSON.parse(x.jsonContent).body[self.language], 100) + `</a></h3>
 							</div>
 						</div>
 					</div>
@@ -339,9 +342,9 @@ class MJProcess {
 				</div>
                 <div class="port-footer">
 						<div class="port-link-item">
-							<span class="port-head-link" id="` + this.NextItemsLinkId + `" onclick="mjProcess.PutNextAds(` + blockId + `)">
-                                Още
-							</span>
+							<a class="btn btn-primary" id="` + this.NextItemsLinkId + `" onclick="mjProcess.PutNextAds(` + blockId + `)">
+                                <t>more</t>
+							</a>
 						</div>
 			</div>`;
 
@@ -368,19 +371,21 @@ class MJProcess {
 
             success: function (data) {
                 self.Top += data.rows.length;
+
                 showMore = self.Top < data.count;
-                data.rows.forEach(x =>
+                data.rows.forEach(x => {
                     divs += `<div class="list-box">
 						<div class="port-content">
 							`+ (JSON.parse(x.jsonContent).imageId ? '<img src="/api/part/GetBlob?hash=' + JSON.parse(x.jsonContent).imageId + '" alt="" style="max-width:100%;max-height:100%;"  class="list-article-img img-list"/>' : '') +
-                    `<div>
+                        `<div>
 								<h6 class="date">`+ x.date + `</h6>
-								<h3><a href="#">`+ self.NarrowText(JSON.parse(x.jsonContent).body[self.language], 100) + `</a></h3>
+								<h3><a href="`+ x.url + `">` + self.NarrowText(JSON.parse(x.jsonContent).body[self.language], 100) + `</a></h3>
 							</div>
 						</div>
 					</div>
-					`
-                );
+					`;
+                    console.log(JSON.parse(x.jsonContent));
+                });
 
             }
         });
@@ -409,9 +414,9 @@ class MJProcess {
 				</div>
                 <div class="port-footer">
 						<div class="port-link-item">
-							<span class="port-head-link" id="` + this.NextItemsLinkId + `" onclick="mjProcess.PutNextNews(` + blockId + `)">
-                                Още
-							</span>
+							<a class="btn btn-primary" id="` + this.NextItemsLinkId + `" onclick="mjProcess.PutNextNews(` + blockId + `)">
+                                <t>more</t>
+							</a>
 						</div>
 			</div>`;
 
@@ -464,7 +469,7 @@ class MJProcess {
 			    <div class="port-head">
 				    <h3 class="port-title"><t>news</t></h3>
 				    <div class="port-link-item">
-					    <a href="news-list.html" class="port-head-link"><t>allnews</t>
+					    <a href="news-list.html" autolink="news" class="port-head-link"><t>allnews</t>
 					        <svg class="icon icon-arrow-right"><use xlink:href="images/symbol-defs.svg#icon-angle-arrow-down"></use></svg>
 					    </a>
 				    </div>
@@ -498,12 +503,13 @@ class MJProcess {
         var showMore = false;
         var query = localStorage.getItem(lsSearchString) || "";
         $.ajax({
-            url: "/api/content/search?size=10&query=" + query + "&top=" + self.Top + "&part=" + (this.MJPageData.mainpartid === "min" ? "" : this.MJPageData.mainpartid),
+            url: "/api/content/search?size=1&query=" + query + "&from=" + self.Top + "&part=" + (this.MJPageData.mainpartid === "min" ? "" : this.MJPageData.mainpartid),
             dataType: 'json',
             async: false,
 
             success: function (data) {
-                self.Top += data.response.numFound;
+                self.Top += data.response.docs.length;
+                $("#" + self.FoundCountId).text(data.response.numFound);
                 showMore = self.Top < data.response.numFound;
                 data.response.docs.forEach(x =>
                     divs += `<div class="list-box">
@@ -523,6 +529,8 @@ class MJProcess {
         if (!showMore)
             $("#" + this.NextItemsLinkId).hide();
 
+
+
     }
 
     PutSearch(divId, isMain) {
@@ -531,21 +539,24 @@ class MJProcess {
         var blockId = isMain ? this.MJPageData.mainid : this.MJPageData["block_" + divId].value;
         this.ItemsContentId = this.Guid();
         this.NextItemsLinkId = this.Guid();
+        this.FoundCountId = this.Guid();
         var self = this;
-
         var newContent = `<div class="port-wrapper">
 				<div class="port-head">
 					<h3 class="port-title"><t>searchresult</t></h3>
-					
+                    <span>
+                        <t>found</t>: <span id=`+ this.FoundCountId + `></span> <t>records</t>
+				    </span>					
 				</div>
 				<div class="port-box box-border" id="` + this.ItemsContentId + `">
 					
 				</div>
                 <div class="port-footer">
+
 						<div class="port-link-item">
-							<span class="port-head-link" id="` + this.NextItemsLinkId + `" onclick="mjProcess.PutNextSearch(` + blockId + `)">
-                                Още
-							</span>
+                            <a class="btn btn-primary" id="` + this.NextItemsLinkId + `" onclick="mjProcess.PutNextSearch(` + blockId + `)">
+                                <t>more</t>
+							</a>
 						</div>
 			</div>`;
 
@@ -609,7 +620,7 @@ class MJProcess {
 				
 				<figure>
 
-					<img class="half-pic" src="/api/part/GetBlob?hash=`+ obj.imageId + `">
+					`+ (obj.imageId ? '<img class="half-pic" src="/api/part/GetBlob?hash=' + obj.imageId + '">' : "") + `
 				</figure>
 				<div class="article-content">
 					`+ obj.body[self.language] + `
@@ -627,7 +638,8 @@ class MJProcess {
         oldDiv.replaceWith($(`<article class="article-container">
 
 				<h1>`+ obj.title[self.language] +
-            (obj.prime ? "<span><t>minister</t></span>" : "") +
+            "<span>" + (obj.addinfo[self.language] || "") + "</span>" +
+
 
 
             `				
@@ -684,18 +696,22 @@ class MJProcess {
             async: false,
 
             success: function (data) {
-                data.forEach(x =>
+                data.forEach(x => {
+                    var data = JSON.parse(x.jsonvalues);
                     divs += `<div class="list-box">
 						<div class="port-content">
-							`+ (JSON.parse(x.jsonvalues).imageId ? '<img src="/api/part/GetBlob?hash=' + JSON.parse(x.jsonvalues).imageId + '" alt="" style="max-width:100%;max-height:100%;"  class="list-article-img img-list"/>' : '') +
-                    `<div>
+							`+ (data.imageId ? '<img src="/api/part/GetBlob?hash=' + JSON.parse(x.jsonvalues).imageId + '" alt="" style="-width:auto;height:auto;"  class="list-article-img img-list"/>' : '') +
+                        `<div>
 								
-								<h3><a href="`+ x.url + `">` + self.NarrowText(JSON.parse(x.jsonvalues).body[self.language], 100) + `</a></h3>
+								<h3><a href="`+ x.url + `">` + data.title[self.language] + `</a>
+                                    
+                                </h3>
+<span>` + (data.addinfo[self.language] || "") + `</span>
 							</div>
 						</div>
 					</div>
-					`
-                );
+					`;
+                });
 
             }
         });
@@ -904,7 +920,7 @@ class MJProcess {
             divYears += `<br/><div class="article-content">
                          `;
             divYears += '<h2>' + x.year + '</h2>';
-            x.months.forEach(m => divYears += '<a onclick="mjProcess.ShowMonth(' + x.year + ', ' + m.month + ',\'' + hiddenDivId + '\')">' + m.month + '</a>&nbsp;&nbsp;');
+            x.months.forEach(m => divYears += '<a onclick="mjProcess.ShowMonth(' + x.year + ', ' + m.month + ',\'' + hiddenDivId + '\')" class="pnt"><t>month' + m.month + '</t></a>&nbsp;&nbsp;');
             divYears += '<br/><div id="' + hiddenDivId + '" />';
 
             divYears += `</div>`;
@@ -981,6 +997,7 @@ class MJProcess {
         $("#lTranslate").text(self.language === "bg" ? "EN" : "BG");
         self.ShowBannerIfNeeded();
         self.DisplayBreadCrumbs();
+        self.PutAutomaticLinks();
     }
 
 
@@ -1034,7 +1051,7 @@ class MJProcess {
             $("#olBC li").remove();
             var bc = JSON.parse(localStorage.getItem(lsBreadcrumbs) || "[]");
             bc.forEach((x, i) =>
-                $("#olBC").append($('<li class="breadcrumb - item" aria-current="page"><a href="' + (x.key === bcKeyMain ? '/' : '/home/index/' + x.key) + '">' + x.title[self.language] + '</a></li>'))
+                $("#olBC").append($('<li class="breadcrumb-item" aria-current="page"><a href="' + (x.key === bcKeyMain ? '/' : '/home/index/' + x.key) + '">' + self.NarrowText(x.title[self.language], 50) + '</a></li>'))
             );
 
         }
@@ -1094,6 +1111,24 @@ class MJProcess {
         }
 
 
+    }
+
+    PutAutomaticLinks() {
+        var self = this;
+        $("a[autolink]").each(function (i, e) {
+
+            $.ajax({
+                url: "/api/content/GetFirstOfKindUrl?portalPartId=" + self.MJPageData.mainpartid + "&blockTypeId=" + $(e).attr("autolink"),
+                dataType: 'text',
+                async: true,
+
+                success: function (data) {
+                    console.log("data", data);
+                    $(e).attr("href", "home/index/" + data);
+
+                }
+            });
+        });
     }
 
 }

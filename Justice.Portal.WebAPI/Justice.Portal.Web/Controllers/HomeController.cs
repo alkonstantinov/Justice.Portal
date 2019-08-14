@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Justice.Portal.DB;
 using Justice.Portal.DB.JSModels;
 using Justice.Portal.DB.Models;
+using Justice.Portal.Web.Services;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
 using Serilog;
@@ -15,15 +16,17 @@ namespace Justice.Portal.Web.Controllers
     public class HomeController : Controller
     {
         protected DBFuncs db;
+        protected ICielaComm cielaComm;
 
-        public HomeController(JusticePortalContext jpc)
+        public HomeController(JusticePortalContext jpc, ICielaComm cielaComm)
         {
             this.db = new DBFuncs(jpc);
+            this.cielaComm = cielaComm;
         }
         //[HttpGet("index/{url?}")]
         public IActionResult Index([FromRoute]string url)
         {
-            
+
             JSBlock block;
             if (string.IsNullOrEmpty(url))
                 block = db.GetBlockForPart(null);
@@ -46,8 +49,11 @@ namespace Justice.Portal.Web.Controllers
             foreach (var b in jaSources)
             {
 
-                b["blockData"] = JObject.Parse(db.GetBlock(int.Parse(b["value"].ToString())).Jsonvalues);
-                joPageData["block_" + b["id"].ToString()] = b;
+                if (int.TryParse(b["value"]?.ToString(), out int innerBlockId))
+                {
+                    b["blockData"] = JObject.Parse(db.GetBlock(innerBlockId).Jsonvalues);
+                    joPageData["block_" + b["id"].ToString()] = b;
+                }
             }
 
             string strTemplate = template.TemplateJson;
@@ -62,7 +68,12 @@ namespace Justice.Portal.Web.Controllers
 
             return View("index", html);
         }
+        [HttpGet("home/NormDoc/{id}")]
+        public IActionResult NormDoc([FromRoute]Int64 id)
+        {
+            return View("index", cielaComm.GetDocument(id));
+        }
 
-        
+
     }
 }

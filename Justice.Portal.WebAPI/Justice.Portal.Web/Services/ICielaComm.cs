@@ -10,6 +10,6 @@ namespace Justice.Portal.Web.Services
     public interface ICielaComm
     {
         CielaDocInfo[] GetDocuments();
-        string GetDocument(int id);
+        string GetDocument(Int64 id);
     }
 }

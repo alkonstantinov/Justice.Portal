@@ -181,6 +181,8 @@ namespace Justice.Portal.DB
         {
             db.Session.RemoveRange(db.Session.Where(x => Math.Abs((x.LastEdit - DateTime.Now).TotalMinutes) > 30));
             db.SaveChanges();
+            this.UpdateToken(token);
+
             return db.Session.Any(x => x.SessionKey.ToString() == token);
         }
 
@@ -566,6 +568,7 @@ namespace Justice.Portal.DB
                         {
                             BlockId = b.BlockId,
                             Date = btpv.Value,
+                            Url = b.Url,
                             JSONContent = b.Jsonvalues
                         }).ToArray();
             return new AdsData()
@@ -586,6 +589,7 @@ namespace Justice.Portal.DB
                         {
                             BlockId = b.BlockId,
                             Date = btpv.Value,
+                            Url = b.Url,
                             JSONContent = b.Jsonvalues
                         }).ToArray();
             return new NewsData()
@@ -655,6 +659,12 @@ namespace Justice.Portal.DB
             var headerId = db.BlockTypePropertyValue.First(x => x.BlockId == blockId && x.PropertyId == "header").Value;
             var result = ModelMapper.Instance.Mapper.Map<JSHeader>(db.Header.First(x => x.HeaderId == int.Parse(headerId)));
             return result;
+        }
+
+        public string GetFirstOfKindUrl(string portalPartId, string blockTypeId)
+        {
+            var blk = db.Block.FirstOrDefault(x => x.PortalPartId == portalPartId && x.BlockTypeId == blockTypeId);
+            return blk == null ? "" : blk.Url;
         }
 
 

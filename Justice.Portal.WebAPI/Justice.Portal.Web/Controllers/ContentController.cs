@@ -94,6 +94,13 @@ namespace Justice.Portal.Web.Controllers
             return Ok(db.GetHeaderByBlockId(blockId));
         }
 
+        [HttpGet("GetFirstOfKindUrl")]
+        public async Task<IActionResult> GetFirstOfKindUrl(string portalPartId, string blockTypeId)
+        {
+            return Ok(db.GetFirstOfKindUrl(portalPartId, blockTypeId));
+        }
+
 
     }
+
 }

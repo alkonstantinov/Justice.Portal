@@ -29,12 +29,14 @@ export default class BlockBio extends BaseComponent {
         if (this.props.block) {
             var obj = JSON.parse(this.props.block.jsonvalues);
             state.title = obj.title || {};
+            state.addinfo = obj.addinfo || {};
             state.body = obj.body || {};
             state.prime = obj.prime || false;
             state.imageId = obj.imageId;
         }
         else {
             state.title = {};
+            state.addinfo = {};
             state.body = {};
             state.prime = false;
             state.image = null;
@@ -57,6 +59,7 @@ export default class BlockBio extends BaseComponent {
     GetData() {
         return {
             title: this.state.title,
+            addinfo: this.state.addinfo,
             body: this.state.body,
             prime: this.state.prime,
             imageId: this.state.imageId
@@ -79,6 +82,17 @@ export default class BlockBio extends BaseComponent {
                             getData={self.GetStateMLData}
                             setData={self.SetStateMLData}
                             stateId="title"
+                        ></TB>
+
+                    </div>
+                </div>,
+                <div className="row">
+                    <div className="col-12">
+                        <label className="control-label">Допълнителна информация</label>
+                        <TB
+                            getData={self.GetStateMLData}
+                            setData={self.SetStateMLData}
+                            stateId="addinfo"
                         ></TB>
 
                     </div>

@@ -59,6 +59,9 @@ namespace Justice.Portal.Web.Controllers
         public async Task<IActionResult> GetTemplates(string portalPartId)
         {
             string token = this.GetToken();
+            if (!db.IsAuthenticated(token))
+                return Unauthorized();
+
             if (!this.CanDoPart(portalPartId))
                 return Unauthorized();
 
@@ -81,6 +84,9 @@ namespace Justice.Portal.Web.Controllers
         public async Task<IActionResult> GetBlocksPerPortalPart(string portalPartId)
         {
             string token = this.GetToken();
+            if (!db.IsAuthenticated(token))
+                return Unauthorized();
+
             if (!this.CanDoPart(portalPartId))
                 return Unauthorized();
 
@@ -93,6 +99,9 @@ namespace Justice.Portal.Web.Controllers
         public async Task<IActionResult> GetBlocks(string portalPartId, string blockTypeId)
         {
             string token = this.GetToken();
+            if (!db.IsAuthenticated(token))
+                return Unauthorized();
+
             if (!this.CanDoPart(portalPartId))
                 return Unauthorized();
 
@@ -154,7 +163,7 @@ namespace Justice.Portal.Web.Controllers
         public async Task<FileContentResult> GetBlob(string hash)
         {
             var b = db.GetBlob(hash);
-            var response = b!=null ? File(b?.Content, b?.ContentType) : null; // FileStreamResult
+            var response = b != null ? File(b.Content, b.ContentType, b.Filename) : null; // FileStreamResult
             return response;
         }
 
@@ -180,7 +189,7 @@ namespace Justice.Portal.Web.Controllers
 
         }
 
-        
+
 
         [HttpGet("GetTemplate")]
 
@@ -263,8 +272,8 @@ namespace Justice.Portal.Web.Controllers
         }
 
 
-        
-        
+
+
 
         [HttpGet("UrlExists")]
         public async Task<IActionResult> UrlExists([FromQuery]string url, [FromQuery]int? blockId)
@@ -275,6 +284,9 @@ namespace Justice.Portal.Web.Controllers
         [HttpGet("GetHeaders")]
         public async Task<IActionResult> GetHeaders()
         {
+            string token = this.GetToken();
+            if (!db.IsAuthenticated(token))
+                return Unauthorized();
             if (!this.HasRight("adminheaders"))
                 return Unauthorized();
             return Ok(db.GetHeaders());
@@ -283,6 +295,9 @@ namespace Justice.Portal.Web.Controllers
         [HttpGet("GetHeader")]
         public async Task<IActionResult> GetHeader(int headerId)
         {
+            string token = this.GetToken();
+            if (!db.IsAuthenticated(token))
+                return Unauthorized();
             if (!this.HasRight("adminheaders"))
                 return Unauthorized();
             return Ok(db.GetHeader(headerId));
@@ -291,6 +306,9 @@ namespace Justice.Portal.Web.Controllers
         [HttpPost("SaveHeader")]
         public async Task<IActionResult> SaveHeader([FromBody]JSHeader header)
         {
+            string token = this.GetToken();
+            if (!db.IsAuthenticated(token))
+                return Unauthorized();
             if (!this.HasRight("adminheaders"))
                 return Unauthorized();
             db.SaveHeader(header);

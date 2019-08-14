@@ -158,7 +158,7 @@ export default class BlockDocList extends BaseComponent {
 
                                         <Calendar dateFormat="dd.mm.yy" value={moment(i.date, "YYYY-MM-DD").toDate()}
                                             onChange={(e) => self.SetDocDate(i.id, moment(e.value).format("YYYY-MM-DD"))}
-                                            readOnlyInput="true" inputClassName="form-control" baseZIndex="0"></Calendar>
+                                            readOnlyInput="true" inputClassName="form-control" baseZIndex="0" yearNavigator={true} yearRange="2010:2030"></Calendar>
                                     </div>
                                     <div className="col-4">
                                         {
