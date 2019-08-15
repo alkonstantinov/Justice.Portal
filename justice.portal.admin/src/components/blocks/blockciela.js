@@ -187,10 +187,12 @@ export default class BlockCiela extends BaseComponent {
                                     </div>
                                     <div className="col-6">
                                         <label className="control-label" htmlFor="Date">Връзка към правната система</label>
+
                                         <select className="form-control" value={i.link}
                                             onChange={(e) => self.SetLink(i.id, e.target.value)}>
                                             {
-                                                this.state.docs.map(x => <option value={x.id}>{x.name}</option>)
+
+                                                (this.state.docs || []).map(x => <option value={x.id}>{x.name}</option>)
                                             }
 
 

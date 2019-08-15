@@ -172,7 +172,7 @@ export default class Blocks extends BaseComponent {
                                                     <td>
                                                         {
                                                             self.props.mode === "select" ?
-                                                                <button className="btn btn-light" onClick={() => self.props.selectFunc(obj.blockId, obj.name)}><i className="fas fa-check"></i></button>
+                                                                <button className="btn btn-light" onClick={() => self.props.selectFunc(obj.url, obj.name)}><i className="fas fa-check"></i></button>
                                                                 :
 
                                                                 [

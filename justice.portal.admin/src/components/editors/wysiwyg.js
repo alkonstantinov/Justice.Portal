@@ -46,7 +46,7 @@ export default class WYSIWYG extends BaseComponent {
         if (selContent === "")
             selContent = "link";
 
-        const content = '<a href="' + Comm.url + "part/GetPage?pageId=" + pageId + '">' + selContent + '</a>';
+        const content = '<a href="/home/index/' + pageId + '">' + selContent + '</a>';
 
         const viewFragment = this.editor.data.processor.toView(content);
         const modelFragment = this.editor.data.toModel(viewFragment);

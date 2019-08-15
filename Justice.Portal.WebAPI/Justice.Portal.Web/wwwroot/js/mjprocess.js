@@ -49,6 +49,8 @@ class MJProcess {
         this.PutBiographies = this.PutBiographies.bind(this);
         this.PutDocList = this.PutDocList.bind(this);
         this.PutCollection = this.PutCollection.bind(this);
+        this.PutCiela = this.PutCiela.bind(this);
+        this.PutSitemap = this.PutSitemap.bind(this);
 
 
 
@@ -163,6 +165,8 @@ class MJProcess {
             case "biocabinet": this.PutBiographies(blockId, isMain); break;
             case "doclist": this.PutDocList(blockId, isMain); break;
             case "collection": this.PutCollection(blockId, isMain); break;
+            case "ciela": this.PutCiela(blockId, isMain); break;
+            case "sitemap": this.PutSitemap(blockId, isMain); break;
 
         }
     }
@@ -941,6 +945,54 @@ class MJProcess {
 			</article>`));
 
 
+
+
+    }
+
+
+    PutCiela(divId, isMain) {
+        var oldDiv = $("#" + divId);
+        var obj = isMain ? this.MJPageData.main : this.MJPageData["block_" + divId].blockData;
+        var self = this;
+        var actsLI = "";
+
+        obj.links.sort((a, b) => a.id < b.id ? -1 : 1)
+            .forEach(x =>
+                actsLI += `<li class='list-group-item'><a href='/home/normdoc/` + x.link + `' target='_blank'>` + x.title[self.language] + `</a></li>`
+            );
+
+        oldDiv.replaceWith($(`<article class="article-container">
+
+				<h1>`+ obj.title[self.language] +`				
+				</h1>				
+				<div class="article-content">
+					`+ (obj.body[self.language]||"") + `
+				</div>
+                <div class="article-content">
+                    <ul  class='list-group'>
+					`+ actsLI + `
+                    </ul>
+				</div>
+			</article>`));
+
+
+    }
+
+
+    PutSitemap(divId, isMain) {
+        var oldDiv = $("#" + divId);
+        var obj = isMain ? this.MJPageData.main : this.MJPageData["block_" + divId].blockData;
+        var self = this;
+        
+
+        oldDiv.replaceWith($(`<article class="article-container">
+
+				<h1>`+ obj.title[self.language] + `				
+				</h1>				
+				<div class="article-content">
+					`+ (obj.body[self.language] || "") + `
+				</div>
+        	</article>`));
 
 
     }
