@@ -22,7 +22,7 @@ class BaseComponent extends Component {
         this.UploadBlob = this.UploadBlob.bind(this);
         this.GetStateMLData = this.GetStateMLData.bind(this);
         this.SetStateMLData = this.SetStateMLData.bind(this);
-        
+
 
 
         this.state = {
@@ -105,18 +105,19 @@ class BaseComponent extends Component {
 
 
     SetSpecific = (prop, value) => {
-        var rec = this.state.Rec;
-        rec[prop] = value;
+        var self = this;
+        var rec = this.state[prop];
+        rec = value;
         this.setState({
-            Rec: rec
-        });
+            [prop]: rec
+        }, () => console.log("xxxx", self.state));
     }
 
-    GetSpecific = (prop) => {
-        var rec = this.state.Rec;
+    // GetSpecific = (prop) => {
+    //     var rec = this.state.Rec;
 
-        return rec !== null ? rec[prop] : null;
-    }
+    //     return rec !== null ? rec[prop] : null;
+    // }
 
 
     ConvertArrayToObject(array) {

@@ -330,5 +330,11 @@ namespace Justice.Portal.Web.Controllers
 
         }
 
+        [HttpGet("GetPKLabels")]
+        public async Task<IActionResult> GetPKLabels(string group)
+        {
+            return Ok(db.GetPKLabels(group));
+        }
+
     }
 }

@@ -45,7 +45,11 @@ namespace Justice.Portal.DB.Tools
                     .ReverseMap();
                 cfg.CreateMap<JSHeader, Header>()
                     .ReverseMap();
+                cfg.CreateMap<JSPklabel, Pklabel>()
+                    .ReverseMap();
                 
+
+
 
             }
             );

@@ -23,6 +23,7 @@ namespace Justice.Portal.DB.Models
         public virtual DbSet<Collection> Collection { get; set; }
         public virtual DbSet<Header> Header { get; set; }
         public virtual DbSet<Log> Log { get; set; }
+        public virtual DbSet<Pklabel> Pklabel { get; set; }
         public virtual DbSet<PortalGroup> PortalGroup { get; set; }
         public virtual DbSet<PortalGroup2Part> PortalGroup2Part { get; set; }
         public virtual DbSet<PortalGroup2Right> PortalGroup2Right { get; set; }
@@ -202,6 +203,29 @@ namespace Justice.Portal.DB.Models
                 entity.Property(e => e.Level).HasMaxLength(128);
 
                 entity.Property(e => e.Properties).HasColumnType("xml");
+            });
+
+            modelBuilder.Entity<Pklabel>(entity =>
+            {
+                entity.ToTable("PKLabel");
+
+                entity.HasIndex(e => e.PklabelGroup)
+                    .HasName("ix_PKLabel_PKLabelGroup");
+
+                entity.Property(e => e.PklabelId)
+                    .HasColumnName("PKLabelId")
+                    .ValueGeneratedNever();
+
+                entity.Property(e => e.PklabelGroup)
+                    .IsRequired()
+                    .HasColumnName("PKLabelGroup")
+                    .HasMaxLength(5);
+
+                entity.Property(e => e.TitleBg)
+                    .IsRequired()
+                    .HasColumnName("TitleBG");
+
+                entity.Property(e => e.TitleEn).HasColumnName("TitleEN");
             });
 
             modelBuilder.Entity<PortalGroup>(entity =>

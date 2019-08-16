@@ -667,6 +667,11 @@ namespace Justice.Portal.DB
             return blk == null ? "" : blk.Url;
         }
 
+        public JSPklabel[] GetPKLabels(string group)
+        {
+            return ModelMapper.Instance.Mapper.Map<ICollection<Pklabel>, ICollection<JSPklabel>>(db.Pklabel.Where(x => x.PklabelGroup == group).OrderBy(x => x.TitleBg).ToArray()).ToArray();
+        }
+
 
     }
 }

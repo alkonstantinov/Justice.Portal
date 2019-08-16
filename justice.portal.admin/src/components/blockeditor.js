@@ -29,6 +29,14 @@ import BlockNewsSq from './blocks/blocknewssq';
 import BlockSearch from './blocks/blocksearch';
 import BlockSitemap from './blocks/blocksitemap';
 import BlockHtml from './blocks/blockhtml';
+import BlockPkOp from './blocks/blockpkop';
+import BlockPkOffer from './blocks/blockpkoffer';
+import BlockPkMessage from './blocks/blockpkmessage';
+import BlockPkConsult from './blocks/blockpkconsult';
+import BlockPKConsults from './blocks/blockpkconsults';
+import BlockPKMessages from './blocks/blockpkmessages';
+import BlockPKOffers from './blocks/blockpkoffers';
+import BlockPKOps from './blocks/blockpkops';
 
 export default class BlockEditor extends BaseComponent {
     constructor(props) {
@@ -73,7 +81,11 @@ export default class BlockEditor extends BaseComponent {
         this.GetSearch = this.GetSearch.bind(this);
         this.GetSitemap = this.GetSitemap.bind(this);
         this.GetHtml = this.GetHtml.bind(this);
+        this.GetPkOp = this.GetPkOp.bind(this);
+        this.GetPkOffer = this.GetPkOffer.bind(this);
 
+        this.GetPkMessage = this.GetPkMessage.bind(this);
+        this.GetPkConsult = this.GetPkConsult.bind(this);
 
         this.state = { mode: "loading" };
 
@@ -222,6 +234,52 @@ export default class BlockEditor extends BaseComponent {
 
     }
 
+    GetPkOp() {
+        return (<BlockPkOp block={this.state.block} ref="Editor" />
+        );
+
+    }
+
+    GetPkOffer() {
+        return (<BlockPkOffer block={this.state.block} ref="Editor" />
+        );
+
+    }
+    GetPkMessage() {
+        return (<BlockPkMessage block={this.state.block} ref="Editor" />
+        );
+
+    }
+    GetPkConsult() {
+        return (<BlockPkConsult block={this.state.block} ref="Editor" />
+        );
+
+    }
+
+
+    GetPkOps() {
+        return (<BlockPKOps block={this.state.block} ref="Editor" />
+        );
+
+    }
+    GetPkOffers() {
+        return (<BlockPKOffers block={this.state.block} ref="Editor" />
+        );
+
+    }
+    GetPkMessages() {
+        return (<BlockPKMessages block={this.state.block} ref="Editor" />
+        );
+
+    }
+    GetPkConsults() {
+        return (<BlockPKConsults block={this.state.block} ref="Editor" />
+        );
+
+    }
+
+
+
     GetEditor() {
         switch (this.props.match.params.blockTypeId) {
             case "new": return this.GetNew();
@@ -246,6 +304,14 @@ export default class BlockEditor extends BaseComponent {
             case "search": return this.GetSearch();
             case "sitemap": return this.GetSitemap();
             case "html": return this.GetHtml();
+            case "pkop": return this.GetPkOp();
+            case "pkoffer": return this.GetPkOffer();
+            case "pkmessage": return this.GetPkMessage();
+            case "pkconsult": return this.GetPkConsult();
+            case "pkops": return this.GetPkOps();
+            case "pkoffers": return this.GetPkOffers();
+            case "pkmessages": return this.GetPkMessages();
+            case "pkconsults": return this.GetPkConsults();
 
             default: return null;
         }
