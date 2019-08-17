@@ -37,6 +37,7 @@ import BlockPKConsults from './blocks/blockpkconsults';
 import BlockPKMessages from './blocks/blockpkmessages';
 import BlockPKOffers from './blocks/blockpkoffers';
 import BlockPKOps from './blocks/blockpkops';
+import BlockPK from './blocks/blockpk';
 
 export default class BlockEditor extends BaseComponent {
     constructor(props) {
@@ -83,9 +84,12 @@ export default class BlockEditor extends BaseComponent {
         this.GetHtml = this.GetHtml.bind(this);
         this.GetPkOp = this.GetPkOp.bind(this);
         this.GetPkOffer = this.GetPkOffer.bind(this);
-
         this.GetPkMessage = this.GetPkMessage.bind(this);
         this.GetPkConsult = this.GetPkConsult.bind(this);
+        this.GetPkOps = this.GetPkOps.bind(this);
+        this.GetPkOffers = this.GetPkOffers.bind(this);
+        this.GetPkMessages = this.GetPkMessages.bind(this);
+        this.GetPkConsults = this.GetPkConsults.bind(this);
 
         this.state = { mode: "loading" };
 
@@ -277,6 +281,11 @@ export default class BlockEditor extends BaseComponent {
         );
 
     }
+    GetPk() {
+        return (<BlockPK block={this.state.block} ref="Editor" />
+        );
+
+    }
 
 
 
@@ -312,6 +321,7 @@ export default class BlockEditor extends BaseComponent {
             case "pkoffers": return this.GetPkOffers();
             case "pkmessages": return this.GetPkMessages();
             case "pkconsults": return this.GetPkConsults();
+            case "pk": return this.GetPk();
 
             default: return null;
         }

@@ -51,6 +51,10 @@ class MJProcess {
         this.PutCollection = this.PutCollection.bind(this);
         this.PutCiela = this.PutCiela.bind(this);
         this.PutSitemap = this.PutSitemap.bind(this);
+        this.PutPK = this.PutPK.bind(this);
+        this.PutOps = this.PutOps.bind(this);
+
+        this.PutNextPKListItems = this.PutNextPKListItems.bind(this);
 
 
 
@@ -167,6 +171,8 @@ class MJProcess {
             case "collection": this.PutCollection(blockId, isMain); break;
             case "ciela": this.PutCiela(blockId, isMain); break;
             case "sitemap": this.PutSitemap(blockId, isMain); break;
+            case "pk": this.PutPK(blockId, isMain); break;
+            case "pkops": this.PutOps(blockId, isMain); break;
 
         }
     }
@@ -299,7 +305,7 @@ class MJProcess {
         var divs = "";
         var showMore = false;
         $.ajax({
-            url: "/api/content/GetAdsData?count=3&blockId=" + blockId + "&top=" + self.Top,
+            url: "/api/content/GetAdsData?count=10&blockId=" + blockId + "&top=" + self.Top,
             dataType: 'json',
             async: false,
 
@@ -998,6 +1004,30 @@ class MJProcess {
     }
 
 
+    PutPK(divId, isMain) {
+        var oldDiv = $("#" + divId);
+        var obj = isMain ? this.MJPageData.main : this.MJPageData["block_" + divId].blockData;
+        var self = this;
+
+
+        oldDiv.replaceWith($(`<article class="article-container">
+
+				<h1>`+ obj.title[self.language] + `				
+				</h1>				
+				<div class="article-content">
+                    <ul class='list-group'>        
+                        <li class='list-group-item'><a href='#' autolink="pkops"><t>ops</t></a></li>
+                        <li class='list-group-item'><a href='#' autolink="pkoffers"><t>offers</t></a></li>
+                        <li class='list-group-item'><a href='#' autolink="pkmessages"><t>messages</t></a></li>
+                        <li class='list-group-item'><a href='#' autolink="pkconsults"><t>consults</t></a></li>
+					</ul>
+				</div>
+        	</article>`));
+
+
+    }
+
+
     PutBlocks() {
         this.PutElement(null, true);
         let array = $("div[mjblocktypeid]").each(
@@ -1176,11 +1206,94 @@ class MJProcess {
 
                 success: function (data) {
                     console.log("data", data);
-                    $(e).attr("href", "home/index/" + data);
+                    $(e).attr("href", "/home/index/" + data);
 
                 }
             });
         });
+    }
+
+
+
+    PutNextPKListItems(blockId, itemType) {
+        var self = this;
+        var divs = "";
+        var showMore = false;
+        $.ajax({
+            url: "/api/content/GetPKListData?count=10&blockId=" + blockId + "&top=" + self.Top + "&blockTypeId=" + itemType + "&ss=" + $("#" + this.TBSSId).val(),
+            dataType: 'json',
+            async: false,
+
+            success: function (data) {
+                self.Top += data.rows.length;
+
+                showMore = self.Top < data.count;
+                data.rows.forEach(x => {
+                    divs += `<div class="list-box">
+						<div class="port-content">
+							`+ (JSON.parse(x.jsonContent).imageId ? '<img src="/api/part/GetBlob?hash=' + JSON.parse(x.jsonContent).imageId + '" alt="" style="max-width:100%;max-height:100%;"  class="list-article-img img-list"/>' : '') +
+                        `<div>
+								<h6 class="date">`+ x.date + `</h6>
+								<h3><a href="`+ x.url + `">` + self.NarrowText(JSON.parse(x.jsonContent).title[self.language], 100) + `</a></h3>
+							</div>
+						</div>
+					</div>
+					`;
+                    console.log(JSON.parse(x.jsonContent));
+                });
+
+            }
+        });
+
+        $("#" + this.ItemsContentId).append($(divs));
+        if (!showMore)
+            $("#" + this.NextItemsLinkId).hide();
+
+    }
+
+    PutOps(divId, isMain) {
+        var oldDiv = $("#" + divId);
+        var obj = isMain ? this.MJPageData.main : this.MJPageData["block_" + divId].blockData;
+        var blockId = isMain ? this.MJPageData.mainid : this.MJPageData["block_" + divId].value;
+        this.ItemsContentId = this.Guid();
+        this.TBSSId = this.Guid();
+        this.NextItemsLinkId = this.Guid();
+        var self = this;
+
+        var newContent = `<div class="port-wrapper">
+				<div class="port-head">
+					<h3 class="port-title"><t>ops</t></h3>
+					
+				</div>
+                <div class="port-box box-border">
+                    <div class="row">
+				        <div class="col-10">	
+                            <input type="text" class="form-control" id="` + this.TBSSId + `" placeholder="search"/>
+                        </div>
+                        <div class="col-2">
+                            <a class="btn btn-primary" onclick="mjProcess.Top=0; $('#` + this.ItemsContentId + `').empty(); mjProcess.PutNextPKListItems(` + blockId + `,'pkop')">
+                                <t>search</t>
+						    </a>
+                        </div>
+                    </div>
+                    <br/><br/>
+                    <div id="` + this.ItemsContentId + `">
+					
+				    </div>
+                
+				</div>
+				<div class="port-footer">
+						<div class="port-link-item">
+							<a class="btn btn-primary" id="` + this.NextItemsLinkId + `" onclick="mjProcess.PutNextPKListItems(` + blockId + `, 'pkop')">
+                                <t>more</t>
+							</a>
+						</div>
+			</div>`;
+
+        oldDiv.replaceWith($(newContent));
+        this.PutNextPKListItems(blockId, 'pkop');
+
+
     }
 
 }

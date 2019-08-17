@@ -100,6 +100,16 @@ namespace Justice.Portal.Web.Controllers
             return Ok(db.GetFirstOfKindUrl(portalPartId, blockTypeId));
         }
 
+        [HttpGet("GetPKListData")]
+        public async Task<IActionResult> GetPKListData(int top, int count, int blockId, string blockTypeId, string ss)
+        {
+            string portalPartId = db.GetBlock(blockId).PortalPartId;
+
+
+            return Ok(db.GetPKList(top, count, portalPartId, blockTypeId, ss));
+        }
+
+
 
     }
 
