@@ -88,7 +88,7 @@ export default class FileTable extends BaseComponent {
                                         }}>
                                             <option></option>
                                             {
-                                                (self.state.fileTypes || []).map(item => <option value={item.fileTypeId}>{item.titleBg}</option>)
+                                                (self.state.fileTypes || []).map(item => <option value={item.pklabelId}>{item.titleBg}</option>)
                                             }
 
                                         </select>

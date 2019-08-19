@@ -669,7 +669,7 @@ namespace Justice.Portal.DB
 
         public JSPklabel[] GetPKLabels(string group)
         {
-            return ModelMapper.Instance.Mapper.Map<ICollection<Pklabel>, ICollection<JSPklabel>>(db.Pklabel.Where(x => x.PklabelGroup == group).OrderBy(x => x.TitleBg).ToArray()).ToArray();
+            return ModelMapper.Instance.Mapper.Map<ICollection<Pklabel>, ICollection<JSPklabel>>(db.Pklabel.Where(x => string.IsNullOrEmpty(group) || x.PklabelGroup == group).OrderBy(x => x.TitleBg).ToArray()).ToArray();
         }
 
 
@@ -677,7 +677,7 @@ namespace Justice.Portal.DB
         {
             var rows = (from b in db.Block
                         join btpv in db.BlockTypePropertyValue on new { bid = b.BlockId, pid = "date" } equals new { bid = btpv.BlockId, pid = btpv.PropertyId }
-                        where b.PortalPartId == portalPartId && b.BlockTypeId == blockTypeId &&(string.IsNullOrEmpty(ss)||b.Jsonvalues.Contains(ss))
+                        where b.PortalPartId == portalPartId && b.BlockTypeId == blockTypeId && (string.IsNullOrEmpty(ss) || b.Jsonvalues.Contains(ss))
                         orderby btpv.Value descending
                         select new PKListItem()
                         {

@@ -35,7 +35,7 @@ export default class BlockPkMessage extends BaseComponent {
             state.body = obj.body || {};
             state.files = obj.files || [];
 
-            state.enddate = obj.enddate;
+
 
         }
         else {
@@ -59,8 +59,7 @@ export default class BlockPkMessage extends BaseComponent {
         return {
             title: this.state.title || {},
             files: this.state.files || [],
-            body: this.state.body,
-            enddate: this.state.enddate
+            body: this.state.body
 
         };
     }
@@ -97,14 +96,6 @@ export default class BlockPkMessage extends BaseComponent {
 
 
 
-                    </div>
-                </div>,
-                <div className="row">
-                    <div className="col-12">
-                        <label className="control-label">Краен срок за подаване на оферти</label>
-                        <Calendar dateFormat="dd.mm.yy" value={(this.state.enddate || "") === "" ? "" : moment(this.state.enddate, "YYYY-MM-DD").toDate()}
-                            onChange={(e) => this.setState({ enddate: moment(e.value).format("YYYY-MM-DD") })}
-                            readOnlyInput="true" inputClassName="form-control"></Calendar>
                     </div>
                 </div>,
                 <div className="row">

@@ -94,7 +94,7 @@ export default class BlockPkOp extends BaseComponent {
             });
 
         var stas = []
-        await Comm.Instance().get('part/GetPKLabels?group=obj')
+        await Comm.Instance().get('part/GetPKLabels?group=sta')
             .then(result => {
                 stas = result.data;
             })

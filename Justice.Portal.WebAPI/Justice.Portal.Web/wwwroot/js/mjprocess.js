@@ -20,6 +20,7 @@ class MJProcess {
         this.LoadTranslations = this.LoadTranslations.bind(this);
         this.Translate = this.Translate.bind(this);
         this.TranslateAttribs = this.TranslateAttribs.bind(this);
+        this.LoadAllPKNomenclatures = this.LoadAllPKNomenclatures.bind(this);
 
         this.DoProcess = this.DoProcess.bind(this);
         this.ShowBannerIfNeeded = this.ShowBannerIfNeeded.bind(this);
@@ -53,6 +54,13 @@ class MJProcess {
         this.PutSitemap = this.PutSitemap.bind(this);
         this.PutPK = this.PutPK.bind(this);
         this.PutOps = this.PutOps.bind(this);
+        this.PutOp = this.PutOp.bind(this);
+        this.PutOffers = this.PutOffers.bind(this);
+        this.PutOffer = this.PutOffer.bind(this);
+        this.PutMessages = this.PutMessages.bind(this);
+        this.PutMessage = this.PutMessage.bind(this);
+        this.PutConsults = this.PutConsults.bind(this);
+        this.PutConsult = this.PutConsult.bind(this);
 
         this.PutNextPKListItems = this.PutNextPKListItems.bind(this);
 
@@ -173,6 +181,13 @@ class MJProcess {
             case "sitemap": this.PutSitemap(blockId, isMain); break;
             case "pk": this.PutPK(blockId, isMain); break;
             case "pkops": this.PutOps(blockId, isMain); break;
+            case "pkoffers": this.PutOffers(blockId, isMain); break;
+            case "pkmessages": this.PutMessages(blockId, isMain); break;
+            case "pkconsults": this.PutConsults(blockId, isMain); break;
+            case "pkop": this.PutOp(blockId, isMain); break;
+            case "pkoffer": this.PutOffer(blockId, isMain); break;
+            case "pkmessage": this.PutMessage(blockId, isMain); break;
+            case "pkconsult": this.PutConsult(blockId, isMain); break;
 
         }
     }
@@ -1293,6 +1308,505 @@ class MJProcess {
         oldDiv.replaceWith($(newContent));
         this.PutNextPKListItems(blockId, 'pkop');
 
+
+    }
+
+
+    PutOffers(divId, isMain) {
+        var oldDiv = $("#" + divId);
+        var obj = isMain ? this.MJPageData.main : this.MJPageData["block_" + divId].blockData;
+        var blockId = isMain ? this.MJPageData.mainid : this.MJPageData["block_" + divId].value;
+        this.ItemsContentId = this.Guid();
+        this.TBSSId = this.Guid();
+        this.NextItemsLinkId = this.Guid();
+        var self = this;
+
+        var newContent = `<div class="port-wrapper">
+				<div class="port-head">
+					<h3 class="port-title"><t>offers</t></h3>
+					
+				</div>
+                <div class="port-box box-border">
+                    <div class="row">
+				        <div class="col-10">	
+                            <input type="text" class="form-control" id="` + this.TBSSId + `" placeholder="search"/>
+                        </div>
+                        <div class="col-2">
+                            <a class="btn btn-primary" onclick="mjProcess.Top=0; $('#` + this.ItemsContentId + `').empty(); mjProcess.PutNextPKListItems(` + blockId + `,'pkoffer')">
+                                <t>search</t>
+						    </a>
+                        </div>
+                    </div>
+                    <br/><br/>
+                    <div id="` + this.ItemsContentId + `">
+					
+				    </div>
+                
+				</div>
+				<div class="port-footer">
+						<div class="port-link-item">
+							<a class="btn btn-primary" id="` + this.NextItemsLinkId + `" onclick="mjProcess.PutNextPKListItems(` + blockId + `, 'pkoffer')">
+                                <t>more</t>
+							</a>
+						</div>
+			</div>`;
+
+        oldDiv.replaceWith($(newContent));
+        this.PutNextPKListItems(blockId, 'pkoffer');
+
+
+    }
+
+    PutMessages(divId, isMain) {
+        var oldDiv = $("#" + divId);
+        var obj = isMain ? this.MJPageData.main : this.MJPageData["block_" + divId].blockData;
+        var blockId = isMain ? this.MJPageData.mainid : this.MJPageData["block_" + divId].value;
+        this.ItemsContentId = this.Guid();
+        this.TBSSId = this.Guid();
+        this.NextItemsLinkId = this.Guid();
+        var self = this;
+
+        var newContent = `<div class="port-wrapper">
+				<div class="port-head">
+					<h3 class="port-title"><t>messages</t></h3>
+					
+				</div>
+                <div class="port-box box-border">
+                    <div class="row">
+				        <div class="col-10">	
+                            <input type="text" class="form-control" id="` + this.TBSSId + `" placeholder="search"/>
+                        </div>
+                        <div class="col-2">
+                            <a class="btn btn-primary" onclick="mjProcess.Top=0; $('#` + this.ItemsContentId + `').empty(); mjProcess.PutNextPKListItems(` + blockId + `,'pkmessage')">
+                                <t>search</t>
+						    </a>
+                        </div>
+                    </div>
+                    <br/><br/>
+                    <div id="` + this.ItemsContentId + `">
+					
+				    </div>
+                
+				</div>
+				<div class="port-footer">
+						<div class="port-link-item">
+							<a class="btn btn-primary" id="` + this.NextItemsLinkId + `" onclick="mjProcess.PutNextPKListItems(` + blockId + `, 'pkmessage')">
+                                <t>more</t>
+							</a>
+						</div>
+			</div>`;
+
+        oldDiv.replaceWith($(newContent));
+        this.PutNextPKListItems(blockId, 'pkmessage');
+
+
+    }
+
+    PutConsults(divId, isMain) {
+        var oldDiv = $("#" + divId);
+        var obj = isMain ? this.MJPageData.main : this.MJPageData["block_" + divId].blockData;
+        var blockId = isMain ? this.MJPageData.mainid : this.MJPageData["block_" + divId].value;
+        this.ItemsContentId = this.Guid();
+        this.TBSSId = this.Guid();
+        this.NextItemsLinkId = this.Guid();
+        var self = this;
+
+        var newContent = `<div class="port-wrapper">
+				<div class="port-head">
+					<h3 class="port-title"><t>consults</t></h3>
+					
+				</div>
+                <div class="port-box box-border">
+                    <div class="row">
+				        <div class="col-10">	
+                            <input type="text" class="form-control" id="` + this.TBSSId + `" placeholder="search"/>
+                        </div>
+                        <div class="col-2">
+                            <a class="btn btn-primary" onclick="mjProcess.Top=0; $('#` + this.ItemsContentId + `').empty(); mjProcess.PutNextPKListItems(` + blockId + `,'pkconsult')">
+                                <t>search</t>
+						    </a>
+                        </div>
+                    </div>
+                    <br/><br/>
+                    <div id="` + this.ItemsContentId + `">
+					
+				    </div>
+                
+				</div>
+				<div class="port-footer">
+						<div class="port-link-item">
+							<a class="btn btn-primary" id="` + this.NextItemsLinkId + `" onclick="mjProcess.PutNextPKListItems(` + blockId + `, 'pkconsult')">
+                                <t>more</t>
+							</a>
+						</div>
+			</div>`;
+
+        oldDiv.replaceWith($(newContent));
+        this.PutNextPKListItems(blockId, 'pkconsult');
+
+
+    }
+
+    LoadAllPKNomenclatures() {
+        var self = this;
+        $.ajax({
+            url: "/api/part/GetPKLabels",
+            dataType: 'json',
+            async: false,
+
+            success: function (data) {
+                self.PKLabels = data;
+
+            }
+        });
+
+
+    }
+
+    PutFiles(files, dFilesId) {
+        var self = this;
+        var divs = "<table class='table table-bordered'><tbody>";
+        files.forEach(x =>
+            divs += `
+            <tr>
+                <td><a href="/api/part/GetBlob?hash=`+ x.file + `">` + x.title[self.language] +`</a></td>
+                <td>
+                    `+ (self.language === "bg" ? self.PKLabels.find(l => l.pklabelId == x.type).titleBg : self.PKLabels.find(l => l.pklabelId == x.type).titleEn) + `
+                </td>                
+            </tr>
+
+        `);
+        divs += "</tbody><table>";
+        $("#" + dFilesId).append(divs);
+    }
+
+    PutOp(divId, isMain) {
+        this.LoadAllPKNomenclatures();
+        var oldDiv = $("#" + divId);
+        var obj = isMain ? this.MJPageData.main : this.MJPageData["block_" + divId].blockData;
+        var blockId = isMain ? this.MJPageData.mainid : this.MJPageData["block_" + divId].value;
+        this.ItemsContentId = this.Guid();
+        this.dFilesId = this.Guid();
+        var self = this;
+
+        var newContent = `<div class="port-wrapper">
+				<div class="port-head">
+					<h3 class="port-title"><t>op</t></h3>
+					
+				</div>
+                <div class="port-box box-border">
+                    <div class="row">
+				        <div class="col-6">	
+                            <b><t>title</t></b>
+                        </div>
+                        <div class="col-6">	
+                            `+ obj.title[self.language] +`
+                        </div>
+                    </div>
+                    <div class="row">
+				        <div class="col-6">
+                            <b><t>name</t></b>
+                        </div>
+                        <div class="col-6">
+                            `+ obj.PBName[self.language] +`
+                        </div>
+                    </div>
+                    <div class="row">
+				        <div class="col-6">
+                            <b><t>aopnum</t></b>
+                        </div>
+                        <div class="col-6">
+                            `+ obj.AOPNum +`
+                        </div>
+                    </div>
+                    <div class="row">
+				        <div class="col-6">
+                            <b><t>elnum</t></b>
+                        </div>
+                        <div class="col-6">
+                            `+ obj.ElNum +`
+                        </div>
+                    </div>
+                    <div class="row">
+				        <div class="col-6">
+                            <b><t>proctype</t></b>
+                        </div>
+                        <div class="col-6">
+                            `+ (self.language === "bg" ? self.PKLabels.find(l => l.pklabelId == obj.proctype).titleBg : self.PKLabels.find(l => l.pklabelId == obj.proctype).titleEn) + `
+                        </div>
+                    </div>
+                    <div class="row">
+				        <div class="col-6">
+                            <b><t>procobject</t></b>
+                        </div>
+                        <div class="col-6">
+                            `+ (self.language === "bg" ? self.PKLabels.find(l => l.pklabelId == obj.procobject).titleBg : self.PKLabels.find(l => l.pklabelId == obj.procobject).titleEn) + `
+                        </div>
+                    </div>
+                    <div class="row">
+				        <div class="col-6">
+                            <b><t>subject</t></b>
+                        </div>
+                        <div class="col-6">
+                            `+ obj.Subject[self.language] +`
+                        </div>
+                    </div>
+                    <div class="row">
+				        <div class="col-6">
+                            <b><t>procstatus</t></b>
+                        </div>
+                        <div class="col-6">
+                            `+ (self.language === "bg" ? self.PKLabels.find(l => l.pklabelId == obj.procstatus).titleBg : self.PKLabels.find(l => l.pklabelId == obj.procstatus).titleEn) + `
+                        </div>
+                    </div>
+                    <div class="row">
+				        <div class="col-6">
+                            <b><t>novatprognosis</t></b>
+                        </div>
+                        <div class="col-6">
+                            `+ obj.novatprognosis +`
+                        </div>
+                    </div>
+                    <div class="row">
+				        <div class="col-6">
+                            <b><t>cpv</t></b>
+                        </div>
+                        <div class="col-6">
+                            `+ obj.cpv +`
+                        </div>
+                    </div>
+                    <div class="row">
+				        <div class="col-6">
+                            <b><t>teritorry</t></b>
+                        </div>
+                        <div class="col-6">
+                            `+ (self.language === "bg" ? self.PKLabels.find(l => l.pklabelId == obj.teritorry).titleBg : self.PKLabels.find(l => l.pklabelId == obj.teritorry).titleEn) + `
+                        </div>
+                    </div>
+                    <div class="row">
+				        <div class="col-6">
+                            <b><t>novat</t></b>
+                        </div>
+                        <div class="col-6">
+                            `+ obj.novat +`
+                        </div>
+                    </div>
+                    <div class="row">
+				        <div class="col-6">
+                            <b><t>enddate</t></b>
+                        </div>
+                        <div class="col-6">
+                            `+ obj.enddate +`
+                        </div>
+                    </div>
+                    <div class="row">
+				        <div class="col-6">
+                            <b><t>business</t></b>
+                        </div>
+                        <div class="col-6">
+                            `+ (self.language === "bg" ? self.PKLabels.find(l => l.pklabelId == obj.business).titleBg : self.PKLabels.find(l => l.pklabelId == obj.business).titleEn) + `
+                        </div>
+                    </div>
+
+
+				</div>
+                <div class="port-box box-border">
+                    <div class="row">
+				        <div class="col-12" id="`+ this.dFilesId+`">	
+                            
+                        </div>
+                    </div>
+                    
+                
+				</div>
+				<div class="port-footer">
+					
+			</div>`;
+
+        
+
+        oldDiv.replaceWith($(newContent));
+        this.PutFiles(obj.files, this.dFilesId);
+
+    }
+
+    PutOffer(divId, isMain) {
+        this.LoadAllPKNomenclatures();
+        var oldDiv = $("#" + divId);
+        var obj = isMain ? this.MJPageData.main : this.MJPageData["block_" + divId].blockData;
+        var blockId = isMain ? this.MJPageData.mainid : this.MJPageData["block_" + divId].value;
+        this.ItemsContentId = this.Guid();
+        this.dFilesId = this.Guid();
+        var self = this;
+
+        var newContent = `<div class="port-wrapper">
+				<div class="port-head">
+					<h3 class="port-title"><t>offer</t></h3>
+					
+				</div>
+                <div class="port-box box-border">
+                    <div class="row">
+				        <div class="col-6">	
+                            <b><t>title</t></b>
+                        </div>
+                        <div class="col-6">	
+                            `+ obj.title[self.language] + `
+                        </div>
+                    </div>
+                    <div class="row">
+				        <div class="col-6">
+                            <b><t>content</t></b>
+                        </div>
+                        <div class="col-6">
+                            `+ obj.body[self.language] + `
+                        </div>
+                    </div>
+                    <div class="row">
+				        <div class="col-6">
+                            <b><t>enddate</t></b>
+                        </div>
+                        <div class="col-6">
+                            `+ obj.enddate + `
+                        </div>
+                    </div>
+
+
+				</div>
+                <div class="port-box box-border">
+                    <div class="row">
+				        <div class="col-12" id="`+ this.dFilesId + `">	
+                            
+                        </div>
+                    </div>
+                    
+                
+				</div>
+				<div class="port-footer">
+					
+			</div>`;
+
+
+
+        oldDiv.replaceWith($(newContent));
+        this.PutFiles(obj.files, this.dFilesId);
+
+    }
+
+    PutMessage(divId, isMain) {
+        this.LoadAllPKNomenclatures();
+        var oldDiv = $("#" + divId);
+        var obj = isMain ? this.MJPageData.main : this.MJPageData["block_" + divId].blockData;
+        var blockId = isMain ? this.MJPageData.mainid : this.MJPageData["block_" + divId].value;
+        this.ItemsContentId = this.Guid();
+        this.dFilesId = this.Guid();
+        var self = this;
+
+        var newContent = `<div class="port-wrapper">
+				<div class="port-head">
+					<h3 class="port-title"><t>message</t></h3>
+					
+				</div>
+                <div class="port-box box-border">
+                    <div class="row">
+				        <div class="col-6">	
+                            <b><t>title</t></b>
+                        </div>
+                        <div class="col-6">	
+                            `+ obj.title[self.language] + `
+                        </div>
+                    </div>
+                    <div class="row">
+				        <div class="col-6">
+                            <b><t>content</t></b>
+                        </div>
+                        <div class="col-6">
+                            `+ obj.body[self.language] + `
+                        </div>
+                    </div>
+                    
+
+
+				</div>
+                <div class="port-box box-border">
+                    <div class="row">
+				        <div class="col-12" id="`+ this.dFilesId + `">	
+                            
+                        </div>
+                    </div>
+                    
+                
+				</div>
+				<div class="port-footer">
+					
+			</div>`;
+
+
+
+        oldDiv.replaceWith($(newContent));
+        this.PutFiles(obj.files, this.dFilesId);
+
+    }
+
+
+    PutConsult(divId, isMain) {
+        this.LoadAllPKNomenclatures();
+        var oldDiv = $("#" + divId);
+        var obj = isMain ? this.MJPageData.main : this.MJPageData["block_" + divId].blockData;
+        var blockId = isMain ? this.MJPageData.mainid : this.MJPageData["block_" + divId].value;
+        this.ItemsContentId = this.Guid();
+        this.dFilesId = this.Guid();
+        var self = this;
+
+        var newContent = `<div class="port-wrapper">
+				<div class="port-head">
+					<h3 class="port-title"><t>consult</t></h3>
+					
+				</div>
+                <div class="port-box box-border">
+                    <div class="row">
+				        <div class="col-6">	
+                            <b><t>title</t></b>
+                        </div>
+                        <div class="col-6">	
+                            `+ obj.title[self.language] + `
+                        </div>
+                    </div>
+                    <div class="row">
+				        <div class="col-6">
+                            <b><t>content</t></b>
+                        </div>
+                        <div class="col-6">
+                            `+ obj.body[self.language] + `
+                        </div>
+                    </div>
+                    <div class="row">
+				        <div class="col-6">
+                            <b><t>enddate</t></b>
+                        </div>
+                        <div class="col-6">
+                            `+ obj.enddate + `
+                        </div>
+                    </div>
+
+
+				</div>
+                <div class="port-box box-border">
+                    <div class="row">
+				        <div class="col-12" id="`+ this.dFilesId + `">	
+                            
+                        </div>
+                    </div>
+                    
+                
+				</div>
+				<div class="port-footer">
+					
+			</div>`;
+
+
+
+        oldDiv.replaceWith($(newContent));
+        this.PutFiles(obj.files, this.dFilesId);
 
     }
 

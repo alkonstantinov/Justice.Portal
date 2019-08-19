@@ -109,7 +109,7 @@ namespace Justice.Portal.Web.Controllers
             return Ok(db.GetPKList(top, count, portalPartId, blockTypeId, ss));
         }
 
-
+        
 
     }
 
