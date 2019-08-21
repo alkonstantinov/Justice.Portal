@@ -12,6 +12,8 @@ namespace Justice.Portal.Web.Services
 
         void DeleteBlock(int blockId);
 
+        void DeleteAll ();
+
         string Search(string query, int from, int size, string part);
     }
 }

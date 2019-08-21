@@ -78,5 +78,22 @@ namespace Justice.Portal.Web.Services
             wc.BaseAddress = url;
             return wc.DownloadString($"query?q={q}&rows={size}&start={from}&sort=id asc");
         }
+
+        public void DeleteAll()
+        {
+            JObject data = JObject.FromObject(new
+            {
+                delete = new
+                {
+                    query = "*:*"
+                }
+            });
+            WebClient wc = new WebClient();
+            wc.BaseAddress = url;
+
+            wc.Headers[HttpRequestHeader.ContentType] = "application/json";
+
+            string response = wc.UploadString("update?commit=true", data.ToString());
+        }
     }
 }

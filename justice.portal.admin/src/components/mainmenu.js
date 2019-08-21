@@ -2,13 +2,15 @@ import React from 'react';
 import BaseComponent from './basecomponent';
 import eventClient from '../modules/eventclient';
 import { Link } from 'react-router-dom';
-import Axios from 'axios';
 import { Redirect } from 'react-router-dom';
+import Comm from '../modules/comm';
+import { toast } from 'react-toastify';
 
 
 class MainMenu extends BaseComponent {
     constructor(props) {
         super(props);
+        this.Reindex = this.Reindex.bind(this);
         eventClient.emit(
             "breadcrump",
             [{
@@ -21,7 +23,22 @@ class MainMenu extends BaseComponent {
 
     }
 
+    Reindex() {
+        var self = this;
+        Comm.Instance().get('search/Reindex')
+            .then(result => {
+                toast.info("Преиндексирането е приключило");
+            })
+            .catch(error => {
+                if (error.response && error.response.status === 401)
+                    toast.error("Липса на права", {
+                        onClose: this.Logout
+                    });
+                else
+                    toast.error(error.message);
 
+            });
+    }
 
 
 
@@ -121,6 +138,13 @@ class MainMenu extends BaseComponent {
                                 : null
                         }
 
+
+                    </div>
+                    <div className="col-3">
+                        <span className="btn btn-default fillSpace" style={{ 'cursor': 'pointer' }} onClick={self.Reindex}>
+                            <i className="fab fa-battle-net"></i>
+                            <p>Преиндексиране</p>
+                        </span>
 
                     </div>
 

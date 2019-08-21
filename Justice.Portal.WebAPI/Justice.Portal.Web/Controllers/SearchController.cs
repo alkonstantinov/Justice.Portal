@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
+using Justice.Portal.DB;
 using Justice.Portal.DB.JSModels;
 using Justice.Portal.DB.Models;
 using Justice.Portal.Web.Services;
@@ -20,6 +21,7 @@ namespace Justice.Portal.Web.Controllers
     public class SearchController : BaseController
     {
 
+
         ISOLRComm SolrComm;
         public SearchController(JusticePortalContext jpc, ISOLRComm solrComm) : base(jpc)
         {
@@ -32,6 +34,31 @@ namespace Justice.Portal.Web.Controllers
         {
             return Ok(SolrComm.Search(query, from, size, part));
         }
+
+        [HttpGet("Reindex")]
+        public async Task<IActionResult> Reindex()
+        {
+            string token = this.GetToken();
+            if (!db.IsAuthenticated(token))
+                return Unauthorized();
+            await Task.Run(() =>
+            {
+                SolrComm.DeleteAll();
+                int top = 0;
+                int count = 50;
+                Block[] blocks = null;
+                do
+                {
+                    blocks = db.GetNextIndexableBlocks(top, count);
+                    foreach (var b in blocks)
+                        SolrComm.UpdateBlock(b);
+                    top += count;
+                } while (count == blocks.Length);
+            });
+            return Ok();
+        }
+
+
 
     }
 }

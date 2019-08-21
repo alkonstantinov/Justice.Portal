@@ -693,6 +693,16 @@ namespace Justice.Portal.DB
             };
         }
 
+        public Block[] GetNextIndexableBlocks(int top, int count)
+        {
+            var arr = (from b in db.Block
+                       join bt in db.BlockType on new { btid = b.BlockTypeId } equals new { btid = bt.BlockTypeId }
+                       where bt.IsSearchable
+                       orderby b.BlockId
+                       select b).Skip(top).Take(count).ToArray();
+            return arr;
+        }
+
 
     }
 }

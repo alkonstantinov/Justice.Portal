@@ -984,10 +984,10 @@ class MJProcess {
 
         oldDiv.replaceWith($(`<article class="article-container">
 
-				<h1>`+ obj.title[self.language] +`				
+				<h1>`+ obj.title[self.language] + `				
 				</h1>				
 				<div class="article-content">
-					`+ (obj.body[self.language]||"") + `
+					`+ (obj.body[self.language] || "") + `
 				</div>
                 <div class="article-content">
                     <ul  class='list-group'>
@@ -1004,7 +1004,7 @@ class MJProcess {
         var oldDiv = $("#" + divId);
         var obj = isMain ? this.MJPageData.main : this.MJPageData["block_" + divId].blockData;
         var self = this;
-        
+
 
         oldDiv.replaceWith($(`<article class="article-container">
 
@@ -1469,7 +1469,7 @@ class MJProcess {
         files.forEach(x =>
             divs += `
             <tr>
-                <td><a href="/api/part/GetBlob?hash=`+ x.file + `">` + x.title[self.language] +`</a></td>
+                <td><a href="/api/part/GetBlob?hash=`+ x.file + `">` + x.title[self.language] + `</a></td>
                 <td>
                     `+ (self.language === "bg" ? self.PKLabels.find(l => l.pklabelId == x.type).titleBg : self.PKLabels.find(l => l.pklabelId == x.type).titleEn) + `
                 </td>                
@@ -1500,7 +1500,7 @@ class MJProcess {
                             <b><t>title</t></b>
                         </div>
                         <div class="col-6">	
-                            `+ obj.title[self.language] +`
+                            `+ obj.title[self.language] + `
                         </div>
                     </div>
                     <div class="row">
@@ -1508,7 +1508,7 @@ class MJProcess {
                             <b><t>name</t></b>
                         </div>
                         <div class="col-6">
-                            `+ obj.PBName[self.language] +`
+                            `+ (obj.PBName[self.language] || "") + `
                         </div>
                     </div>
                     <div class="row">
@@ -1516,7 +1516,7 @@ class MJProcess {
                             <b><t>aopnum</t></b>
                         </div>
                         <div class="col-6">
-                            `+ obj.AOPNum +`
+                            `+ obj.AOPNum + `
                         </div>
                     </div>
                     <div class="row">
@@ -1524,7 +1524,7 @@ class MJProcess {
                             <b><t>elnum</t></b>
                         </div>
                         <div class="col-6">
-                            `+ obj.ElNum +`
+                            `+ obj.ElNum + `
                         </div>
                     </div>
                     <div class="row">
@@ -1532,7 +1532,7 @@ class MJProcess {
                             <b><t>proctype</t></b>
                         </div>
                         <div class="col-6">
-                            `+ (self.language === "bg" ? self.PKLabels.find(l => l.pklabelId == obj.proctype).titleBg : self.PKLabels.find(l => l.pklabelId == obj.proctype).titleEn) + `
+                            `+ (self.language === "bg" ? (self.PKLabels.find(l => l.pklabelId == obj.proctype) || {}).titleBg : (self.PKLabels.find(l => l.pklabelId == obj.proctype) || {}).titleEn) + `
                         </div>
                     </div>
                     <div class="row">
@@ -1540,7 +1540,7 @@ class MJProcess {
                             <b><t>procobject</t></b>
                         </div>
                         <div class="col-6">
-                            `+ (self.language === "bg" ? self.PKLabels.find(l => l.pklabelId == obj.procobject).titleBg : self.PKLabels.find(l => l.pklabelId == obj.procobject).titleEn) + `
+                            `+ (self.language === "bg" ? (self.PKLabels.find(l => l.pklabelId == obj.procobject) || {}).titleBg : (self.PKLabels.find(l => l.pklabelId == obj.procobject) || {}).titleEn) + `
                         </div>
                     </div>
                     <div class="row">
@@ -1548,7 +1548,7 @@ class MJProcess {
                             <b><t>subject</t></b>
                         </div>
                         <div class="col-6">
-                            `+ obj.Subject[self.language] +`
+                            `+ obj.Subject[self.language] + `
                         </div>
                     </div>
                     <div class="row">
@@ -1556,7 +1556,7 @@ class MJProcess {
                             <b><t>procstatus</t></b>
                         </div>
                         <div class="col-6">
-                            `+ (self.language === "bg" ? self.PKLabels.find(l => l.pklabelId == obj.procstatus).titleBg : self.PKLabels.find(l => l.pklabelId == obj.procstatus).titleEn) + `
+                            `+ (self.language === "bg" ? (self.PKLabels.find(l => l.pklabelId == obj.procstatus) || {}).titleBg : (self.PKLabels.find(l => l.pklabelId == obj.procstatus) || {}).titleEn) + `
                         </div>
                     </div>
                     <div class="row">
@@ -1564,7 +1564,7 @@ class MJProcess {
                             <b><t>novatprognosis</t></b>
                         </div>
                         <div class="col-6">
-                            `+ obj.novatprognosis +`
+                            `+ obj.novatprognosis + `
                         </div>
                     </div>
                     <div class="row">
@@ -1572,7 +1572,7 @@ class MJProcess {
                             <b><t>cpv</t></b>
                         </div>
                         <div class="col-6">
-                            `+ obj.cpv +`
+                            `+ obj.cpv + `
                         </div>
                     </div>
                     <div class="row">
@@ -1580,7 +1580,7 @@ class MJProcess {
                             <b><t>teritorry</t></b>
                         </div>
                         <div class="col-6">
-                            `+ (self.language === "bg" ? self.PKLabels.find(l => l.pklabelId == obj.teritorry).titleBg : self.PKLabels.find(l => l.pklabelId == obj.teritorry).titleEn) + `
+                            `+ (self.language === "bg" ? (self.PKLabels.find(l => l.pklabelId == obj.teritorry) || {}).titleBg : (self.PKLabels.find(l => l.pklabelId == obj.teritorry) || {}).titleEn) + `
                         </div>
                     </div>
                     <div class="row">
@@ -1588,7 +1588,7 @@ class MJProcess {
                             <b><t>novat</t></b>
                         </div>
                         <div class="col-6">
-                            `+ obj.novat +`
+                            `+ obj.novat + `
                         </div>
                     </div>
                     <div class="row">
@@ -1596,7 +1596,7 @@ class MJProcess {
                             <b><t>enddate</t></b>
                         </div>
                         <div class="col-6">
-                            `+ obj.enddate +`
+                            `+ obj.enddate + `
                         </div>
                     </div>
                     <div class="row">
@@ -1604,7 +1604,7 @@ class MJProcess {
                             <b><t>business</t></b>
                         </div>
                         <div class="col-6">
-                            `+ (self.language === "bg" ? self.PKLabels.find(l => l.pklabelId == obj.business).titleBg : self.PKLabels.find(l => l.pklabelId == obj.business).titleEn) + `
+                            `+ (self.language === "bg" ? (self.PKLabels.find(l => l.pklabelId == obj.business) || {}).titleBg : (self.PKLabels.find(l => l.pklabelId == obj.business) || {}).titleEn) + `
                         </div>
                     </div>
 
@@ -1612,7 +1612,7 @@ class MJProcess {
 				</div>
                 <div class="port-box box-border">
                     <div class="row">
-				        <div class="col-12" id="`+ this.dFilesId+`">	
+				        <div class="col-12" id="`+ this.dFilesId + `">	
                             
                         </div>
                     </div>
@@ -1623,7 +1623,7 @@ class MJProcess {
 					
 			</div>`;
 
-        
+
 
         oldDiv.replaceWith($(newContent));
         this.PutFiles(obj.files, this.dFilesId);
