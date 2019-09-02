@@ -9,6 +9,7 @@ import WYSIWYG from '../editors/wysiwyg';
 import TB from '../editors/tb';
 import { Calendar } from 'primereact/calendar';
 import moment from 'moment';
+import { Dialog } from 'primereact/dialog';
 import eventClient from '../../modules/eventclient';
 import { toast } from 'react-toastify';
 
@@ -28,14 +29,18 @@ export default class BlockCiela extends BaseComponent {
         );
         this.Validate = this.Validate.bind(this);
         this.GetData = this.GetData.bind(this);
-        this.AddLink = this.AddLink.bind(this);
+        this.EditLink = this.EditLink.bind(this);
         this.SetLinkTitle = this.SetLinkTitle.bind(this);
         this.SetLink = this.SetLink.bind(this);
         this.DeleteLink = this.DeleteLink.bind(this);
         this.SetOrder = this.SetOrder.bind(this);
+        this.SaveLink = this.SaveLink.bind(this);
 
 
-        var state = { lang: "bg" };
+        var state = {
+            lang: "bg",
+            showDialog: false
+        };
         if (this.props.block) {
             var obj = JSON.parse(this.props.block.jsonvalues);
             state.title = obj.title || {};
@@ -67,52 +72,81 @@ export default class BlockCiela extends BaseComponent {
         };
     }
 
-    AddLink() {
-        var newDoc = {
-            id: uuidv4(),
-            order: 0,
-            title: {
-                bg: '',
-                en: ''
-            },
-            link: this.state.docs[0].id
+    EditLink(id) {
+        var rec;
+        if (id) {
+            rec = JSON.parse(JSON.stringify(this.state.links.find(x => x.id == id)));
+
+        }
+        else {
+            rec = {
+                id: null,
+                order: 0,
+                title: {
+                    bg: '',
+                    en: ''
+                },
+                link: this.state.docs[0].id
+            }
         }
 
-        var links = this.state.links;
-        links = [newDoc].concat(links);
-        this.setState({ links: links });
-    }
+        console.log(this.state.links);
 
-    SetLinkTitle(id, value) {
-        var links = this.state.links;
-        links.find(x => x.id === id).title[this.state.lang] = value;
-        this.setState({ links: links });
+        this.setState({
+            rec: rec,
+            showDialog: true
+        });
 
-    }
-    SetLink(id, value) {
-        var links = this.state.links;
-        links.find(x => x.id === id).link = value;
-        this.setState({ links: links });
 
     }
 
-    SetOrder(id, value) {
-        var links = this.state.links;
-        value = parseInt(value || "0");
-        links.find(x => x.id === id).order = value;
+    SaveLink() {
+        var self = this;
+        var rec;
+        var links = self.state.links;
+        if (this.state.rec.id) {
+            rec = links.find(x => x.id == self.state.rec.id);
 
+        }
+        else {
+            rec = { id: uuidv4() };
+            links.push(rec);
+        }
+        rec.order = this.state.rec.order;
+        rec.title = JSON.parse(JSON.stringify(this.state.rec.title));
+        rec.link = this.state.rec.link;
+        links = links.sort((a, b) => a.order - b.order);
+        this.setState({ links: links, showDialog: false });
+    }
 
-        this.setState({ links: links });
+    SetLinkTitle(value) {
+        var rec = this.state.rec;
+        rec.title[this.state.lang] = value;
+        this.setState({ rec: rec });
+
+    }
+    SetLink(value) {
+        var rec = this.state.rec;
+        rec.link = value;
+        this.setState({ rec: rec });
 
     }
 
+    SetOrder(value) {
+        var rec = this.state.rec;
+        rec.order = value;
+        this.setState({ rec: rec });
+
+    }
 
     DeleteLink(id) {
         var links = this.state.links;
         var toDel = links.find(x => x.id === id);
         var i = links.indexOf(toDel);
         links.splice(i, 1);
-        this.setState({ links: links });
+        this.setState({
+            links: links
+        });
     }
 
     componentDidMount() {
@@ -168,39 +202,67 @@ export default class BlockCiela extends BaseComponent {
                 </div>,
                 <div className="row">
                     <div className="col-2">
-                        <button className="btn btn-light" onClick={self.AddLink}>+</button>
+                        <button className="btn btn-light" onClick={() => self.EditLink()}>+</button>
                     </div>
                     <div className="col-10">
+                        {
+                            self.state.rec ?
+                                <Dialog header="Нормативен акт" visible={this.state.showDialog} style={{ width: '75vw' }} modal={true} onHide={() => { self.setState({ showDialog: false }) }}>
+                                    <div className="row">
+                                        <div className="col-1">
+                                            <label className="control-label" htmlFor="Date">No</label>
+                                            <input type="number" min="0" className="form-control" value={self.state.rec.order}
+                                                onChange={(e) => self.SetOrder(e.target.value)}></input>
+                                        </div>
+                                        <div className="col-4">
+                                            <label className="control-label" htmlFor="Date">Заглавие</label>
+
+                                            <input type="text" className="form-control" value={self.state.rec.title[self.state.lang]}
+                                                onChange={(e) => self.SetLinkTitle(e.target.value)}></input>
+                                        </div>
+                                        <div className="col-6">
+                                            <label className="control-label" htmlFor="Date">Връзка към правната система</label>
+
+                                            <select className="form-control" value={self.state.rec.link}
+                                                onChange={(e) => self.SetLink(e.target.value)}>
+                                                {
+
+                                                    (this.state.docs || []).map(x => <option value={x.id}>{x.name}</option>)
+                                                }
+
+
+                                            </select>
+
+                                        </div>
+                                    </div>
+                                    <div className="row">
+                                        <div className="col-1">
+                                            <button className="btn btn-light pull-right" onClick={() => self.SaveLink()}>Запис</button>
+                                        </div>
+                                    </div>
+                                </Dialog>
+                                : null
+                        }
                         {
                             self.state.links.map((i, no) =>
                                 <div className="row" key={no}>
                                     <div className="col-1">
-                                        <label className="control-label" htmlFor="Date">No</label>
-                                        <input type="number" min="0" className="form-control" value={i.order}
-                                            onChange={(e) => self.SetOrder(i.id, e.target.value)}></input>
+                                        {i.order}
                                     </div>
                                     <div className="col-4">
-                                        <label className="control-label" htmlFor="Date">Заглавие</label>
-
-                                        <input type="text" className="form-control" value={i.title[self.state.lang]}
-                                            onChange={(e) => self.SetLinkTitle(i.id, e.target.value)}></input>
+                                        {i.title[self.state.lang]}
                                     </div>
                                     <div className="col-6">
-                                        <label className="control-label" htmlFor="Date">Връзка към правната система</label>
-
-                                        <select className="form-control" value={i.link}
-                                            onChange={(e) => self.SetLink(i.id, e.target.value)}>
-                                            {
-
-                                                (this.state.docs || []).map(x => <option value={x.id}>{x.name}</option>)
-                                            }
-
-
-                                        </select>
+                                        {
+                                            this.state.docs ?
+                                                this.state.docs.find(x => x.id === parseInt(i.link)).name
+                                                : null
+                                        }
 
                                     </div>
                                     <div className="col-1">
                                         <button className="btn btn-light" onClick={() => self.DeleteLink(i.id)}>-</button>
+                                        <button className="btn btn-light" onClick={() => self.EditLink(i.id)}><i className="fas fa-edit"></i></button>
                                     </div>
                                 </div>
                             )
