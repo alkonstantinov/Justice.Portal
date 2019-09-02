@@ -121,6 +121,7 @@ export default class WYSIWYG extends BaseComponent {
     }
 
 
+
     render() {
         var self = this;
         return (
@@ -130,7 +131,7 @@ export default class WYSIWYG extends BaseComponent {
                 <button className="btn btn-light" onClick={() => self.InsertLinkToPage()}>Към страница</button>
                 <button className="btn btn-light" onClick={() => self.ShowHtml()}>HTML</button>
 
-                <Dialog header="Избор страница" visible={this.state.ShowSelectPageDialog} style={{ width: '50vw' }} modal={true} onHide={() => { self.setState({ ShowSelectPageDialog: false }) }}>
+                <Dialog header="Избор страница" visible={this.state.ShowSelectPageDialog} style={{ width: '50vw', height: '60vh', 'overflow-y': 'scroll' }} modal={true} onHide={() => { self.setState({ ShowSelectPageDialog: false }) }}>
                     <Blocks selectFunc={this.ChoosePage} mode="select"></Blocks>
                 </Dialog>
                 <Dialog header="HTML" visible={this.state.ShowHtmlDialog} style={{ width: '50vw' }} modal={true} onHide={() => { self.setState({ ShowHtmlDialog: false }) }}>

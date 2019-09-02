@@ -248,7 +248,7 @@ class MJProcess {
                         <img src="/api/part/GetBlob?hash=`+ obj.imageId + `" alt="" style="max-width:100%;max-height:100%;"/>
                     </div>
                     <div class="col-6">
-                        `+ (obj.body[self.language] || "") + `
+                        `+ self.FixText(obj.body[self.language] || "") + `
                     </div>
                 </div>
                 
@@ -606,7 +606,7 @@ class MJProcess {
 					<img class="half-pic" src="/api/part/GetBlob?hash=`+ obj.imageId + `">
 				</figure>
 				<div class="article-content">
-					`+ obj.body[self.language] + `
+					`+ self.FixText(obj.body[self.language]) + `
 				</div>
 			</article>`));
 
@@ -627,7 +627,7 @@ class MJProcess {
 					`+ (obj.imageId ? '<img class="half-pic" src="/api/part/GetBlob?hash=' + obj.imageId + '">' : "") + `
 				</figure>
 				<div class="article-content">
-					`+ obj.body[self.language] + `
+					`+ self.FixText(obj.body[self.language]) + `
 				</div>
 			</article>`));
 
@@ -648,7 +648,7 @@ class MJProcess {
 					`+ (obj.imageId ? '<img class="half-pic" src="/api/part/GetBlob?hash=' + obj.imageId + '">' : "") + `
 				</figure>
 				<div class="article-content">
-					`+ obj.body[self.language] + `
+					`+ self.FixText(obj.body[self.language]) + `
 				</div>
 			</article>`));
 
@@ -676,7 +676,7 @@ class MJProcess {
 					<img class="half-pic" src="/api/part/GetBlob?hash=`+ obj.imageId + `">
 				</figure>
 				<div class="article-content">
-					`+ obj.body[self.language] + `
+					`+ self.FixText(obj.body[self.language]) +`
 				</div>
 			</article>`));
 
@@ -698,7 +698,7 @@ class MJProcess {
 					<img class="half-pic" src="/api/part/GetBlob?hash=`+ obj.imageId + `">
 				</figure>
 				<div class="article-content" style="max-width:100%">
-					`+ obj.body[self.language] + `
+					`+ self.FixText(obj.body[self.language]) +`
 				</div>
 			</article>`));
 
@@ -960,7 +960,7 @@ class MJProcess {
 				</h1>
 				
 				<div class="article-content">
-					`+ obj.body[self.language] + `
+					`+ self.FixText(obj.body[self.language]) +`
 				</div>
                 `+ divYears + `
 			</article>`));
@@ -1095,6 +1095,7 @@ class MJProcess {
         self.ShowBannerIfNeeded();
         self.DisplayBreadCrumbs();
         self.PutAutomaticLinks();
+        
     }
 
 
@@ -1658,7 +1659,7 @@ class MJProcess {
                             <b><t>content</t></b>
                         </div>
                         <div class="col-6">
-                            `+ obj.body[self.language] + `
+                            `+ self.FixText(obj.body[self.language]) +`
                         </div>
                     </div>
                     <div class="row">
@@ -1720,7 +1721,7 @@ class MJProcess {
                             <b><t>content</t></b>
                         </div>
                         <div class="col-6">
-                            `+ obj.body[self.language] + `
+                            `+ self.FixText(obj.body[self.language]) +`
                         </div>
                     </div>
                     
@@ -1776,7 +1777,7 @@ class MJProcess {
                             <b><t>content</t></b>
                         </div>
                         <div class="col-6">
-                            `+ obj.body[self.language] + `
+                            `+ self.FixText(obj.body[self.language]) +`
                         </div>
                     </div>
                     <div class="row">
@@ -1810,5 +1811,14 @@ class MJProcess {
 
     }
 
+    FixText(data) {
+        if (!data)
+            return "";
+        data = data.replace(/<ul>/g, "<ul style='margin-left:100px;'>");
+        return data;
+    }
+    
+
+    
 }
 
