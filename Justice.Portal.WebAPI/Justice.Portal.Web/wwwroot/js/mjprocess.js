@@ -100,7 +100,7 @@ class MJProcess {
             dataType: 'json',
             async: false,
 
-            success: function (data) {
+            success: function(data) {
                 self.translation = data;
 
             }
@@ -284,7 +284,7 @@ class MJProcess {
             dataType: 'json',
             async: false,
 
-            success: function (data) {
+            success: function(data) {
                 data.forEach(x =>
                     lis += '<li><h3><span>' + x.date + '</span><a href="home/index/' + x.url + '">' + self.NarrowText(JSON.parse(x.jsonContent).body[self.language], 140) + '</a></h3></li>'
                 );
@@ -324,7 +324,7 @@ class MJProcess {
             dataType: 'json',
             async: false,
 
-            success: function (data) {
+            success: function(data) {
                 self.Top += data.rows.length;
                 showMore = self.Top < data.count;
                 data.rows.forEach(x =>
@@ -394,7 +394,7 @@ class MJProcess {
             dataType: 'json',
             async: false,
 
-            success: function (data) {
+            success: function(data) {
                 self.Top += data.rows.length;
 
                 showMore = self.Top < data.count;
@@ -465,7 +465,7 @@ class MJProcess {
             dataType: 'json',
             async: false,
 
-            success: function (data) {
+            success: function(data) {
                 data.forEach((x, idx) => {
                     var data = JSON.parse(x.jsonContent);
                     divs +=
@@ -532,7 +532,7 @@ class MJProcess {
             dataType: 'json',
             async: false,
 
-            success: function (data) {
+            success: function(data) {
                 self.Top += data.response.docs.length;
                 $("#" + self.FoundCountId).text(data.response.numFound);
                 showMore = self.Top < data.response.numFound;
@@ -676,7 +676,7 @@ class MJProcess {
 					<img class="half-pic" src="/api/part/GetBlob?hash=`+ obj.imageId + `">
 				</figure>
 				<div class="article-content">
-					`+ self.FixText(obj.body[self.language]) +`
+					`+ self.FixText(obj.body[self.language]) + `
 				</div>
 			</article>`));
 
@@ -698,7 +698,7 @@ class MJProcess {
 					<img class="half-pic" src="/api/part/GetBlob?hash=`+ obj.imageId + `">
 				</figure>
 				<div class="article-content" style="max-width:100%">
-					`+ self.FixText(obj.body[self.language]) +`
+					`+ self.FixText(obj.body[self.language]) + `
 				</div>
 			</article>`));
 
@@ -720,7 +720,7 @@ class MJProcess {
             dataType: 'json',
             async: false,
 
-            success: function (data) {
+            success: function(data) {
                 data.forEach(x => {
                     var data = JSON.parse(x.jsonvalues);
                     divs += `<div class="list-box">
@@ -773,10 +773,16 @@ class MJProcess {
     ShowMonth(year, month, divId) {
         $("div[id^=dMonth_]").hide();
         var self = this;
+        var download = "download";
+        var lng = this.translation[this.language];
+        if (lng) {
+            download = lng[download];
+
+        }
 
         var ul = "<ul class='list-group'>";
         this.years.find(x => x.year === year).months.find(x => x.month === month).docs.forEach(x =>
-            ul += "<li class='list-group-item'>" + self.FormatDate(x.date) + " <a href='/api/part/getblob?hash=" + x.docId + "'>" + x.title[self.language] + "</a></li>"
+            ul += "<li class='list-group-item'>" + self.FormatDate(x.date) + " <a href='/api/part/getblob?hash=" + x.docId + "'>" + download + "</a></li>"
         );
         ul += "</ul>";
         console.log("ul", ul);
@@ -854,7 +860,7 @@ class MJProcess {
             dataType: 'json',
             async: false,
 
-            success: function (data) {
+            success: function(data) {
                 self.CollectionStructure = JSON.parse(data.structure);
                 self.CollectionContent = JSON.parse(data.content);
             }
@@ -960,7 +966,7 @@ class MJProcess {
 				</h1>
 				
 				<div class="article-content">
-					`+ self.FixText(obj.body[self.language]) +`
+					`+ self.FixText(obj.body[self.language]) + `
 				</div>
                 `+ divYears + `
 			</article>`));
@@ -1084,10 +1090,10 @@ class MJProcess {
         this.FindMeOrAddMeInBreadCrumbs();
         this.PutBlocks();
         var self = this;
-        $("T").each(function (i, e) {
+        $("T").each(function(i, e) {
             self.Translate(e);
         });
-        $("input").each(function (i, e) {
+        $("input").each(function(i, e) {
 
             self.TranslateAttribs(e);
         });
@@ -1095,7 +1101,7 @@ class MJProcess {
         self.ShowBannerIfNeeded();
         self.DisplayBreadCrumbs();
         self.PutAutomaticLinks();
-        
+
     }
 
 
@@ -1167,7 +1173,7 @@ class MJProcess {
             url: "/api/content/GetSearchResultBlock?portalPartId=" + this.MJPageData.mainpartid,
             dataType: 'json',
             async: false,
-            success: function (data) {
+            success: function(data) {
                 window.location.href = "/home/index/" + data.url;
 
             }
@@ -1184,7 +1190,7 @@ class MJProcess {
             dataType: 'json',
             async: false,
 
-            success: function (data) {
+            success: function(data) {
                 $("div[mjheader]").replaceWith(data.content);
 
             }
@@ -1213,14 +1219,14 @@ class MJProcess {
 
     PutAutomaticLinks() {
         var self = this;
-        $("a[autolink]").each(function (i, e) {
+        $("a[autolink]").each(function(i, e) {
 
             $.ajax({
                 url: "/api/content/GetFirstOfKindUrl?portalPartId=" + self.MJPageData.mainpartid + "&blockTypeId=" + $(e).attr("autolink"),
                 dataType: 'text',
                 async: true,
 
-                success: function (data) {
+                success: function(data) {
                     console.log("data", data);
                     $(e).attr("href", "/home/index/" + data);
 
@@ -1240,7 +1246,7 @@ class MJProcess {
             dataType: 'json',
             async: false,
 
-            success: function (data) {
+            success: function(data) {
                 self.Top += data.rows.length;
 
                 showMore = self.Top < data.count;
@@ -1455,7 +1461,7 @@ class MJProcess {
             dataType: 'json',
             async: false,
 
-            success: function (data) {
+            success: function(data) {
                 self.PKLabels = data;
 
             }
@@ -1659,7 +1665,7 @@ class MJProcess {
                             <b><t>content</t></b>
                         </div>
                         <div class="col-6">
-                            `+ self.FixText(obj.body[self.language]) +`
+                            `+ self.FixText(obj.body[self.language]) + `
                         </div>
                     </div>
                     <div class="row">
@@ -1721,7 +1727,7 @@ class MJProcess {
                             <b><t>content</t></b>
                         </div>
                         <div class="col-6">
-                            `+ self.FixText(obj.body[self.language]) +`
+                            `+ self.FixText(obj.body[self.language]) + `
                         </div>
                     </div>
                     
@@ -1777,7 +1783,7 @@ class MJProcess {
                             <b><t>content</t></b>
                         </div>
                         <div class="col-6">
-                            `+ self.FixText(obj.body[self.language]) +`
+                            `+ self.FixText(obj.body[self.language]) + `
                         </div>
                     </div>
                     <div class="row">
@@ -1817,8 +1823,8 @@ class MJProcess {
         data = data.replace(/<ul>/g, "<ul style='margin-left:100px;'>");
         return data;
     }
-    
 
-    
+
+
 }
 

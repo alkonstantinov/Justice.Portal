@@ -47,6 +47,9 @@ export default class BlockDocList extends BaseComponent {
             state.docs = [];
         }
 
+        state.years = [...new Set(state.docs.map(i => new Date(i.date).getFullYear()))];
+        state.currentYear = state.years[0];
+        state.currentMonth = 1;
 
         this.state = state;
 
@@ -111,6 +114,8 @@ export default class BlockDocList extends BaseComponent {
 
     render() {
         var self = this;
+        var cy = self.state.docs.filter(x => new Date(x.date).getFullYear() === parseInt(self.state.currentYear) && new Date(x.date).getMonth() === parseInt(self.state.currentMonth) - 1);
+        console.log(self.state);
         return (
             [
                 <div className="row">
@@ -139,35 +144,63 @@ export default class BlockDocList extends BaseComponent {
                         ></WYSIWYG>
                     </div>
                 </div>,
+
                 <div className="row">
                     <div className="col-2">
                         <button className="btn btn-light" onClick={self.AddDoc}>+</button>
                     </div>
-                    <div className="col-10">
-                        {
-                            self.state.docs.map((i, no) =>
-                                <div className="row" key={no}>
-                                    <div className="col-3">
-                                        <label className="control-label" htmlFor="Date">Заглавие</label>
+                    <div className="col-2">
+                        <select className="form-control" value={self.state.currentYear} onChange={(e) => self.setState({ currentYear: e.target.value })}>
+                            {
+                                self.state.years.map(item => <option value={item}>{item}</option>)
+                            }
 
-                                        <input type="text" className="form-control" value={i.title[self.state.lang]}
+                        </select>
+                    </div>
+                    <div className="col-2">
+                        <select className="form-control" value={self.state.currentMonth} onChange={(e) => self.setState({ currentMonth: e.target.value })}>
+                            <option value="1">Януари</option>
+                            <option value="2">Февруари</option>
+                            <option value="3">Март</option>
+                            <option value="4">Април</option>
+                            <option value="5">Май</option>
+                            <option value="6">Юни</option>
+                            <option value="7">Юли</option>
+                            <option value="8">Август</option>
+                            <option value="9">Септември</option>
+                            <option value="10">Октомври</option>
+                            <option value="11">Ноември</option>
+                            <option value="12">Декември</option>
+
+                        </select>
+                    </div>
+                </div>,
+                <div className="row">
+                    <div className="col-12">
+                        {
+                            cy.map((i, no) =>
+                                <div className="row" key={'r' + i.date}>
+                                    <div className="col-3" key={'d1' + i.date}>
+                                        <label className="control-label" htmlFor="Date" key={'l1' + i.date}>Заглавие</label>
+
+                                        <input type="text" className="form-control" value={i.title[self.state.lang]} key={'i1' + i.date}
                                             onChange={(e) => self.SetDocTitle(i.id, e.target.value)}></input>
                                     </div>
-                                    <div className="col-3">
-                                        <label className="control-label" htmlFor="Date">Дата</label>
+                                    <div className="col-3" key={'d2' + i.date}>
+                                        <label className="control-label" htmlFor="Date" key={'l2' + i.date}>Дата</label>
 
-                                        <Calendar dateFormat="dd.mm.yy" value={moment(i.date, "YYYY-MM-DD").toDate()}
+                                        <Calendar dateFormat="dd.mm.yy" value={moment(i.date, "YYYY-MM-DD").toDate()} key={'c2' + i.date}
                                             onChange={(e) => self.SetDocDate(i.id, moment(e.value).format("YYYY-MM-DD"))}
                                             readOnlyInput="true" inputClassName="form-control" baseZIndex="0" yearNavigator={true} yearRange="2010:2030"></Calendar>
                                     </div>
-                                    <div className="col-4">
+                                    <div className="col-4" key={'d3' + i.date}>
                                         {
-                                            i.docId ? <a href={Comm.url + "part/getblob?hash=" + i.docId} target="_blank">документ</a> : null
+                                            i.docId ? <a href={Comm.url + "part/getblob?hash=" + i.docId} target="_blank" key={'a3' + i.date}>документ</a> : null
                                         }
-                                        <button className="btn btn-light" onClick={() => self.UploadBlob((docId) => self.UploadDoc(i.id, docId))}>...</button>
+                                        <button className="btn btn-light" onClick={() => self.UploadBlob((docId) => self.UploadDoc(i.id, docId))} key={'b3' + i.date}>...</button>
                                     </div>
-                                    <div className="col-2">
-                                        <button className="btn btn-light" onClick={() => self.DeleteDoc(i.id)}>-</button>
+                                    <div className="col-2" key={'d4' + i.date}>
+                                        <button className="btn btn-light" onClick={() => self.DeleteDoc(i.id)} key={'b4' + i.date}>-</button>
                                     </div>
                                 </div>
                             )

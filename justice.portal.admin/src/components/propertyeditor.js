@@ -164,7 +164,7 @@ export default class PropertyEditor extends BaseComponent {
             <div className="row">
                 {self.props.properties.map((item, i) =>
 
-                    <div className="col-4">
+                    <div className="col-4" key={i}>
                         {this.GetPropertyElement(item)}
                     </div>
 
