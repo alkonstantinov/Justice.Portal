@@ -19,6 +19,8 @@ class MJProcess {
     constructor() {
         this.LoadTranslations = this.LoadTranslations.bind(this);
         this.Translate = this.Translate.bind(this);
+        this.TranslateWord = this.TranslateWord.bind(this);
+
         this.TranslateAttribs = this.TranslateAttribs.bind(this);
         this.LoadAllPKNomenclatures = this.LoadAllPKNomenclatures.bind(this);
 
@@ -100,7 +102,7 @@ class MJProcess {
             dataType: 'json',
             async: false,
 
-            success: function(data) {
+            success: function (data) {
                 self.translation = data;
 
             }
@@ -129,6 +131,20 @@ class MJProcess {
 
 
 
+    }
+
+
+    TranslateWord(word) {
+        var lng = this.translation[this.language];
+        if (!lng) {
+            return "";
+        }
+
+        var wording = lng[word.toLowerCase()];
+        if (!wording) {
+            return "";
+        }
+        return wording;
     }
 
     TranslateAttribs(element) {
@@ -284,7 +300,7 @@ class MJProcess {
             dataType: 'json',
             async: false,
 
-            success: function(data) {
+            success: function (data) {
                 data.forEach(x =>
                     lis += '<li><h3><span>' + x.date + '</span><a href="home/index/' + x.url + '">' + self.NarrowText(JSON.parse(x.jsonContent).body[self.language], 140) + '</a></h3></li>'
                 );
@@ -324,7 +340,7 @@ class MJProcess {
             dataType: 'json',
             async: false,
 
-            success: function(data) {
+            success: function (data) {
                 self.Top += data.rows.length;
                 showMore = self.Top < data.count;
                 data.rows.forEach(x =>
@@ -394,7 +410,7 @@ class MJProcess {
             dataType: 'json',
             async: false,
 
-            success: function(data) {
+            success: function (data) {
                 self.Top += data.rows.length;
 
                 showMore = self.Top < data.count;
@@ -465,7 +481,7 @@ class MJProcess {
             dataType: 'json',
             async: false,
 
-            success: function(data) {
+            success: function (data) {
                 data.forEach((x, idx) => {
                     var data = JSON.parse(x.jsonContent);
                     divs +=
@@ -532,7 +548,7 @@ class MJProcess {
             dataType: 'json',
             async: false,
 
-            success: function(data) {
+            success: function (data) {
                 self.Top += data.response.docs.length;
                 $("#" + self.FoundCountId).text(data.response.numFound);
                 showMore = self.Top < data.response.numFound;
@@ -720,7 +736,7 @@ class MJProcess {
             dataType: 'json',
             async: false,
 
-            success: function(data) {
+            success: function (data) {
                 data.forEach(x => {
                     var data = JSON.parse(x.jsonvalues);
                     divs += `<div class="list-box">
@@ -773,12 +789,7 @@ class MJProcess {
     ShowMonth(year, month, divId) {
         $("div[id^=dMonth_]").hide();
         var self = this;
-        var download = "download";
-        var lng = this.translation[this.language];
-        if (lng) {
-            download = lng[download];
-
-        }
+        var download = this.TranslateWord("download");
 
         var ul = "<ul class='list-group'>";
         this.years.find(x => x.year === year).months.find(x => x.month === month).docs.forEach(x =>
@@ -803,13 +814,13 @@ class MJProcess {
                 var src = "";
                 switch (parseInt(ss.type)) {
                     case 1:
-                        src = $("#" + ss.id).val();
-                        if ((src || "") !== "" && r[ss.id].indexOf(src) === -1)
+                        src = $("#" + ss.id).val().toLowerCase();
+                        if ((src || "") !== "" && r[ss.id].toLowerCase().indexOf(src) === -1)
                             ok = false;
                         break;
                     case 2:
-                        src = $("#" + ss.id).val();
-                        if ((src || "") !== "" && r[ss.id][self.language].indexOf(src) === -1)
+                        src = $("#" + ss.id).val().toLowerCase();
+                        if ((src || "") !== "" && r[ss.id][self.language].toLowerCase().indexOf(src) === -1)
                             ok = false;
                         break;
                 };
@@ -826,6 +837,7 @@ class MJProcess {
 
         });
         resultTbl += "</tr></thead><tbody>";
+        var download = self.TranslateWord("download");
         searchResult.forEach(x => {
             resultTbl += "<tr>";
             self.CollectionStructure.forEach(ss => {
@@ -837,9 +849,9 @@ class MJProcess {
                     case 3:
                         resultTbl += "<td>" + x[ss.id] + "</td>"; break;
                     case 4:
-                        resultTbl += "<td><a href='/api/part/getblob?hash=" + x[ss.id] + "'><t>link</t></a></td>"; break;
+                        resultTbl += "<td><a href='/api/part/getblob?hash=" + x[ss.id] + "'>" + download + "</a></td>"; break;
                     case 5:
-                        resultTbl += "<td><a href='http://" + x[ss.id] + "'><t>link</t></a></td>"; break;
+                        resultTbl += "<td><a href='http://" + x[ss.id] + "'>" + download + "</a></td>"; break;
                 }
 
             });
@@ -860,7 +872,7 @@ class MJProcess {
             dataType: 'json',
             async: false,
 
-            success: function(data) {
+            success: function (data) {
                 self.CollectionStructure = JSON.parse(data.structure);
                 self.CollectionContent = JSON.parse(data.content);
             }
@@ -1090,10 +1102,10 @@ class MJProcess {
         this.FindMeOrAddMeInBreadCrumbs();
         this.PutBlocks();
         var self = this;
-        $("T").each(function(i, e) {
+        $("T").each(function (i, e) {
             self.Translate(e);
         });
-        $("input").each(function(i, e) {
+        $("input").each(function (i, e) {
 
             self.TranslateAttribs(e);
         });
@@ -1173,7 +1185,7 @@ class MJProcess {
             url: "/api/content/GetSearchResultBlock?portalPartId=" + this.MJPageData.mainpartid,
             dataType: 'json',
             async: false,
-            success: function(data) {
+            success: function (data) {
                 window.location.href = "/home/index/" + data.url;
 
             }
@@ -1190,7 +1202,7 @@ class MJProcess {
             dataType: 'json',
             async: false,
 
-            success: function(data) {
+            success: function (data) {
                 $("div[mjheader]").replaceWith(data.content);
 
             }
@@ -1219,14 +1231,14 @@ class MJProcess {
 
     PutAutomaticLinks() {
         var self = this;
-        $("a[autolink]").each(function(i, e) {
+        $("a[autolink]").each(function (i, e) {
 
             $.ajax({
                 url: "/api/content/GetFirstOfKindUrl?portalPartId=" + self.MJPageData.mainpartid + "&blockTypeId=" + $(e).attr("autolink"),
                 dataType: 'text',
                 async: true,
 
-                success: function(data) {
+                success: function (data) {
                     console.log("data", data);
                     $(e).attr("href", "/home/index/" + data);
 
@@ -1246,7 +1258,7 @@ class MJProcess {
             dataType: 'json',
             async: false,
 
-            success: function(data) {
+            success: function (data) {
                 self.Top += data.rows.length;
 
                 showMore = self.Top < data.count;
@@ -1461,7 +1473,7 @@ class MJProcess {
             dataType: 'json',
             async: false,
 
-            success: function(data) {
+            success: function (data) {
                 self.PKLabels = data;
 
             }

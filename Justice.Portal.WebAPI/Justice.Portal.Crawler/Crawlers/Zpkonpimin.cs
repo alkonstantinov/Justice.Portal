@@ -46,6 +46,7 @@ namespace Justice.Portal.Crawler.Crawlers
                     Filename = Path.GetFileName(m.Groups[1].Value),
                     Hash = hash
                 };
+                db.AddBlob(b);
 
                 JObject rec = new JObject();
                 rec["id"] = Guid.NewGuid().ToString();
