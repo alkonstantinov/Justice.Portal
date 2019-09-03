@@ -46,6 +46,7 @@ export default class BlockCollection extends BaseComponent {
 
     GetData() {
         return {
+            title: this.state.title,
             collectionId: this.state.collectionId
         };
     }
