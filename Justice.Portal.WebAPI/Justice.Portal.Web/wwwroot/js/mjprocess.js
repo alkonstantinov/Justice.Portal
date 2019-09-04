@@ -34,6 +34,8 @@ class MJProcess {
         this.ShowMonth = this.ShowMonth.bind(this);
         this.SearchCollection = this.SearchCollection.bind(this);
         this.PutHeader = this.PutHeader.bind(this);
+        this.ShowCareers = this.ShowCareers.bind(this);
+
 
         this.PutBlocks = this.PutBlocks.bind(this);
         this.PutElement = this.PutElement.bind(this);
@@ -63,6 +65,7 @@ class MJProcess {
         this.PutMessage = this.PutMessage.bind(this);
         this.PutConsults = this.PutConsults.bind(this);
         this.PutConsult = this.PutConsult.bind(this);
+        this.PutCareers = this.PutCareers.bind(this);
 
         this.PutNextPKListItems = this.PutNextPKListItems.bind(this);
 
@@ -204,6 +207,7 @@ class MJProcess {
             case "pkoffer": this.PutOffer(blockId, isMain); break;
             case "pkmessage": this.PutMessage(blockId, isMain); break;
             case "pkconsult": this.PutConsult(blockId, isMain); break;
+            case "career": this.PutCareers(blockId, isMain); break;
 
         }
     }
@@ -1834,6 +1838,56 @@ class MJProcess {
             return "";
         data = data.replace(/<ul>/g, "<ul style='margin-left:100px;'>");
         return data;
+    }
+
+    ShowCareers() {
+        var self = this;
+        var toShow = this.careers.filter(x => x.type[self.language] === $("#" + self.TypeSelectId).val());
+        var html = `<ul class='list-group'>`;
+        toShow.forEach(c => {
+            var docHtml = `<ul class='list-group'>`;
+            c.docs.forEach(d => docHtml += `<li class='list-group-item'>
+            <a href="/api/part/GetBlob?hash=`+ d.link + `">` + d.title[this.language] + `</a></li>`);
+            docHtml += "</ul>";
+            html += `<li class='list-group-item'>
+            <h4>`+ c.title[this.language] + `</h4><br/>` + c.body[this.language] + `<br/>
+            `+ docHtml + `
+            </li>`;
+        });
+        $("#" + this.ItemsContentId).html(html);
+    }
+
+    PutCareers(divId, isMain) {
+        var oldDiv = $("#" + divId);
+        var obj = isMain ? this.MJPageData.main : this.MJPageData["block_" + divId].blockData;
+        var blockId = isMain ? this.MJPageData.mainid : this.MJPageData["block_" + divId].value;
+        this.ItemsContentId = this.Guid();
+        this.TypeSelectId = this.Guid();
+        var self = this;
+
+        var newContent = `<div class="port-wrapper">
+				<div class="port-head">
+					<h3 class="port-title">`+ this.TranslateWord("careers") + `</h3><br/>
+                    <h3 class="port-title"><select class="form-control" id=`+ this.TypeSelectId + ` onchange="mjProcess.ShowCareers()"></select>    </h3>
+                    
+				</div>
+                
+				<div class="port-box box-border" id="` + this.ItemsContentId + `">
+					
+				</div>
+                
+			</div>`;
+
+        oldDiv.replaceWith($(newContent));
+
+        var types = [...new Set(obj.data.map(d => d.type[this.language]))];
+        types.forEach(y => $("#" + this.TypeSelectId).append("<option value='" + y + "'>" + y + "</option>"));
+        $("#" + this.TypeSelectId).val(types[0]);
+        this.careers = obj.data;
+        this.ShowCareers();
+        //this.PutNextNews(blockId);
+
+
     }
 
 

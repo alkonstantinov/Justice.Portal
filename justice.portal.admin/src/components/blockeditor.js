@@ -38,6 +38,7 @@ import BlockPKMessages from './blocks/blockpkmessages';
 import BlockPKOffers from './blocks/blockpkoffers';
 import BlockPKOps from './blocks/blockpkops';
 import BlockPK from './blocks/blockpk';
+import BlockCareer from './blocks/blockcareer';
 
 export default class BlockEditor extends BaseComponent {
     constructor(props) {
@@ -90,7 +91,7 @@ export default class BlockEditor extends BaseComponent {
         this.GetPkOffers = this.GetPkOffers.bind(this);
         this.GetPkMessages = this.GetPkMessages.bind(this);
         this.GetPkConsults = this.GetPkConsults.bind(this);
-
+        this.GetCareer = this.GetCareer.bind(this);
         this.state = { mode: "loading" };
 
     }
@@ -287,6 +288,12 @@ export default class BlockEditor extends BaseComponent {
 
     }
 
+    GetCareer() {
+        return (
+            <BlockCareer block={this.state.block} ref="Editor" />
+        );
+
+    }
 
 
     GetEditor() {
@@ -322,6 +329,7 @@ export default class BlockEditor extends BaseComponent {
             case "pkmessages": return this.GetPkMessages();
             case "pkconsults": return this.GetPkConsults();
             case "pk": return this.GetPk();
+            case "career": return this.GetCareer();
 
             default: return null;
         }

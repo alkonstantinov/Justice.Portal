@@ -15,6 +15,7 @@ namespace Justice.Portal.Crawler
             Console.WriteLine("Choose:");
             Console.WriteLine("1. SEBRA");
             Console.WriteLine("2. ZPKONPI MIN");
+            Console.WriteLine("3. CAREERS");
             var choice = Console.ReadLine();
             switch (choice)
             {
@@ -25,6 +26,10 @@ namespace Justice.Portal.Crawler
                 case "2":
                     var zpkonpi = new Zpkonpimin(db);
                     zpkonpi.Download();
+                    break;
+                case "3":
+                    var careers = new Careers(db);
+                    careers.Download();
                     break;
             }
 

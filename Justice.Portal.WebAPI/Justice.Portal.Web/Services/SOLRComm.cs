@@ -19,7 +19,7 @@ namespace Justice.Portal.Web.Services
 
         private JArray FormSOLRJson(Block block)
         {
-            
+
             try
             {
                 JObject jo = JObject.Parse(block.Jsonvalues);
@@ -66,8 +66,13 @@ namespace Justice.Portal.Web.Services
             WebClient wc = new WebClient();
             wc.BaseAddress = url;
             wc.Headers[HttpRequestHeader.ContentType] = "application/json";
-
-            string response = wc.UploadString("update?commit=true", data.ToString());
+            try
+            {
+                string response = wc.UploadString("update?commit=true", data.ToString());
+            }
+            catch
+            {
+            }
         }
 
         public string Search(string query, int from, int size, string part)
