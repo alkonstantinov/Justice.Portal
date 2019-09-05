@@ -1,4 +1,5 @@
 import React from 'react';
+import { withRouter } from 'react-router-dom'
 import BaseComponent from './basecomponent';
 import Loader from 'react-loader-spinner';
 import { toast } from 'react-toastify';
@@ -40,7 +41,9 @@ class Login extends BaseComponent {
                     parts: result.data.parts,
                     LastAccessDate: moment(new Date())
                 });
+
                 Comm.Instance().defaults.headers.common['Authorization'] = result.data.sessionID;
+
                 eventClient.emit("loginchange");
             })
             .catch(error => {

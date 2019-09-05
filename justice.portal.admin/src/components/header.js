@@ -3,6 +3,7 @@ import BaseComponent from './basecomponent';
 import eventClient from '../modules/eventclient';
 import { Link } from 'react-router-dom';
 import Comm from '../modules/comm';
+import UIContext from '../modules/context';
 
 class Header extends BaseComponent {
     constructor(props) {
@@ -44,10 +45,14 @@ class Header extends BaseComponent {
 
 
     Logout() {
+        UIContext.LastPortalPartId = null;
+        UIContext.LastBlockTypeId = null;
 
         Comm.Instance().get('security/logout');
         this.SM.Logout();
-        eventClient.emit('loginchange');
+        window.document.location.href = "/login";
+
+
     }
 
     render() {

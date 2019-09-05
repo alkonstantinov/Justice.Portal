@@ -75,8 +75,12 @@ class BaseComponent extends Component {
 
         Comm.Instance().get('security/logout');
         this.SM.Logout();
-        eventClient.emit('loginchange');
+        window.document.location.href = "/login";
+        //eventClient.emit('loginchange');
     }
+
+
+
 
     Refresh() {
         window.location.reload();

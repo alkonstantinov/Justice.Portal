@@ -46,19 +46,22 @@ class MainMenu extends BaseComponent {
     render() {
         var self = this;
 
+
         if (this.SM.IsSessionExpired()) {
             this.Logout();
             return (<Redirect to="/login"></Redirect>)
         }
 
         var session = self.SM.GetSession();
+        console.log("session.rights", session.rights.find(x => x === "adminusers"));
+
         return (
 
             <div className="container mt-3">
                 <div className="row">
                     <div className="col-3">
                         {
-                            session.rights.find(x => x === "adminusers") !== null ?
+                            session.rights.find(x => x === "adminusers") ?
                                 <Link className="btn btn-default fillSpace" to='/users'>
                                     <i className="fas fa-user"></i>
                                     <p>Потребители</p>
@@ -68,7 +71,7 @@ class MainMenu extends BaseComponent {
                     </div>
                     <div className="col-3">
                         {
-                            session.rights.find(x => x === "adminusers") !== null ?
+                            session.rights.find(x => x === "adminusers") ?
                                 <Link className="btn btn-default fillSpace" to='/groups'>
                                     <i className="fas fa-users"></i>
                                     <p>Групи</p>
@@ -77,14 +80,12 @@ class MainMenu extends BaseComponent {
                         }
                     </div>
                     <div className="col-3">
-                        {
-                            session.parts.length !== 0 ?
-                                <Link className="btn btn-default fillSpace" to='/changepassword'>
-                                    <i className="fas fa-unlock"></i>
-                                    <p>Смяна парола</p>
-                                </Link>
-                                : null
-                        }
+
+                        <Link className="btn btn-default fillSpace" to='/changepassword'>
+                            <i className="fas fa-unlock"></i>
+                            <p>Смяна парола</p>
+                        </Link>
+
                     </div>
                     <div className="col-3">
                         {
@@ -98,7 +99,7 @@ class MainMenu extends BaseComponent {
                     </div>
                     <div className="col-3">
                         {
-                            session.rights.find(x => x === "admintemplates") !== null ?
+                            session.rights.find(x => x === "admintemplates") ?
                                 <Link className="btn btn-default fillSpace" to='/webpages'>
                                     <i className="far fa-file-alt"></i>
                                     <p>Страници</p>
@@ -108,7 +109,7 @@ class MainMenu extends BaseComponent {
                     </div>
                     <div className="col-3">
                         {
-                            session.rights.find(x => x === "admincollections") !== null ?
+                            session.rights.find(x => x === "admincollections") ?
                                 <Link className="btn btn-default fillSpace" to='/collections'>
                                     <i className="fas fa-file-alt"></i>
                                     <p>Колекции</p>
@@ -118,7 +119,7 @@ class MainMenu extends BaseComponent {
                     </div>
                     <div className="col-3">
                         {
-                            session.rights.find(x => x === "adminheaders") !== null ?
+                            session.rights.find(x => x === "adminheaders") ?
                                 <Link className="btn btn-default fillSpace" to='/headers'>
                                     <i className="fas fa-file-alt"></i>
                                     <p>Заглавни части</p>
@@ -130,7 +131,7 @@ class MainMenu extends BaseComponent {
                     </div>
                     <div className="col-3">
                         {
-                            session.rights.find(x => x === "admintranslations") !== null ?
+                            session.rights.find(x => x === "admintranslations") ?
                                 <Link className="btn btn-default fillSpace" to='/translations'>
                                     <i className="fas fa-globe-europe"></i>
                                     <p>Преводи</p>

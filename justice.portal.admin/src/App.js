@@ -56,8 +56,12 @@ class App extends BaseComponent {
     eventClient.removeEventListener('loginchange', this.LoginEvent);
     eventClient.removeEventListener('language', this.Refresh);
   }
+
+
+
   render() {
     var self = this;
+
 
     return (
 
@@ -86,9 +90,6 @@ class App extends BaseComponent {
                 <Route exact path='/translations' component={Translations} />
                 <Route exact path='/editheader/:id?' component={HeaderEditor} />
                 <Route component={MainMenu} />
-
-
-
               </Switch>
           }
         </main>
