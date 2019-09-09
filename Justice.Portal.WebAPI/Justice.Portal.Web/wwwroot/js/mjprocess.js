@@ -797,7 +797,7 @@ class MJProcess {
 
         var ul = "<ul class='list-group'>";
         this.years.find(x => x.year === year).months.find(x => x.month === month).docs.forEach(x =>
-            ul += "<li class='list-group-item'>" + self.FormatDate(x.date) + " <a href='/api/part/getblob?hash=" + x.docId + "'>" + download + "</a></li>"
+            ul += "<li class='list-group-item'>" + self.FormatDate(x.date) + " " + self.FixText(x.title[self.language]) + " " + " <a href='/api/part/getblob?hash=" + x.docId + "'>" + download + "</a></li>"
         );
         ul += "</ul>";
         console.log("ul", ul);

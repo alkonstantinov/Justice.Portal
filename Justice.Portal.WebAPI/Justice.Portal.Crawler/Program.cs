@@ -13,9 +13,13 @@ namespace Justice.Portal.Crawler
             DB.DBFuncs db = new DB.DBFuncs(jpc);
 
             Console.WriteLine("Choose:");
-            Console.WriteLine("1. SEBRA");
+            Console.WriteLine("1. SEBRA MIN");
             Console.WriteLine("2. ZPKONPI MIN");
-            Console.WriteLine("3. CAREERS");
+            Console.WriteLine("3. CAREERS MIN");
+            Console.WriteLine("4. NEWS MIN");
+            Console.WriteLine("5. NFM MIN");
+            Console.WriteLine("6. OPDU MIN");
+            Console.WriteLine("7. BUDGET MIN");
             var choice = Console.ReadLine();
             switch (choice)
             {
@@ -31,6 +35,23 @@ namespace Justice.Portal.Crawler
                     var careers = new Careers(db);
                     careers.Download();
                     break;
+                case "4":
+                    var newsMin = new MinNews(db);
+                    newsMin.Download();
+                    break;
+                case "5":
+                    var nfm = new NFM(db);
+                    nfm.Download();
+                    break;
+                case "6":
+                    var opdu = new OPDU(db);
+                    opdu.Download();
+                    break;
+                case "7":
+                    var minFin = new MinFin(db);
+                    minFin.Download();
+                    break;
+                    
             }
 
         }
