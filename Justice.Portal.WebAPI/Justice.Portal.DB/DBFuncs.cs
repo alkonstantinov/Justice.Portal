@@ -289,9 +289,10 @@ namespace Justice.Portal.DB
         }
 
 
-        public JSBlock[] GetBlocks(string portalPartId, string blockTypeId)
+        public JSBlock[] GetBlocks(string portalPartId, string blockTypeId, string ss)
         {
-            return ModelMapper.Instance.Mapper.Map<ICollection<Block>, ICollection<JSBlock>>(db.Block.Where(x => x.BlockTypeId == blockTypeId && x.PortalPartId == portalPartId).ToArray()).ToArray();
+            return ModelMapper.Instance.Mapper.Map<ICollection<Block>, ICollection<JSBlock>>(db.Block
+                .Where(x => x.BlockTypeId == blockTypeId && x.PortalPartId == portalPartId && (string.IsNullOrEmpty(ss) || x.Name.Contains(ss, StringComparison.InvariantCultureIgnoreCase))).OrderBy(x => x.Name).Take(50).ToArray()).ToArray();
         }
 
 

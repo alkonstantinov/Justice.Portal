@@ -47,6 +47,7 @@ class Header extends BaseComponent {
     Logout() {
         UIContext.LastPortalPartId = null;
         UIContext.LastBlockTypeId = null;
+        UIContext.SS = null;
 
         Comm.Instance().get('security/logout');
         this.SM.Logout();

@@ -6,6 +6,7 @@ import renderHTML from 'react-render-html';
 import CKEditor from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import Blocks from '../blocks';
+import { toast } from 'react-toastify';
 //import ClassicEditor from '../../ckeditor/build/ckeditor';
 
 
@@ -22,6 +23,7 @@ export default class WYSIWYG extends BaseComponent {
         this.InsertDocument = this.InsertDocument.bind(this);
         this.GetSelectedText = this.GetSelectedText.bind(this);
         this.ShowHtml = this.ShowHtml.bind(this);
+        this.PutNormLink = this.PutNormLink.bind(this);
 
         var data = this.props.getData(this.props.stateId);
 
@@ -33,6 +35,25 @@ export default class WYSIWYG extends BaseComponent {
         };
     }
 
+    componentDidMount() {
+        var self = this;
+        Comm.Instance().get('ciela/GetDocLIst')
+            .then(result => {
+                self.setState({
+                    normDocs: result.data
+                })
+            })
+            .catch(error => {
+                if (error.response && error.response.status === 401)
+                    toast.error("Липса на права", {
+                        onClose: this.Logout
+                    });
+                else
+                    toast.error(error.message);
+
+            });
+    }
+
 
 
     InsertLinkToPage() {
@@ -41,7 +62,7 @@ export default class WYSIWYG extends BaseComponent {
 
     ChoosePage(pageId, pageTitle) {
 
-
+        this.editor.editing.view.focus();
         var selContent = this.GetSelectedText();
         if (selContent === "")
             selContent = "link";
@@ -53,6 +74,24 @@ export default class WYSIWYG extends BaseComponent {
 
         this.editor.model.insertContent(modelFragment);
         this.setState({ ShowSelectPageDialog: false });
+    }
+
+    PutNormLink() {
+        var self = this;
+        this.editor.editing.view.focus();
+        var selContent = this.GetSelectedText();
+        if (selContent === "")
+            selContent = "link";
+
+        var id = self.state.normId || self.state.normDocs.filter(x => x.name.toLowerCase().indexOf(self.state.normSS || "") > -1)[0].id;
+
+        const content = '<a href="/api/ciela/GetDoc?id=' + id + '">' + selContent + '</a>';
+
+        const viewFragment = this.editor.data.processor.toView(content);
+        const modelFragment = this.editor.data.toModel(viewFragment);
+
+        this.editor.model.insertContent(modelFragment);
+        this.setState({ ShowNormDialog: false });
     }
 
 
@@ -87,7 +126,7 @@ export default class WYSIWYG extends BaseComponent {
     }
 
     InsertDocument(id) {
-
+        this.editor.editing.view.focus()
         var selContent = this.GetSelectedText();
         if (selContent === "")
             selContent = "link";
@@ -130,6 +169,7 @@ export default class WYSIWYG extends BaseComponent {
                 <button className="btn btn-light" onClick={() => self.UploadBlob(self.InsertDocument)}>Документ</button>
                 <button className="btn btn-light" onClick={() => self.InsertLinkToPage()}>Към страница</button>
                 <button className="btn btn-light" onClick={() => self.ShowHtml()}>HTML</button>
+                <button className="btn btn-light" onClick={() => self.setState({ ShowNormDialog: true })}>Нормативен документ</button>
 
                 <Dialog header="Избор страница" visible={this.state.ShowSelectPageDialog} style={{ width: '50vw', height: '60vh', 'overflow-y': 'scroll' }} modal={true} onHide={() => { self.setState({ ShowSelectPageDialog: false }) }}>
                     <Blocks selectFunc={this.ChoosePage} mode="select"></Blocks>
@@ -137,6 +177,31 @@ export default class WYSIWYG extends BaseComponent {
                 <Dialog header="HTML" visible={this.state.ShowHtmlDialog} style={{ width: '50vw' }} modal={true} onHide={() => { self.setState({ ShowHtmlDialog: false }) }}>
                     <textarea className="form-control" value={self.state.Html} onChange={(e) => self.setState({ Html: e.target.value })}></textarea>
                     <button className="btn btn-light pull-right" onClick={() => self.SaveHtml()}>Запис</button>
+                </Dialog>
+                <Dialog header="Връзка към правен документ" visible={this.state.ShowNormDialog} style={{ width: '50vw' }} modal={true} onHide={() => { self.setState({ ShowNormDialog: false }) }}>
+                    <div className="row">
+                        <div className="col-12">
+                            <input type="text" className="form-control" value={self.state.normSS}
+                                onChange={(e) => self.setState({ normSS: e.target.value })}></input>
+                        </div>
+                    </div>
+                    <div className="row">
+                        <div className="col-12">
+                            <select className="form-control" value={self.state.normId} onChange={(e) => self.setState({ normId: e.target.value })}>
+                                {
+                                    self.state.normDocs ?
+                                        self.state.normDocs.filter(x => x.name.toLowerCase().indexOf(self.state.normSS || "") > -1).map(x => <option value={x.id}>{x.name}</option>)
+                                        : null
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div className="row">
+                        <div className="col-12">
+                            <button className="btn btn-light pull-right" onClick={self.PutNormLink}>Запис</button>
+                        </div>
+                    </div>
+
                 </Dialog>
 
 

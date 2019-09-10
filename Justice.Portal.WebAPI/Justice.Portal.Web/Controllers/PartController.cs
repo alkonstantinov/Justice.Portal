@@ -96,7 +96,7 @@ namespace Justice.Portal.Web.Controllers
 
 
         [HttpGet("GetBlocks")]
-        public async Task<IActionResult> GetBlocks(string portalPartId, string blockTypeId)
+        public async Task<IActionResult> GetBlocks(string portalPartId, string blockTypeId, string ss)
         {
             string token = this.GetToken();
             if (!db.IsAuthenticated(token))
@@ -105,7 +105,7 @@ namespace Justice.Portal.Web.Controllers
             if (!this.CanDoPart(portalPartId))
                 return Unauthorized();
 
-            return Ok(db.GetBlocks(portalPartId, blockTypeId));
+            return Ok(db.GetBlocks(portalPartId, blockTypeId, ss));
         }
 
         [HttpGet("GetBlockData")]
@@ -335,6 +335,21 @@ namespace Justice.Portal.Web.Controllers
         {
             return Ok(db.GetPKLabels(group));
         }
+
+
+        [HttpDelete("DeleteBlock/{blockId}")]
+        public async Task<IActionResult> DeleteBlock([FromRoute]int blockId)
+        {
+            string token = this.GetToken();
+            if (!db.IsAuthenticated(token))
+                return Unauthorized();
+            db.DeleteBlock(blockId);
+
+
+            return Ok();
+
+        }
+
 
     }
 }

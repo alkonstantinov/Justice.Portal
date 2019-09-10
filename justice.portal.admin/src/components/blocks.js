@@ -40,11 +40,11 @@ export default class Blocks extends BaseComponent {
         if (this.props.mode !== "select") {
             UIContext.LastBlockTypeId = this.state.blockTypeId;
             UIContext.LastPortalPartId = this.state.portalPartId;
-
+            UIContext.SS = this.state.ss;
         }
 
 
-        Comm.Instance().get('part/GetBlocks?portalPartId=' + self.state.portalPartId + "&blockTypeId=" + self.state.blockTypeId)
+        Comm.Instance().get('part/GetBlocks?portalPartId=' + self.state.portalPartId + "&blockTypeId=" + self.state.blockTypeId + "&ss=" + (self.state.ss || ""))
             .then(result => {
                 self.setState({
                     blocks: result.data,
@@ -70,7 +70,8 @@ export default class Blocks extends BaseComponent {
                     blockTypes: result.data.blockTypes,
                     blockTypeId: UIContext.LastBlockTypeId || result.data.blockTypes[0].blockTypeId,
                     parts: result.data.parts,
-                    portalPartId: UIContext.LastPortalPartId || result.data.parts[0].portalPartId
+                    portalPartId: UIContext.LastPortalPartId || result.data.parts[0].portalPartId,
+                    ss: UIContext.SS
                 }, () => self.LoadData());
             })
             .catch(error => {
@@ -139,21 +140,28 @@ export default class Blocks extends BaseComponent {
                 self.state.mode === "list" ?
                     <div className="container mt-3">
                         <div className="row">
-                            <div className="col-5">
+                            <div className="col-4">
                                 <select className="form-control" value={self.state.portalPartId} onChange={(e) => self.setState({ portalPartId: e.target.value }, () => self.LoadData())}>
                                     {
                                         self.state.parts.map(x => <option value={x.portalPartId}>{x.name}</option>)
                                     }
                                 </select>
                             </div>
-                            <div className="col-5">
+                            <div className="col-4">
                                 <select className="form-control" value={self.state.blockTypeId} onChange={(e) => self.setState({ blockTypeId: e.target.value }, () => self.LoadData())}>
                                     {
                                         self.state.blockTypes.map(x => <option value={x.blockTypeId}>{x.name}</option>)
                                     }
                                 </select>
                             </div>
-
+                            <div className="col-3">
+                                <input className="form-control" value={self.state.ss} onChange={(e) => self.setState({ ss: e.target.value })}></input>
+                            </div>
+                            <div className="col-1">
+                                <button className="btn btn-primary pull-right" onClick={() => self.LoadData()}>Търси</button>
+                            </div>
+                        </div>
+                        <div className="row">
                             <div className="col-2">
                                 <button className="btn btn-primary pull-right" onClick={() => self.EditBlock(null)}>Нов</button>
                             </div>
