@@ -101,12 +101,12 @@ namespace Justice.Portal.Web.Controllers
         }
 
         [HttpGet("GetPKListData")]
-        public async Task<IActionResult> GetPKListData(int top, int count, int blockId, string blockTypeId, string ss)
+        public async Task<IActionResult> GetPKListData(int top, int count, int blockId, string blockTypeId, string ss, DateTime? d1, DateTime? d2)
         {
             string portalPartId = db.GetBlock(blockId).PortalPartId;
 
 
-            return Ok(db.GetPKList(top, count, portalPartId, blockTypeId, ss));
+            return Ok(db.GetPKList(top, count, portalPartId, blockTypeId, ss, d1, d2));
         }
 
         

@@ -35,6 +35,7 @@ class MJProcess {
         this.SearchCollection = this.SearchCollection.bind(this);
         this.PutHeader = this.PutHeader.bind(this);
         this.ShowCareers = this.ShowCareers.bind(this);
+        this.NetDate = this.NetDate.bind(this);
 
 
         this.PutBlocks = this.PutBlocks.bind(this);
@@ -71,6 +72,7 @@ class MJProcess {
 
 
 
+        this.T = this.T.bind(this);
 
         this.LoadTranslations();
     }
@@ -790,6 +792,17 @@ class MJProcess {
         return date;
     }
 
+    NetDate(d) {
+        var currentDt = new Date(d);
+        var mm = currentDt.getMonth() + 1;
+        if (mm < 10) mm = '0' + mm;
+        var dd = currentDt.getDate();
+        if (dd < 10) dd = '0' + dd;
+        var yyyy = currentDt.getFullYear();
+        var date = yyyy + '-' + mm + '-' + dd;
+        return date;
+    }
+
     ShowMonth(year, month, divId) {
         $("div[id^=dMonth_]").hide();
         var self = this;
@@ -1257,8 +1270,13 @@ class MJProcess {
         var self = this;
         var divs = "";
         var showMore = false;
+        var url = "/api/content/GetPKListData?count=10&blockId=" + blockId + "&top=" + self.Top + "&blockTypeId=" + itemType + "&ss=" + $("#" + this.TBSSId).val();
+        if (this.fromDate)
+            url += "&d1=" + this.NetDate(this.fromDate);
+        if (this.toDate)
+            url += "&d2=" + this.NetDate(this.toDate);
         $.ajax({
-            url: "/api/content/GetPKListData?count=10&blockId=" + blockId + "&top=" + self.Top + "&blockTypeId=" + itemType + "&ss=" + $("#" + this.TBSSId).val(),
+            url: url,
             dataType: 'json',
             async: false,
 
@@ -1297,7 +1315,8 @@ class MJProcess {
         this.TBSSId = this.Guid();
         this.NextItemsLinkId = this.Guid();
         var self = this;
-
+        self.fromDate = obj.fromDate;
+        self.toDate = obj.toDate;
         var newContent = `<div class="port-wrapper">
 				<div class="port-head">
 					<h3 class="port-title"><t>ops</t></h3>
@@ -1494,7 +1513,7 @@ class MJProcess {
             <tr>
                 <td><a href="/api/part/GetBlob?hash=`+ x.file + `">` + x.title[self.language] + `</a></td>
                 <td>
-                    `+ (self.language === "bg" ? self.PKLabels.find(l => l.pklabelId == x.type).titleBg : self.PKLabels.find(l => l.pklabelId == x.type).titleEn) + `
+                    `+ self.T(x.filetype) + `
                 </td>                
             </tr>
 
@@ -1523,7 +1542,7 @@ class MJProcess {
                             <b><t>title</t></b>
                         </div>
                         <div class="col-6">	
-                            `+ obj.title[self.language] + `
+                            `+ self.T(obj.title) + `
                         </div>
                     </div>
                     <div class="row">
@@ -1531,7 +1550,7 @@ class MJProcess {
                             <b><t>name</t></b>
                         </div>
                         <div class="col-6">
-                            `+ (obj.PBName[self.language] || "") + `
+                            `+ self.T(obj.PBName) + `
                         </div>
                     </div>
                     <div class="row">
@@ -1555,7 +1574,7 @@ class MJProcess {
                             <b><t>proctype</t></b>
                         </div>
                         <div class="col-6">
-                            `+ (self.language === "bg" ? (self.PKLabels.find(l => l.pklabelId == obj.proctype) || {}).titleBg : (self.PKLabels.find(l => l.pklabelId == obj.proctype) || {}).titleEn) + `
+                            `+ self.T(obj.proctype) + `
                         </div>
                     </div>
                     <div class="row">
@@ -1563,7 +1582,7 @@ class MJProcess {
                             <b><t>procobject</t></b>
                         </div>
                         <div class="col-6">
-                            `+ (self.language === "bg" ? (self.PKLabels.find(l => l.pklabelId == obj.procobject) || {}).titleBg : (self.PKLabels.find(l => l.pklabelId == obj.procobject) || {}).titleEn) + `
+                            `+ self.T(obj.procobject) + `
                         </div>
                     </div>
                     <div class="row">
@@ -1571,7 +1590,7 @@ class MJProcess {
                             <b><t>subject</t></b>
                         </div>
                         <div class="col-6">
-                            `+ obj.Subject[self.language] + `
+                            `+ self.T(obj.Subject) + `
                         </div>
                     </div>
                     <div class="row">
@@ -1579,7 +1598,7 @@ class MJProcess {
                             <b><t>procstatus</t></b>
                         </div>
                         <div class="col-6">
-                            `+ (self.language === "bg" ? (self.PKLabels.find(l => l.pklabelId == obj.procstatus) || {}).titleBg : (self.PKLabels.find(l => l.pklabelId == obj.procstatus) || {}).titleEn) + `
+                            `+ self.T(obj.procstatus) + `
                         </div>
                     </div>
                     <div class="row">
@@ -1603,7 +1622,7 @@ class MJProcess {
                             <b><t>teritorry</t></b>
                         </div>
                         <div class="col-6">
-                            `+ (self.language === "bg" ? (self.PKLabels.find(l => l.pklabelId == obj.teritorry) || {}).titleBg : (self.PKLabels.find(l => l.pklabelId == obj.teritorry) || {}).titleEn) + `
+                            `+ self.T(obj.teritorry) + `
                         </div>
                     </div>
                     <div class="row">
@@ -1627,7 +1646,7 @@ class MJProcess {
                             <b><t>business</t></b>
                         </div>
                         <div class="col-6">
-                            `+ (self.language === "bg" ? (self.PKLabels.find(l => l.pklabelId == obj.business) || {}).titleBg : (self.PKLabels.find(l => l.pklabelId == obj.business) || {}).titleEn) + `
+                            `+ self.T(obj.business) + `
                         </div>
                     </div>
 
@@ -1791,7 +1810,15 @@ class MJProcess {
                             <b><t>title</t></b>
                         </div>
                         <div class="col-6">	
-                            `+ obj.title[self.language] + `
+                            `+ self.T(obj.title) + `
+                        </div>
+                    </div>
+                    <div class="row">
+				        <div class="col-6">
+                            <b><t>elnum</t></b>
+                        </div>
+                        <div class="col-6">
+                            `+ obj.code + `
                         </div>
                     </div>
                     <div class="row">
@@ -1799,7 +1826,7 @@ class MJProcess {
                             <b><t>content</t></b>
                         </div>
                         <div class="col-6">
-                            `+ self.FixText(obj.body[self.language]) + `
+                            `+ self.FixText(self.T(obj.body)) + `
                         </div>
                     </div>
                     <div class="row">
@@ -1888,6 +1915,14 @@ class MJProcess {
         //this.PutNextNews(blockId);
 
 
+    }
+
+    T(obj) {
+        if (!obj)
+            return "";
+        if (!obj[this.language])
+            return "";
+        return obj[this.language];
     }
 
 

@@ -20,6 +20,8 @@ namespace Justice.Portal.Crawler
             Console.WriteLine("5. NFM MIN");
             Console.WriteLine("6. OPDU MIN");
             Console.WriteLine("7. BUDGET MIN");
+            Console.WriteLine("8. OP MIN");
+            Console.WriteLine("9. CONSULT MIN");
             var choice = Console.ReadLine();
             switch (choice)
             {
@@ -51,7 +53,15 @@ namespace Justice.Portal.Crawler
                     var minFin = new MinFin(db);
                     minFin.Download();
                     break;
-                    
+                case "8":
+                    var minOP = new MinOP(db);
+                    minOP.Download();
+                    break;
+                case "9":
+                    var minConsult = new MinConsult(db);
+                    minConsult.Download();
+                    break;
+
             }
 
         }

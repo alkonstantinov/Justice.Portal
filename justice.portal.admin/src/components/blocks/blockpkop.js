@@ -10,7 +10,8 @@ import { Calendar } from 'primereact/calendar';
 import 'primereact/resources/themes/nova-light/theme.css';
 import 'primereact/resources/primereact.min.css';
 import 'primeicons/primeicons.css';
-import moment from 'moment';
+
+
 
 export default class BlockPkOp extends BaseComponent {
 
@@ -37,15 +38,15 @@ export default class BlockPkOp extends BaseComponent {
 
             state.AOPNum = obj.AOPNum;
             state.ElNum = obj.ElNum;
-            state.proctype = obj.proctype;
-            state.procobject = obj.procobject;
-            state.procstatus = obj.procstatus;
+            state.proctype = obj.proctype || {};
+            state.procobject = obj.procobject || {};
+            state.procstatus = obj.procstatus || {};
             state.novatprognosis = obj.novatprognosis;
             state.cpv = obj.cpv;
             state.teritorry = obj.teritorry;
             state.novat = obj.novat;
-            state.enddate = obj.enddate;
-            state.business = obj.business;
+            state.enddate = new Date(obj.enddate);
+            state.business = obj.business || {};
 
         }
         else {
@@ -53,6 +54,10 @@ export default class BlockPkOp extends BaseComponent {
             state.PBName = {};
             state.Subject = {};
             state.files = [];
+            state.proctype = {};
+            state.procobject = {};
+            state.procstatus = {};
+            state.business = {};
         }
 
 
@@ -62,89 +67,89 @@ export default class BlockPkOp extends BaseComponent {
 
 
     async componentDidMount() {
-        var self = this;
-        var pts = []
-        await Comm.Instance().get('part/GetPKLabels?group=pt')
-            .then(result => {
-                pts = result.data;
-            })
-            .catch(error => {
-                if (error.response && error.response.status === 401)
-                    toast.error("Липса на права", {
-                        onClose: this.Logout
-                    });
-                else
-                    toast.error(error.message);
+        // var self = this;
+        // var pts = []
+        // await Comm.Instance().get('part/GetPKLabels?group=pt')
+        //     .then(result => {
+        //         pts = result.data;
+        //     })
+        //     .catch(error => {
+        //         if (error.response && error.response.status === 401)
+        //             toast.error("Липса на права", {
+        //                 onClose: this.Logout
+        //             });
+        //         else
+        //             toast.error(error.message);
 
-            });
+        //     });
 
-        var objs = []
-        await Comm.Instance().get('part/GetPKLabels?group=obj')
-            .then(result => {
-                objs = result.data;
-            })
-            .catch(error => {
-                if (error.response && error.response.status === 401)
-                    toast.error("Липса на права", {
-                        onClose: this.Logout
-                    });
-                else
-                    toast.error(error.message);
+        // var objs = []
+        // await Comm.Instance().get('part/GetPKLabels?group=obj')
+        //     .then(result => {
+        //         objs = result.data;
+        //     })
+        //     .catch(error => {
+        //         if (error.response && error.response.status === 401)
+        //             toast.error("Липса на права", {
+        //                 onClose: this.Logout
+        //             });
+        //         else
+        //             toast.error(error.message);
 
-            });
+        //     });
 
-        var stas = []
-        await Comm.Instance().get('part/GetPKLabels?group=sta')
-            .then(result => {
-                stas = result.data;
-            })
-            .catch(error => {
-                if (error.response && error.response.status === 401)
-                    toast.error("Липса на права", {
-                        onClose: this.Logout
-                    });
-                else
-                    toast.error(error.message);
+        // var stas = []
+        // await Comm.Instance().get('part/GetPKLabels?group=sta')
+        //     .then(result => {
+        //         stas = result.data;
+        //     })
+        //     .catch(error => {
+        //         if (error.response && error.response.status === 401)
+        //             toast.error("Липса на права", {
+        //                 onClose: this.Logout
+        //             });
+        //         else
+        //             toast.error(error.message);
 
-            });
+        //     });
 
-        var nuts = []
-        await Comm.Instance().get('part/GetPKLabels?group=nuts')
-            .then(result => {
-                nuts = result.data;
-            })
-            .catch(error => {
-                if (error.response && error.response.status === 401)
-                    toast.error("Липса на права", {
-                        onClose: this.Logout
-                    });
-                else
-                    toast.error(error.message);
+        // var nuts = []
+        // await Comm.Instance().get('part/GetPKLabels?group=nuts')
+        //     .then(result => {
+        //         nuts = result.data;
+        //     })
+        //     .catch(error => {
+        //         if (error.response && error.response.status === 401)
+        //             toast.error("Липса на права", {
+        //                 onClose: this.Logout
+        //             });
+        //         else
+        //             toast.error(error.message);
 
-            });
+        //     });
 
-        var bus = [];
-        await Comm.Instance().get('part/GetPKLabels?group=bus')
-            .then(result => {
-                bus = result.data;
-            })
-            .catch(error => {
-                if (error.response && error.response.status === 401)
-                    toast.error("Липса на права", {
-                        onClose: this.Logout
-                    });
-                else
-                    toast.error(error.message);
+        // var bus = [];
+        // await Comm.Instance().get('part/GetPKLabels?group=bus')
+        //     .then(result => {
+        //         bus = result.data;
+        //     })
+        //     .catch(error => {
+        //         if (error.response && error.response.status === 401)
+        //             toast.error("Липса на права", {
+        //                 onClose: this.Logout
+        //             });
+        //         else
+        //             toast.error(error.message);
 
-            });
+        //     });
 
-        this.setState({
-            pts: pts,
-            objs: objs,
-            stas: stas,
-            nuts: nuts,
-            bus: bus
-        });
+        // this.setState({
+        //     pts: pts,
+        //     objs: objs,
+        //     stas: stas,
+        //     nuts: nuts,
+        //     bus: bus
+        // });
     }
 
     Validate() {
@@ -217,25 +222,22 @@ export default class BlockPkOp extends BaseComponent {
                 <div className="row">
                     <div className="col-12">
                         <label className="control-label">Вид процедура</label>
-                        <select className="form-control" value={this.state.proctype} onChange={(e) => self.setState({ proctype: e.target.value })}>
-                            <option></option>
-                            {
-                                (self.state.pts || []).map(x => <option value={x.pklabelId}>{x.titleBg}</option>)
+                        <TB
+                            getData={self.GetStateMLData}
+                            setData={self.SetStateMLData}
+                            stateId="proctype"
+                        ></TB>
 
-                            }
-                        </select>
                     </div>
                 </div>,
                 <div className="row">
                     <div className="col-12">
                         <label className="control-label">Обект на поръчка</label>
-                        <select className="form-control" value={this.state.procobject} onChange={(e) => self.setState({ procobject: e.target.value })}>
-                            <option></option>
-                            {
-                                (self.state.objs || []).map(x => <option value={x.pklabelId}>{x.titleBg}</option>)
-
-                            }
-                        </select>
+                        <TB
+                            getData={self.GetStateMLData}
+                            setData={self.SetStateMLData}
+                            stateId="procobject"
+                        ></TB>
                     </div>
                 </div>,
                 <div className="row">
@@ -251,13 +253,12 @@ export default class BlockPkOp extends BaseComponent {
                 <div className="row">
                     <div className="col-12">
                         <label className="control-label">Статус на поръчка</label>
-                        <select className="form-control" value={this.state.procstatus} onChange={(e) => self.setState({ procstatus: e.target.value })}>
-                            <option></option>
-                            {
-                                (self.state.stas || []).map(x => <option value={x.pklabelId}>{x.titleBg}</option>)
+                        <TB
+                            getData={self.GetStateMLData}
+                            setData={self.SetStateMLData}
+                            stateId="procstatus"
+                        ></TB>
 
-                            }
-                        </select>
                     </div>
                 </div>,
                 <div className="row">
@@ -275,13 +276,7 @@ export default class BlockPkOp extends BaseComponent {
                 <div className="row">
                     <div className="col-12">
                         <label className="control-label">Териториален код</label>
-                        <select className="form-control" value={this.state.teritorry} onChange={(e) => self.setState({ teritorry: e.target.value })}>
-                            <option></option>
-                            {
-                                (self.state.nuts || []).map(x => <option value={x.pklabelId}>{x.titleBg}</option>)
-
-                            }
-                        </select>
+                        <input type="number" className="form-control" value={this.state.teritorry || ""} onChange={(e) => self.setState({ teritorry: e.target.value })}></input>
                     </div>
                 </div>,
                 <div className="row">
@@ -293,21 +288,23 @@ export default class BlockPkOp extends BaseComponent {
                 <div className="row">
                     <div className="col-12">
                         <label className="control-label">Краен срок за подаване на оферти</label>
-                        <Calendar dateFormat="dd.mm.yy" value={(this.state.enddate || "") === "" ? "" : moment(this.state.enddate, "YYYY-MM-DD").toDate()}
-                            onChange={(e) => this.setState({ enddate: moment(e.value).format("YYYY-MM-DD") })}
+                        <Calendar showTime={true} hourFormat="24" dateFormat="dd.mm.yy" value={(this.state.enddate || "") === "" ? "" : this.state.enddate}
+                            onChange={(e) => {
+                                this.setState({ enddate: e.value });
+
+                            }
+                            }
                             readOnlyInput="true" inputClassName="form-control"></Calendar>
                     </div>
                 </div>,
                 <div className="row">
                     <div className="col-12">
                         <label className="control-label">Бизнес отрасъл</label>
-                        <select className="form-control" value={this.state.business} onChange={(e) => self.setState({ business: e.target.value })}>
-                            <option></option>
-                            {
-                                (self.state.bus || []).map(x => <option value={x.pklabelId}>{x.titleBg}</option>)
-
-                            }
-                        </select>
+                        <TB
+                            getData={self.GetStateMLData}
+                            setData={self.SetStateMLData}
+                            stateId="business"
+                        ></TB>
                     </div>
                 </div>,
                 <div className="row">

@@ -15,19 +15,19 @@ export default class FileTable extends BaseComponent {
     }
     componentDidMount() {
         var self = this;
-        Comm.Instance().get('part/GetPKLabels?group=ft')
-            .then(result => {
-                self.setState({ fileTypes: result.data });
-            })
-            .catch(error => {
-                if (error.response && error.response.status === 401)
-                    toast.error("Липса на права", {
-                        onClose: this.Logout
-                    });
-                else
-                    toast.error(error.message);
+        // Comm.Instance().get('part/GetPKLabels?group=ft')
+        //     .then(result => {
+        //         self.setState({ fileTypes: result.data });
+        //     })
+        //     .catch(error => {
+        //         if (error.response && error.response.status === 401)
+        //             toast.error("Липса на права", {
+        //                 onClose: this.Logout
+        //             });
+        //         else
+        //             toast.error(error.message);
 
-            });
+        //     });
     }
 
     AddRow() {
@@ -35,7 +35,7 @@ export default class FileTable extends BaseComponent {
         files.push({
             id: uuidv4(),
             title: {},
-            fileType: null,
+            fileType: {},
             file: null
         });
         this.props.setRows('files', files);
@@ -72,6 +72,7 @@ export default class FileTable extends BaseComponent {
                             self.props.files.map(x =>
                                 <div className="row" key={x.id}>
                                     <div className="col-4">
+                                        <label className="control-label">Заглавие</label>
                                         <input className="form-control" value={x.title[self.props.lang] || ""} onChange={(e) => {
                                             var files = self.props.files;
                                             var row = files.find(r => r.id === x.id);
@@ -80,22 +81,17 @@ export default class FileTable extends BaseComponent {
                                         }}></input>
                                     </div>
                                     <div className="col-6">
-                                        <select className="form-control" value={x.type} onChange={(e) => {
+                                        <label className="control-label">Тип</label>
+                                        <input className="form-control" value={x.fileType ? x.fileType[self.props.lang] || "" : ""} onChange={(e) => {
                                             var files = self.props.files;
                                             var row = files.find(r => r.id === x.id);
-                                            row.type = e.target.value;
+                                            row.fileType[self.props.lang] = e.target.value;
                                             self.props.setRows('files', files)
-                                        }}>
-                                            <option></option>
-                                            {
-                                                (self.state.fileTypes || []).map(item => <option value={item.pklabelId}>{item.titleBg}</option>)
-                                            }
-
-                                        </select>
+                                        }}></input>
                                     </div>
 
                                     <div className="col-1">
-
+                                        <label className="control-label">Файл</label>
                                         <input type="text" className="form-control" readOnly="true" value={x.file || ""}
                                             onClick={() =>
                                                 self.UploadBlob((blobId) => {

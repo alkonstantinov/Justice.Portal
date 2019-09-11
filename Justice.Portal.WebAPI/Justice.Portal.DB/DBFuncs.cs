@@ -674,11 +674,11 @@ namespace Justice.Portal.DB
         }
 
 
-        public PKListData GetPKList(int top, int count, string portalPartId, string blockTypeId, string ss)
+        public PKListData GetPKList(int top, int count, string portalPartId, string blockTypeId, string ss, DateTime? d1, DateTime? d2)
         {
             var rows = (from b in db.Block
                         join btpv in db.BlockTypePropertyValue on new { bid = b.BlockId, pid = "date" } equals new { bid = btpv.BlockId, pid = btpv.PropertyId }
-                        where b.PortalPartId == portalPartId && b.BlockTypeId == blockTypeId && (string.IsNullOrEmpty(ss) || b.Jsonvalues.Contains(ss))
+                        where b.PortalPartId == portalPartId && b.BlockTypeId == blockTypeId && (string.IsNullOrEmpty(ss) || b.Jsonvalues.Contains(ss))&&(!d1.HasValue||d1.Value<DateTime.Parse(btpv.Value)) && (!d2.HasValue || d2.Value > DateTime.Parse(btpv.Value))
                         orderby btpv.Value descending
                         select new PKListItem()
                         {

@@ -3,6 +3,11 @@ import BaseComponent from '../basecomponent';
 import { ToggleButton } from 'primereact/togglebutton';
 import eventClient from '../../modules/eventclient';
 import TB from '../editors/tb';
+import { Calendar } from 'primereact/calendar';
+import 'primereact/resources/themes/nova-light/theme.css';
+import 'primereact/resources/primereact.min.css';
+import 'primeicons/primeicons.css';
+import moment from 'moment';
 
 export default class BlockPKOps extends BaseComponent {
 
@@ -23,9 +28,13 @@ export default class BlockPKOps extends BaseComponent {
         if (this.props.block) {
             var obj = JSON.parse(this.props.block.jsonvalues);
             state.title = obj.title || {};
+            state.fromDate = obj.fromDate || "";
+            state.toDate = obj.toDate || "";
         }
         else {
             state.title = {};
+            state.fromDate = "";
+            state.toDate = "";
         }
 
 
@@ -41,7 +50,9 @@ export default class BlockPKOps extends BaseComponent {
 
     GetData() {
         return {
-            title: this.state.title || {}
+            title: this.state.title || {},
+            fromDate: this.state.fromDate,
+            toDate: this.state.toDate
         };
     }
 
@@ -63,6 +74,24 @@ export default class BlockPKOps extends BaseComponent {
                             stateId="title"
                         ></TB>
 
+                    </div>
+                </div>,
+                <div className="row">
+                    <div className="col-2">
+                        <label className="control-label" htmlFor="Date">От дата</label>
+
+                        <Calendar dateFormat="dd.mm.yy" value={(this.state.fromDate || "") === "" ? "" : moment(this.state.fromDate, "YYYY-MM-DD").toDate()}
+                            onChange={(e) => this.setState({ fromDate: moment(e.value).format("YYYY-MM-DD") })}
+                            readOnlyInput="true" inputClassName="form-control" monthNavigator={true} yearNavigator={true} yearRange="2000:2030"></Calendar>
+                    </div>
+                </div>,
+                <div className="row">
+                    <div className="col-2">
+                        <label className="control-label" htmlFor="Date">До дата</label>
+
+                        <Calendar dateFormat="dd.mm.yy" value={(this.state.toDate || "") === "" ? "" : moment(this.state.toDate, "YYYY-MM-DD").toDate()}
+                            onChange={(e) => this.setState({ toDate: moment(e.value).format("YYYY-MM-DD") })}
+                            readOnlyInput="true" inputClassName="form-control" monthNavigator={true} yearNavigator={true} yearRange="2000:2030"></Calendar>
                     </div>
                 </div>
             ]

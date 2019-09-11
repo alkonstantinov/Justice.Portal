@@ -31,16 +31,20 @@ export default class BlockPkConsult extends BaseComponent {
         var state = { lang: "bg" };
         if (this.props.block) {
             var obj = JSON.parse(this.props.block.jsonvalues);
+            console.log(obj);
             state.title = obj.title || {};
             state.body = obj.body || {};
             state.files = obj.files || [];
-
-            state.enddate = obj.enddate;
+            state.procstatus = obj.procstatus || {};
+            state.code = obj.code || "";
+            state.enddate = new Date(obj.enddate);
 
         }
         else {
             state.title = {};
             state.body = {};
+            state.procstatus = {};
+            state.code = "";
             state.files = [];
         }
 
@@ -60,6 +64,9 @@ export default class BlockPkConsult extends BaseComponent {
             title: this.state.title || {},
             files: this.state.files || [],
             body: this.state.body,
+            procstatus: this.state.procstatus,
+            code: this.state.code,
+
             enddate: this.state.enddate
 
         };
@@ -87,6 +94,23 @@ export default class BlockPkConsult extends BaseComponent {
                 </div>,
                 <div className="row">
                     <div className="col-12">
+                        <label className="control-label">Статус на поръчка</label>
+                        <TB
+                            getData={self.GetStateMLData}
+                            setData={self.SetStateMLData}
+                            stateId="procstatus"
+                        ></TB>
+
+                    </div>
+                </div>,
+                <div className="row">
+                    <div className="col-12">
+                        <label className="control-label">Идентификационен номер</label>
+                        <input type="text" className="form-control" value={this.state.code || "0"} onChange={(e) => self.setState({ code: e.target.value })}></input>
+                    </div>
+                </div>,
+                <div className="row">
+                    <div className="col-12">
 
                         <WYSIWYG
                             getData={self.GetStateMLData}
@@ -102,8 +126,12 @@ export default class BlockPkConsult extends BaseComponent {
                 <div className="row">
                     <div className="col-12">
                         <label className="control-label">Краен срок за подаване на оферти</label>
-                        <Calendar dateFormat="dd.mm.yy" value={(this.state.enddate || "") === "" ? "" : moment(this.state.enddate, "YYYY-MM-DD").toDate()}
-                            onChange={(e) => this.setState({ enddate: moment(e.value).format("YYYY-MM-DD") })}
+                        <Calendar showTime={true} hourFormat="24" dateFormat="dd.mm.yy" value={(this.state.enddate || "") === "" ? "" : this.state.enddate}
+                            onChange={(e) => {
+                                this.setState({ enddate: e.value });
+
+                            }
+                            }
                             readOnlyInput="true" inputClassName="form-control"></Calendar>
                     </div>
                 </div>,
