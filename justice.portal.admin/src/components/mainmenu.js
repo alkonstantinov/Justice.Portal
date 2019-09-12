@@ -142,6 +142,14 @@ class MainMenu extends BaseComponent {
 
                     </div>
                     <div className="col-3">
+                        <Link className="btn btn-default fillSpace" to='/uploader'>
+                            <i className="fas fa-globe-europe"></i>
+                            <p>Електронни оригинали</p>
+                        </Link>
+
+
+                    </div>
+                    <div className="col-3">
                         <span className="btn btn-default fillSpace" style={{ 'cursor': 'pointer' }} onClick={self.Reindex}>
                             <i className="fab fa-battle-net"></i>
                             <p>Преиндексиране</p>

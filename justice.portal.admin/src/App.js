@@ -20,6 +20,7 @@ import CollectionEditor from './components/collectioneditor';
 import Headers from './components/headers';
 import HeaderEditor from './components/headereditor';
 import Translations from './components/translations';
+import Uploader from './components/uploader';
 
 class App extends BaseComponent {
 
@@ -89,6 +90,7 @@ class App extends BaseComponent {
                 <Route exact path='/headers' component={Headers} />
                 <Route exact path='/translations' component={Translations} />
                 <Route exact path='/editheader/:id?' component={HeaderEditor} />
+                <Route exact path='/uploader' component={Uploader} />
                 <Route component={MainMenu} />
               </Switch>
           }

@@ -868,7 +868,7 @@ class MJProcess {
                     case 4:
                         resultTbl += "<td><a href='/api/part/getblob?hash=" + x[ss.id] + "'>" + download + "</a></td>"; break;
                     case 5:
-                        resultTbl += "<td><a href='http://" + x[ss.id] + "'>" + download + "</a></td>"; break;
+                        resultTbl += "<td><a href='" + x[ss.id] + "'>" + download + "</a></td>"; break;
                 }
 
             });
