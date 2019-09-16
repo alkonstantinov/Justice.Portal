@@ -26,6 +26,9 @@ namespace Justice.Portal.Crawler
                 Console.WriteLine("10. CRAWL PAGE");
                 Console.WriteLine("11. CHILD PROTECTION COLLECTION");
                 Console.WriteLine("12. ESPCH COLLECTION");
+                Console.WriteLine("13. CRAWL NLAB PAGE");
+                Console.WriteLine("14. JUR REG");
+                Console.WriteLine("15. NLAB NEWS");
                 var choice = Console.ReadLine();
                 switch (choice)
                 {
@@ -76,6 +79,18 @@ namespace Justice.Portal.Crawler
                     case "12":
                         var ESPCHCollection = new ESPCHCollection(db);
                         ESPCHCollection.Download();
+                        break;
+                    case "13":
+                        var CrawlNLABPage = new CrawlNLABPage(db);
+                        CrawlNLABPage.Download();
+                        break;
+                    case "14":
+                        var JurReg = new JurReg(db);
+                        JurReg.Download();
+                        break;
+                    case "15":
+                        var NLABNews = new NLABNews(db);
+                        NLABNews.Download();
                         break;
 
 

@@ -12,11 +12,11 @@ using System.Text.RegularExpressions;
 
 namespace Justice.Portal.Crawler.Crawlers
 {
-    public class CrawlPage
+    public class CrawlNLABPage
     {
         WebClient wc;
         DB.DBFuncs db;
-        public CrawlPage(DB.DBFuncs db)
+        public CrawlNLABPage(DB.DBFuncs db)
         {
             wc = new WebClient();
             this.db = db;
@@ -24,10 +24,15 @@ namespace Justice.Portal.Crawler.Crawlers
 
         public void Download()
         {
+            //Console.OutputEncoding = System.Text.Encoding.GetEncoding(1251);
+            //Console.InputEncoding = System.Text.Encoding.GetEncoding(1251);
             Console.Write("URL:");
             string url = Console.ReadLine();
             var page = wc.DownloadString(url);
-            page = Regex.Match(page, "<div class=\"Panel1a_column1\">([\\w\\W]+?)<div class=\"Panel1a_column2\">").Groups[1].Value;
+            Match mp = Regex.Match(page, "<div class=\"item-page\">([\\w\\W]+?)<div class=\"articleInfoFooter\">");
+            if(!mp.Success)
+                mp = Regex.Match(page, "<div class=\"moduletable_ct_lightBox\">([\\w\\W]+?)<!-- end items-leading -->");
+            page = mp.Groups[1].Value;
             var mcFiles = Regex.Matches(page, "<a [\\w\\W]*?href=\"([\\w\\W]+?\\.[a-z]{3,4})\"[\\w\\W]*?>");
             List<Tuple<string, string>> lLinks = new List<Tuple<string, string>>();
             foreach (Match f in mcFiles)
@@ -40,7 +45,7 @@ namespace Justice.Portal.Crawler.Crawlers
                 byte[] file;
                 try
                 {
-                     file = fUrl.Contains("http") ? wc.DownloadData(fUrl) : wc.DownloadData("http://www.justice.government.bg" + fUrl);
+                     file = fUrl.Contains("http") ? wc.DownloadData(fUrl) : wc.DownloadData("http://www.nbpp.government.bg" + fUrl);
                 }
                 catch (Exception e)
                 {
