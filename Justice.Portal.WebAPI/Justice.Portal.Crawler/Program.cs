@@ -29,6 +29,7 @@ namespace Justice.Portal.Crawler
                 Console.WriteLine("13. CRAWL NLAB PAGE");
                 Console.WriteLine("14. JUR REG");
                 Console.WriteLine("15. NLAB NEWS");
+                Console.WriteLine("16. GDIN NEWS");
                 var choice = Console.ReadLine();
                 switch (choice)
                 {
@@ -91,6 +92,10 @@ namespace Justice.Portal.Crawler
                     case "15":
                         var NLABNews = new NLABNews(db);
                         NLABNews.Download();
+                        break;
+                    case "16":
+                        var GdinNews = new GdinNews(db);
+                        GdinNews.Download();
                         break;
 
 
