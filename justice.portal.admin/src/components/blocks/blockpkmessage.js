@@ -32,6 +32,7 @@ export default class BlockPkMessage extends BaseComponent {
         if (this.props.block) {
             var obj = JSON.parse(this.props.block.jsonvalues);
             state.title = obj.title || {};
+            state.type = obj.type || "";
             state.body = obj.body || {};
             state.files = obj.files || [];
 
@@ -42,6 +43,7 @@ export default class BlockPkMessage extends BaseComponent {
             state.title = {};
             state.body = {};
             state.files = [];
+            state.type = "";
         }
 
 
@@ -59,7 +61,8 @@ export default class BlockPkMessage extends BaseComponent {
         return {
             title: this.state.title || {},
             files: this.state.files || [],
-            body: this.state.body
+            body: this.state.body,
+            type: this.state.type
 
         };
     }
@@ -86,6 +89,12 @@ export default class BlockPkMessage extends BaseComponent {
                 </div>,
                 <div className="row">
                     <div className="col-12">
+                        <label className="control-label">Тип</label>
+                        <input type="text" className="form-control" value={self.state.type} onChange={(e) => self.setState({ type: e.target.value })}></input>
+                    </div>
+                </div>,
+                <div className="row">
+                    <div className="col-12">
 
                         <WYSIWYG
                             getData={self.GetStateMLData}
@@ -93,9 +102,6 @@ export default class BlockPkMessage extends BaseComponent {
                             setData={self.SetStateMLData}
                             stateId="body"
                         ></WYSIWYG>
-
-
-
                     </div>
                 </div>,
                 <div className="row">

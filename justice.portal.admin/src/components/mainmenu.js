@@ -25,7 +25,7 @@ class MainMenu extends BaseComponent {
 
     Reindex() {
         var self = this;
-        Comm.Instance().get('search/Reindex')
+        Comm.Instance(true).get('search/Reindex')
             .then(result => {
                 toast.info("Преиндексирането е приключило");
             })

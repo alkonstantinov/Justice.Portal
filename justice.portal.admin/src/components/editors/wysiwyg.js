@@ -85,7 +85,7 @@ export default class WYSIWYG extends BaseComponent {
 
         var id = self.state.normId || self.state.normDocs.filter(x => x.name.toLowerCase().indexOf(self.state.normSS || "") > -1)[0].id;
 
-        const content = '<a href="/api/ciela/GetDoc?id=' + id + '">' + selContent + '</a>';
+        const content = '<a href="/home/normdoc/' + id + '">' + selContent + '</a>';
 
         const viewFragment = this.editor.data.processor.toView(content);
         const modelFragment = this.editor.data.toModel(viewFragment);

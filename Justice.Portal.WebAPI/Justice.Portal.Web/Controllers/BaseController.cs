@@ -38,7 +38,7 @@ namespace Justice.Portal.Web.Controllers
             string token = this.GetToken();
             if (token == null)
                 return false;
-            return db.HasUserRight(token, "adminusers");
+            return db.HasUserRight(token, right);
         }
 
 

@@ -13,7 +13,7 @@ export default class BlockPKMessages extends BaseComponent {
             "addbreadcrump",
             [
                 {
-                    title: "Съобщения",
+                    title: "Съобщения в профил на купувача",
                 }
             ]
         );
@@ -23,9 +23,11 @@ export default class BlockPKMessages extends BaseComponent {
         if (this.props.block) {
             var obj = JSON.parse(this.props.block.jsonvalues);
             state.title = obj.title || {};
+            state.type = obj.type || "";
         }
         else {
             state.title = {};
+            state.type = "";
         }
 
 
@@ -41,7 +43,8 @@ export default class BlockPKMessages extends BaseComponent {
 
     GetData() {
         return {
-            title: this.state.title || {}
+            title: this.state.title || {},
+            type: this.state.type
         };
     }
 
@@ -63,6 +66,12 @@ export default class BlockPKMessages extends BaseComponent {
                             stateId="title"
                         ></TB>
 
+                    </div>
+                </div>,
+                <div className="row">
+                    <div className="col-12">
+                        <label className="control-label">Тип</label>
+                        <input type="text" className="form-control" value={self.state.type} onChange={(e) => self.setState({ type: e.target.value })}></input>
                     </div>
                 </div>
             ]

@@ -30,6 +30,12 @@ namespace Justice.Portal.Crawler
                 Console.WriteLine("14. JUR REG");
                 Console.WriteLine("15. NLAB NEWS");
                 Console.WriteLine("16. GDIN NEWS");
+                Console.WriteLine("17. GDIN KONPI");
+                Console.WriteLine("18. GDIN Careers");
+                Console.WriteLine("19. PKGdinCrawler");
+                Console.WriteLine("20. Anticorr");
+                Console.WriteLine("21.PKMinCrawler");
+
                 var choice = Console.ReadLine();
                 switch (choice)
                 {
@@ -97,9 +103,30 @@ namespace Justice.Portal.Crawler
                         var GdinNews = new GdinNews(db);
                         GdinNews.Download();
                         break;
+                    case "17":
+                        var ZpkonpiGdin = new ZpkonpiGdin(db);
+                        ZpkonpiGdin.Download();
+                        break;
+                    case "18":
+                        var CareersGdin = new CareersGdin(db);
+                        CareersGdin.Download();
+                        break;
+                    case "19":
+                        var PKGdinCrawler = new PKGdinCrawler(db);
+                        PKGdinCrawler.Download();
+                        break;
 
+                    case "20":
+                        var Anticorr = new Anticorr(db);
+                        Anticorr.Download();
+                        break;
+                    case "21":
+                        var PKMinCrawler = new PKMinCrawler(db);
+                        PKMinCrawler.Download();
+                        break;
 
                 }
+
             }
         }
     }

@@ -355,6 +355,7 @@ class MJProcess {
 							`+ (JSON.parse(x.jsonContent).imageId ? '<img src="/api/part/GetBlob?hash=' + JSON.parse(x.jsonContent).imageId + '" alt="" style="max-width:100%;max-height:100%;"  class="list-article-img img-list"/>' : '') +
                     `<div>
 								<h6 class="date">`+ x.date + `</h6>
+                                <h2>` + self.NarrowText(JSON.parse(x.jsonContent).title[self.language], 100) + `</a></h2>     
 								<h3><a href="`+ x.url + `">` + self.NarrowText(JSON.parse(x.jsonContent).body[self.language], 100) + `</a></h3>
 							</div>
 						</div>
@@ -426,6 +427,8 @@ class MJProcess {
 							`+ (JSON.parse(x.jsonContent).imageId ? '<img src="/api/part/GetBlob?hash=' + JSON.parse(x.jsonContent).imageId + '" alt="" style="max-width:100%;max-height:100%;"  class="list-article-img img-list"/>' : '') +
                         `<div>
 								<h6 class="date">`+ x.date + `</h6>
+                                <h2>` + self.NarrowText(JSON.parse(x.jsonContent).title[self.language], 100) + `</a></h2>     
+
 								<h3><a href="`+ x.url + `">` + self.NarrowText(JSON.parse(x.jsonContent).body[self.language], 100) + `</a></h3>
 							</div>
 						</div>
@@ -550,7 +553,7 @@ class MJProcess {
         var showMore = false;
         var query = localStorage.getItem(lsSearchString) || "";
         $.ajax({
-            url: "/api/content/search?size=1&query=" + query + "&from=" + self.Top + "&part=" + (this.MJPageData.mainpartid === "min" ? "" : this.MJPageData.mainpartid),
+            url: "/api/content/search?size=10&query=" + query + "&from=" + self.Top + "&part=" + (this.MJPageData.mainpartid === "min" ? "" : this.MJPageData.mainpartid),
             dataType: 'json',
             async: false,
 
@@ -809,8 +812,16 @@ class MJProcess {
         var download = this.TranslateWord("download");
 
         var ul = "<ul class='list-group'>";
-        this.years.find(x => x.year === year).months.find(x => x.month === month).docs.forEach(x =>
-            ul += "<li class='list-group-item'>" + self.FormatDate(x.date) + " " + self.FixText(x.title[self.language]) + " " + " <a href='/api/part/getblob?hash=" + x.docId + "'>" + download + "</a></li>"
+        this.years.find(x => x.year === year).months.find(x => x.month === month).docs.forEach(x => {
+            var li = "";
+            if (x.docId !== "") {
+                li = "<li class='list-group-item'>" + self.FormatDate(x.date) + " " + self.FixText(x.title[self.language]) + " " + " <a href='/api/part/getblob?hash=" + x.docId + "'>" + download + "</a></li>";
+            }
+            if (x.html) {
+                li = "<li class='list-group-item'>" + x.html[self.language] + "</a></li>";
+            }
+            ul += li;
+        }
         );
         ul += "</ul>";
         console.log("ul", ul);
@@ -968,6 +979,7 @@ class MJProcess {
             m.docs.push({
                 title: i.title,
                 docId: i.docId,
+                html: i.html,
                 date: i.date
             });
 
@@ -995,7 +1007,7 @@ class MJProcess {
 				</h1>
 				
 				<div class="article-content">
-					`+ self.FixText(obj.body[self.language]) + `
+					`+ self.FixText(obj.body ? obj.body[self.language] : "") + `
 				</div>
                 `+ divYears + `
 			</article>`));
@@ -1270,11 +1282,7 @@ class MJProcess {
         var self = this;
         var divs = "";
         var showMore = false;
-        var url = "/api/content/GetPKListData?count=10&blockId=" + blockId + "&top=" + self.Top + "&blockTypeId=" + itemType + "&ss=" + $("#" + this.TBSSId).val();
-        if (this.fromDate)
-            url += "&d1=" + this.NetDate(this.fromDate);
-        if (this.toDate)
-            url += "&d2=" + this.NetDate(this.toDate);
+        var url = "/api/content/GetPKListData?count=10&blockId=" + blockId + "&top=" + self.Top + "&blockTypeId=" + itemType + "&type=" + self.PKType + "&ss=" + $("#" + this.TBSSId).val();
         $.ajax({
             url: url,
             dataType: 'json',
@@ -1402,6 +1410,7 @@ class MJProcess {
     PutMessages(divId, isMain) {
         var oldDiv = $("#" + divId);
         var obj = isMain ? this.MJPageData.main : this.MJPageData["block_" + divId].blockData;
+        this.PKType = obj.type;
         var blockId = isMain ? this.MJPageData.mainid : this.MJPageData["block_" + divId].value;
         this.ItemsContentId = this.Guid();
         this.TBSSId = this.Guid();
@@ -1410,7 +1419,7 @@ class MJProcess {
 
         var newContent = `<div class="port-wrapper">
 				<div class="port-head">
-					<h3 class="port-title"><t>messages</t></h3>
+					<h3 class="port-title">`+ obj.title[self.language] + `</h3>
 					
 				</div>
                 <div class="port-box box-border">

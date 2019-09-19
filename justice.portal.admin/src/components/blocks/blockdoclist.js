@@ -10,6 +10,7 @@ import TB from '../editors/tb';
 import { Calendar } from 'primereact/calendar';
 import moment from 'moment';
 import eventClient from '../../modules/eventclient';
+import { Dialog } from 'primereact/dialog';
 
 
 export default class BlockDocList extends BaseComponent {
@@ -32,8 +33,9 @@ export default class BlockDocList extends BaseComponent {
         this.SetDocDate = this.SetDocDate.bind(this);
         this.UploadDoc = this.UploadDoc.bind(this);
         this.DeleteDoc = this.DeleteDoc.bind(this);
-
-        var state = { lang: "bg" };
+        this.ShowAddHtml = this.ShowAddHtml.bind(this);
+        this.SaveHtml = this.SaveHtml.bind(this);
+        var state = { lang: "bg", ShowHtmlDialog: false };
         if (this.props.block) {
             var obj = JSON.parse(this.props.block.jsonvalues);
             state.title = obj.title || {};
@@ -76,12 +78,25 @@ export default class BlockDocList extends BaseComponent {
                 en: ''
             },
             docId: null,
-            date: new Date()
+            date: this.FormatDate(new Date())
         }
 
         var docs = this.state.docs;
         docs = [newDoc].concat(docs);
-        this.setState({ docs: docs });
+        var years = this.state.years;
+        var currentYear = new Date().getFullYear();
+        if (!years.find(y => y == currentYear))
+            years.push(currentYear);
+        var month = new Date().getMonth() + 1;
+
+
+
+        this.setState({
+            docs: docs,
+            years: years,
+            currentYear: currentYear,
+            currentMonth: month
+        });
     }
 
     SetDocTitle(id, value) {
@@ -111,11 +126,37 @@ export default class BlockDocList extends BaseComponent {
         this.setState({ docs: docs });
     }
 
+    ShowAddHtml(id) {
+        var docs = this.state.docs;
+        var el = docs.find(x => x.id === id);
+
+        this.CurrentDocId = id;
+        this.setState({
+            ShowHtmlDialog: true,
+            Html: el.html ? (el.html[this.state.lang] || "") : "",
+            docs: docs
+        });
+
+    }
+
+
+
+    SaveHtml() {
+        var docs = this.state.docs;
+        var el = docs.find(x => x.id === this.CurrentDocId);
+        if (!el.html)
+            el.html = {
+                bg: "",
+                en: ""
+            };
+        el.html[this.state.lang] = this.state.Html;
+        this.setState({ ShowHtmlDialog: false, docs: docs });
+        console.log("афтер сейв", docs);
+    }
 
     render() {
         var self = this;
         var cy = self.state.docs.filter(x => new Date(x.date).getFullYear() === parseInt(self.state.currentYear) && new Date(x.date).getMonth() === parseInt(self.state.currentMonth) - 1);
-        console.log(self.state);
         return (
             [
                 <div className="row">
@@ -131,6 +172,10 @@ export default class BlockDocList extends BaseComponent {
                             stateId="title"
                         ></TB>
 
+                        <Dialog header="HTML" visible={this.state.ShowHtmlDialog} style={{ width: '50vw' }} modal={true} onHide={() => { self.setState({ ShowHtmlDialog: false }) }}>
+                            <textarea className="form-control" value={self.state.Html} onChange={(e) => self.setState({ Html: e.target.value })}></textarea>
+                            <button className="btn btn-light pull-right" onClick={() => self.SaveHtml()}>Запис</button>
+                        </Dialog>
                     </div>
                 </div>,
                 <div className="row">
@@ -199,7 +244,10 @@ export default class BlockDocList extends BaseComponent {
                                         }
                                         <button className="btn btn-light" onClick={() => self.UploadBlob((docId) => self.UploadDoc(i.id, docId))} key={'b3' + i.date}>...</button>
                                     </div>
-                                    <div className="col-2" key={'d4' + i.date}>
+                                    <div className="col-1" key={'d4' + i.date}>
+                                        <button className="btn btn-light" onClick={() => self.ShowAddHtml(i.id)}>html</button>
+                                    </div>
+                                    <div className="col-1" key={'d4' + i.date}>
                                         <button className="btn btn-light" onClick={() => self.DeleteDoc(i.id)} key={'b4' + i.date}>-</button>
                                     </div>
                                 </div>
