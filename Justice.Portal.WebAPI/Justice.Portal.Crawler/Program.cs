@@ -35,6 +35,9 @@ namespace Justice.Portal.Crawler
                 Console.WriteLine("19. PKGdinCrawler");
                 Console.WriteLine("20. Anticorr");
                 Console.WriteLine("21.PKMinCrawler");
+                Console.WriteLine("22.PKGDOCrawler");
+                Console.WriteLine("23.GDOCraw");
+                Console.WriteLine("24.ZPKONPI GDO");
 
                 var choice = Console.ReadLine();
                 switch (choice)
@@ -123,6 +126,18 @@ namespace Justice.Portal.Crawler
                     case "21":
                         var PKMinCrawler = new PKMinCrawler(db);
                         PKMinCrawler.Download();
+                        break;
+                    case "22":
+                        var GDOPKCrawler = new GDOPKCrawler(db);
+                        GDOPKCrawler.Download();
+                        break;
+                    case "23":
+                        var GDOCraw = new GDOCraw(db);
+                        GDOCraw.Download();
+                        break;
+                    case "24":
+                        var ZpkonpiGDO = new ZpkonpiGDO(db);
+                        ZpkonpiGDO.Download();
                         break;
 
                 }
