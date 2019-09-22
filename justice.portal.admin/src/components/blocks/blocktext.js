@@ -28,11 +28,13 @@ export default class BlockText extends BaseComponent {
             state.title = obj.title || {};
             state.body = obj.body || {};
             state.imageId = obj.imageId;
+            state.others = obj.others || "";
         }
         else {
             state.title = {};
             state.body = {};
             state.image = null;
+            state.others = "";
         }
 
 
@@ -53,7 +55,8 @@ export default class BlockText extends BaseComponent {
         return {
             title: this.state.title,
             body: this.state.body,
-            imageId: this.state.imageId
+            imageId: this.state.imageId,
+            others: this.state.others
         };
     }
 
@@ -101,6 +104,12 @@ export default class BlockText extends BaseComponent {
                         <img src={self.state.imageId ? Comm.url + "part/GetBlob?hash=" + self.state.imageId : null} alt="" style={{ 'max-width': '300px' }}>
 
                         </img>
+                    </div>
+                </div>,
+                <div className="row">
+                    <div className="col-12">
+                        <label className="control-label">Други(HTML)</label>
+                        <textarea className="form-control" value={self.state.others} onChange={(e) => self.setState({ others: e.target.value })} rows="10"></textarea>
                     </div>
                 </div>
 

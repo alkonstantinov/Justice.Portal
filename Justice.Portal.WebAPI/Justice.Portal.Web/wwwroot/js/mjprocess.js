@@ -628,12 +628,12 @@ class MJProcess {
 				
 				<figure>
 
-					<img class="half-pic" src="/api/part/GetBlob?hash=`+ obj.imageId + `">
-				</figure>
-				<div class="article-content">
-					`+ self.FixText(obj.body[self.language]) + `
+					`+ (obj.imageId ? `<img class="half-pic" src="/api/part/GetBlob?hash=` + obj.imageId + `">` : ``) +`
+				</figure >
+            <div class="article-content">
+                `+ self.FixText(obj.body[self.language]) + `
 				</div>
-			</article>`));
+			</article > `));
 
 
     }
@@ -642,17 +642,17 @@ class MJProcess {
         var oldDiv = $("#" + divId);
         var obj = isMain ? this.MJPageData.main : this.MJPageData["block_" + divId].blockData;
         var self = this;
-        oldDiv.replaceWith($(`<article class="article-container">
+        oldDiv.replaceWith($(`< article class= "article-container" >
 
-				<h1>`+ obj.title[self.language] + `				
+            <h1>`+ obj.title[self.language] + `
 				</h1>
-				
-				<figure>
 
-					`+ (obj.imageId ? '<img class="half-pic" src="/api/part/GetBlob?hash=' + obj.imageId + '">' : "") + `
+            <figure>
+
+                `+ (obj.imageId ? '<img class="half-pic" src="/api/part/GetBlob?hash=' + obj.imageId + '">' : "") + `
 				</figure>
-				<div class="article-content">
-					`+ self.FixText(obj.body[self.language]) + `
+                <div class="article-content">
+                    `+ self.FixText(obj.body[self.language]) + `
 				</div>
 			</article>`));
 
@@ -663,17 +663,21 @@ class MJProcess {
         var oldDiv = $("#" + divId);
         var obj = isMain ? this.MJPageData.main : this.MJPageData["block_" + divId].blockData;
         var self = this;
-        oldDiv.replaceWith($(`<article class="article-container">
+        oldDiv.replaceWith($(`< article class= "article-container" >
 
-				<h1>`+ obj.title[self.language] + `				
+            <h1>`+ obj.title[self.language] + `
 				</h1>
-				
-				<figure>
 
-					`+ (obj.imageId ? '<img class="half-pic" src="/api/part/GetBlob?hash=' + obj.imageId + '">' : "") + `
-				</figure>
-				<div class="article-content">
-					`+ self.FixText(obj.body[self.language]) + `
+            <figure>
+
+                `+ (obj.imageId ? '<img class="half-pic" src="/api/part/GetBlob?hash=' + obj.imageId + '">' : "") + `
+				</figure>`
+            + (obj.others ?
+                `<div class="article-content">
+                    `+ obj.others + `
+				</div>`: "") +
+            `<div class="article-content">
+                    `+ self.FixText(obj.body[self.language]) + `
 				</div>
 			</article>`));
 
@@ -685,23 +689,23 @@ class MJProcess {
         var oldDiv = $("#" + divId);
         var obj = isMain ? this.MJPageData.main : this.MJPageData["block_" + divId].blockData;
         var self = this;
-        oldDiv.replaceWith($(`<article class="article-container">
+        oldDiv.replaceWith($(`< article class= "article-container" >
 
-				<h1>`+ obj.title[self.language] +
+            <h1>`+ obj.title[self.language] +
             "<span>" + (obj.addinfo[self.language] || "") + "</span>" +
-
-
-
-            `				
-
+    
+    
+    
+                `
+    
 				</h1>
-				
-				<figure>
 
-					<img class="half-pic" src="/api/part/GetBlob?hash=`+ obj.imageId + `">
+            <figure>
+
+                <img class="half-pic" src="/api/part/GetBlob?hash=`+ obj.imageId + `">
 				</figure>
-				<div class="article-content">
-					`+ self.FixText(obj.body[self.language]) + `
+                <div class="article-content">
+                    `+ self.FixText(obj.body[self.language]) + `
 				</div>
 			</article>`));
 
@@ -713,17 +717,17 @@ class MJProcess {
         var oldDiv = $("#" + divId);
         var obj = isMain ? this.MJPageData.main : this.MJPageData["block_" + divId].blockData;
         var self = this;
-        oldDiv.replaceWith($(`<article class="article-container">
+        oldDiv.replaceWith($(`< article class= "article-container" >
 
-				<h1>`+ obj.title[self.language] + `				
+            <h1>`+ obj.title[self.language] + `
 				</h1>
-				
-				<figure>
 
-					<img class="half-pic" src="/api/part/GetBlob?hash=`+ obj.imageId + `">
+            <figure>
+
+                <img class="half-pic" src="/api/part/GetBlob?hash=`+ obj.imageId + `">
 				</figure>
-				<div class="article-content" style="max-width:100%">
-					`+ self.FixText(obj.body[self.language]) + `
+                <div class="article-content" style="max-width:100%">
+                    `+ self.FixText(obj.body[self.language]) + `
 				</div>
 			</article>`));
 
@@ -748,36 +752,36 @@ class MJProcess {
             success: function (data) {
                 data.forEach(x => {
                     var data = JSON.parse(x.jsonvalues);
-                    divs += `<div class="list-box">
-						<div class="port-content">
-							`+ (data.imageId ? '<img src="/api/part/GetBlob?hash=' + JSON.parse(x.jsonvalues).imageId + '" alt="" style="-width:auto;height:auto;"  class="list-article-img img-list"/>' : '') +
+                    divs += `< div class= "list-box" >
+            <div class="port-content">
+                `+ (data.imageId ? '<img src="/api/part/GetBlob?hash=' + JSON.parse(x.jsonvalues).imageId + '" alt="" style="-width:auto;height:auto;" class="list-article-img img-list" />' : '') +
                         `<div>
-								
-								<h3><a href="`+ x.url + `">` + data.title[self.language] + `</a>
-                                    
-                                </h3>
-<span>` + (data.addinfo[self.language] || "") + `</span>
-							</div>
-						</div>
-					</div>
-					`;
+
+                    <h3><a href="`+ x.url + `">` + data.title[self.language] + `</a>
+
+                    </h3>
+                    <span>` + (data.addinfo[self.language] || "") + `</span>
+                </div>
+            </div>
+					</div >
+            `;
                 });
 
             }
         });
 
 
-        var newContent = `<div class="port-wrapper">
-				<div class="port-head">
-					<h3 class="port-title"><t>bios</t></h3>
-					
+        var newContent = `< div class= "port-wrapper" >
+            <div class="port-head">
+                <h3 class="port-title"><t>bios</t></h3>
+
+            </div>
+            <div class="port-box box-border" id="` + this.ItemsContentId + `">
+                `+ divs + `
 				</div>
-				<div class="port-box box-border" id="` + this.ItemsContentId + `">
-					`+ divs + `
-				</div>
-                <div class="port-footer">
-						
-			</div>`;
+            <div class="port-footer">
+
+            </div>`;
 
         oldDiv.replaceWith($(newContent));
 
@@ -910,23 +914,23 @@ class MJProcess {
             switch (parseInt(x.type)) {
                 case 1:
                     divSearchControls += `
-                <div class="row">
-                    <div class="col-12">
-                        <label class="control-label">`+ x.name[self.language] + `</label>
-                        <input type="text" id="`+ x.id + `" class="form-control"/>
-                    </div>
-                </div>
-                `;
+            < div class= "row" >
+            <div class="col-12">
+                <label class="control-label">`+ x.name[self.language] + `</label>
+                <input type="text" id="`+ x.id + `" class="form-control" />
+            </div>
+                </div >
+            `;
                     break;
                 case 2:
                     divSearchControls += `
-                <div class="row">
-                    <div class="col-12">
-                        <label class="control-label">`+ x.name[self.language] + `</label>
-                        <input type="text" id="`+ x.id + `" class="form-control"/>
-                    </div>
-                </div>
-                `;
+            < div class= "row" >
+            <div class="col-12">
+                <label class="control-label">`+ x.name[self.language] + `</label>
+                <input type="text" id="`+ x.id + `" class="form-control" />
+            </div>
+                </div >
+            `;
                     break;
 
             }
@@ -934,22 +938,22 @@ class MJProcess {
         });
 
         divSearchControls += `
-                <div class="row">
-                    <div class="col-12">
-                        <button class="btn btn-primary" onclick="mjProcess.SearchCollection()"><t>search</t></label>
-                    </div>
-                </div>
-                `;
-        oldDiv.replaceWith($(`<article class="article-container">
+            < div class= "row" >
+            <div class="col-12">
+                <button class="btn btn-primary" onclick="mjProcess.SearchCollection()"><t>search</t></label>
+            </div>
+                </div >
+            `;
+        oldDiv.replaceWith($(`< article class= "article-container" >
 
-				<h1>`+ (obj.title ? obj.title[self.language] : "") + `				
+            <h1>`+ (obj.title ? obj.title[self.language] : "") + `
 				</h1>
-				
-				<div class="article-content">
-					`+ divSearchControls + `
+
+            <div class="article-content">
+                `+ divSearchControls + `
 				</div>
-                <div class="article-content" id="dSearchResult"></div>
-			</article>`));
+            <div class="article-content" id="dSearchResult"></div>
+			</article > `));
 
 
         this.SearchCollection();
@@ -989,28 +993,28 @@ class MJProcess {
         var divYears = "";
         self.years.forEach(x => {
             var hiddenDivId = "dMonth_" + this.Guid();
-            divYears += `<br/><div class="article-content">
-                         `;
+            divYears += `< br /> <div class="article-content">
+                `;
             divYears += '<h2>' + x.year + '</h2>';
             x.months.forEach(m => divYears += '<a onclick="mjProcess.ShowMonth(' + x.year + ', ' + m.month + ',\'' + hiddenDivId + '\')" class="pnt"><t>month' + m.month + '</t></a>&nbsp;&nbsp;');
-            divYears += '<br/><div id="' + hiddenDivId + '" />';
-
+            divYears += '<br /><div id="' + hiddenDivId + '" />';
+    
             divYears += `</div>`;
         });
 
 
 
 
-        oldDiv.replaceWith($(`<article class="article-container">
+        oldDiv.replaceWith($(`< article class= "article-container" >
 
-				<h1>`+ obj.title[self.language] + `				
+            <h1>`+ obj.title[self.language] + `
 				</h1>
-				
-				<div class="article-content">
-					`+ self.FixText(obj.body ? obj.body[self.language] : "") + `
+
+            <div class="article-content">
+                `+ self.FixText(obj.body ? obj.body[self.language] : "") + `
 				</div>
                 `+ divYears + `
-			</article>`));
+			</article > `));
 
 
 
@@ -1026,22 +1030,22 @@ class MJProcess {
 
         obj.links.sort((a, b) => a.id < b.id ? -1 : 1)
             .forEach(x =>
-                actsLI += `<li class='list-group-item'><a href='/home/normdoc/` + x.link + `' target='_blank'>` + x.title[self.language] + `</a></li>`
+                actsLI += `< li class= 'list-group-item' > <a href='/home/normdoc/` + x.link + `' target='_blank'>` + x.title[self.language] + `</a></li > `
             );
 
-        oldDiv.replaceWith($(`<article class="article-container">
+        oldDiv.replaceWith($(`< article class= "article-container" >
 
-				<h1>`+ obj.title[self.language] + `				
-				</h1>				
-				<div class="article-content">
-					`+ (obj.body[self.language] || "") + `
+            <h1>`+ obj.title[self.language] + `
+				</h1>
+            <div class="article-content">
+                `+ (obj.body[self.language] || "") + `
 				</div>
-                <div class="article-content">
-                    <ul  class='list-group'>
-					`+ actsLI + `
+            <div class="article-content">
+                <ul class='list-group'>
+                    `+ actsLI + `
                     </ul>
-				</div>
-			</article>`));
+            </div>
+			</article > `));
 
 
     }
@@ -1053,14 +1057,14 @@ class MJProcess {
         var self = this;
 
 
-        oldDiv.replaceWith($(`<article class="article-container">
+        oldDiv.replaceWith($(`< article class= "article-container" >
 
-				<h1>`+ obj.title[self.language] + `				
-				</h1>				
-				<div class="article-content">
-					`+ (obj.body[self.language] || "") + `
+            <h1>`+ obj.title[self.language] + `
+				</h1>
+            <div class="article-content">
+                `+ (obj.body[self.language] || "") + `
 				</div>
-        	</article>`));
+        	</article > `));
 
 
     }
@@ -1072,19 +1076,19 @@ class MJProcess {
         var self = this;
 
 
-        oldDiv.replaceWith($(`<article class="article-container">
+        oldDiv.replaceWith($(`< article class= "article-container" >
 
-				<h1>`+ obj.title[self.language] + `				
-				</h1>				
-				<div class="article-content">
-                    <ul class='list-group'>        
-                        <li class='list-group-item'><a href='#' autolink="pkops"><t>ops</t></a></li>
-                        <li class='list-group-item'><a href='#' autolink="pkoffers"><t>offers</t></a></li>
-                        <li class='list-group-item'><a href='#' autolink="pkmessages"><t>messages</t></a></li>
-                        <li class='list-group-item'><a href='#' autolink="pkconsults"><t>consults</t></a></li>
-					</ul>
-				</div>
-        	</article>`));
+            <h1>`+ obj.title[self.language] + `
+				</h1>
+            <div class="article-content">
+                <ul class='list-group'>
+                    <li class='list-group-item'><a href='#' autolink="pkops"><t>ops</t></a></li>
+                    <li class='list-group-item'><a href='#' autolink="pkoffers"><t>offers</t></a></li>
+                    <li class='list-group-item'><a href='#' autolink="pkmessages"><t>messages</t></a></li>
+                    <li class='list-group-item'><a href='#' autolink="pkconsults"><t>consults</t></a></li>
+                </ul>
+            </div>
+        	</article > `));
 
 
     }
@@ -1293,16 +1297,16 @@ class MJProcess {
 
                 showMore = self.Top < data.count;
                 data.rows.forEach(x => {
-                    divs += `<div class="list-box">
-						<div class="port-content">
-							`+ (JSON.parse(x.jsonContent).imageId ? '<img src="/api/part/GetBlob?hash=' + JSON.parse(x.jsonContent).imageId + '" alt="" style="max-width:100%;max-height:100%;"  class="list-article-img img-list"/>' : '') +
+                    divs += `< div class= "list-box" >
+            <div class="port-content">
+                `+ (JSON.parse(x.jsonContent).imageId ? '<img src="/api/part/GetBlob?hash=' + JSON.parse(x.jsonContent).imageId + '" alt="" style="max-width:100%;max-height:100%;" class="list-article-img img-list" />' : '') +
                         `<div>
-								<h6 class="date">`+ x.date + `</h6>
-								<h3><a href="`+ x.url + `">` + self.NarrowText(JSON.parse(x.jsonContent).title[self.language], 100) + `</a></h3>
-							</div>
-						</div>
-					</div>
-					`;
+                    <h6 class="date">`+ x.date + `</h6>
+                    <h3><a href="`+ x.url + `">` + self.NarrowText(JSON.parse(x.jsonContent).title[self.language], 100) + `</a></h3>
+                </div>
+            </div>
+					</div >
+            `;
                     console.log(JSON.parse(x.jsonContent));
                 });
 
@@ -1325,35 +1329,35 @@ class MJProcess {
         var self = this;
         self.fromDate = obj.fromDate;
         self.toDate = obj.toDate;
-        var newContent = `<div class="port-wrapper">
-				<div class="port-head">
-					<h3 class="port-title"><t>ops</t></h3>
-					
-				</div>
-                <div class="port-box box-border">
-                    <div class="row">
-				        <div class="col-10">	
-                            <input type="text" class="form-control" id="` + this.TBSSId + `" placeholder="search"/>
-                        </div>
-                        <div class="col-2">
-                            <a class="btn btn-primary" onclick="mjProcess.Top=0; $('#` + this.ItemsContentId + `').empty(); mjProcess.PutNextPKListItems(` + blockId + `,'pkop')">
-                                <t>search</t>
-						    </a>
-                        </div>
+        var newContent = `< div class= "port-wrapper" >
+            <div class="port-head">
+                <h3 class="port-title"><t>ops</t></h3>
+
+            </div>
+            <div class="port-box box-border">
+                <div class="row">
+                    <div class="col-10">
+                        <input type="text" class="form-control" id="` + this.TBSSId + `" placeholder="search" />
                     </div>
-                    <br/><br/>
-                    <div id="` + this.ItemsContentId + `">
-					
-				    </div>
-                
-				</div>
-				<div class="port-footer">
-						<div class="port-link-item">
-							<a class="btn btn-primary" id="` + this.NextItemsLinkId + `" onclick="mjProcess.PutNextPKListItems(` + blockId + `, 'pkop')">
-                                <t>more</t>
-							</a>
-						</div>
-			</div>`;
+                    <div class="col-2">
+                        <a class="btn btn-primary" onclick="mjProcess.Top=0; $('#` + this.ItemsContentId + `').empty(); mjProcess.PutNextPKListItems(` + blockId + `,'pkop')">
+                            <t>search</t>
+                        </a>
+                    </div>
+                </div>
+                <br /><br />
+                <div id="` + this.ItemsContentId + `">
+
+                </div>
+
+            </div>
+            <div class="port-footer">
+                <div class="port-link-item">
+                    <a class="btn btn-primary" id="` + this.NextItemsLinkId + `" onclick="mjProcess.PutNextPKListItems(` + blockId + `, 'pkop')">
+                        <t>more</t>
+                    </a>
+                </div>
+            </div>`;
 
         oldDiv.replaceWith($(newContent));
         this.PutNextPKListItems(blockId, 'pkop');
@@ -1371,35 +1375,35 @@ class MJProcess {
         this.NextItemsLinkId = this.Guid();
         var self = this;
 
-        var newContent = `<div class="port-wrapper">
-				<div class="port-head">
-					<h3 class="port-title"><t>offers</t></h3>
-					
-				</div>
-                <div class="port-box box-border">
-                    <div class="row">
-				        <div class="col-10">	
-                            <input type="text" class="form-control" id="` + this.TBSSId + `" placeholder="search"/>
-                        </div>
-                        <div class="col-2">
-                            <a class="btn btn-primary" onclick="mjProcess.Top=0; $('#` + this.ItemsContentId + `').empty(); mjProcess.PutNextPKListItems(` + blockId + `,'pkoffer')">
-                                <t>search</t>
-						    </a>
-                        </div>
+        var newContent = `< div class= "port-wrapper" >
+            <div class="port-head">
+                <h3 class="port-title"><t>offers</t></h3>
+
+            </div>
+            <div class="port-box box-border">
+                <div class="row">
+                    <div class="col-10">
+                        <input type="text" class="form-control" id="` + this.TBSSId + `" placeholder="search" />
                     </div>
-                    <br/><br/>
-                    <div id="` + this.ItemsContentId + `">
-					
-				    </div>
-                
-				</div>
-				<div class="port-footer">
-						<div class="port-link-item">
-							<a class="btn btn-primary" id="` + this.NextItemsLinkId + `" onclick="mjProcess.PutNextPKListItems(` + blockId + `, 'pkoffer')">
-                                <t>more</t>
-							</a>
-						</div>
-			</div>`;
+                    <div class="col-2">
+                        <a class="btn btn-primary" onclick="mjProcess.Top=0; $('#` + this.ItemsContentId + `').empty(); mjProcess.PutNextPKListItems(` + blockId + `,'pkoffer')">
+                            <t>search</t>
+                        </a>
+                    </div>
+                </div>
+                <br /><br />
+                <div id="` + this.ItemsContentId + `">
+
+                </div>
+
+            </div>
+            <div class="port-footer">
+                <div class="port-link-item">
+                    <a class="btn btn-primary" id="` + this.NextItemsLinkId + `" onclick="mjProcess.PutNextPKListItems(` + blockId + `, 'pkoffer')">
+                        <t>more</t>
+                    </a>
+                </div>
+            </div>`;
 
         oldDiv.replaceWith($(newContent));
         this.PutNextPKListItems(blockId, 'pkoffer');
@@ -1417,35 +1421,35 @@ class MJProcess {
         this.NextItemsLinkId = this.Guid();
         var self = this;
 
-        var newContent = `<div class="port-wrapper">
-				<div class="port-head">
-					<h3 class="port-title">`+ obj.title[self.language] + `</h3>
-					
-				</div>
-                <div class="port-box box-border">
-                    <div class="row">
-				        <div class="col-10">	
-                            <input type="text" class="form-control" id="` + this.TBSSId + `" placeholder="search"/>
-                        </div>
-                        <div class="col-2">
-                            <a class="btn btn-primary" onclick="mjProcess.Top=0; $('#` + this.ItemsContentId + `').empty(); mjProcess.PutNextPKListItems(` + blockId + `,'pkmessage')">
-                                <t>search</t>
-						    </a>
-                        </div>
+        var newContent = `< div class= "port-wrapper" >
+            <div class="port-head">
+                <h3 class="port-title">`+ obj.title[self.language] + `</h3>
+
+            </div>
+            <div class="port-box box-border">
+                <div class="row">
+                    <div class="col-10">
+                        <input type="text" class="form-control" id="` + this.TBSSId + `" placeholder="search" />
                     </div>
-                    <br/><br/>
-                    <div id="` + this.ItemsContentId + `">
-					
-				    </div>
-                
-				</div>
-				<div class="port-footer">
-						<div class="port-link-item">
-							<a class="btn btn-primary" id="` + this.NextItemsLinkId + `" onclick="mjProcess.PutNextPKListItems(` + blockId + `, 'pkmessage')">
-                                <t>more</t>
-							</a>
-						</div>
-			</div>`;
+                    <div class="col-2">
+                        <a class="btn btn-primary" onclick="mjProcess.Top=0; $('#` + this.ItemsContentId + `').empty(); mjProcess.PutNextPKListItems(` + blockId + `,'pkmessage')">
+                            <t>search</t>
+                        </a>
+                    </div>
+                </div>
+                <br /><br />
+                <div id="` + this.ItemsContentId + `">
+
+                </div>
+
+            </div>
+            <div class="port-footer">
+                <div class="port-link-item">
+                    <a class="btn btn-primary" id="` + this.NextItemsLinkId + `" onclick="mjProcess.PutNextPKListItems(` + blockId + `, 'pkmessage')">
+                        <t>more</t>
+                    </a>
+                </div>
+            </div>`;
 
         oldDiv.replaceWith($(newContent));
         this.PutNextPKListItems(blockId, 'pkmessage');
@@ -1462,35 +1466,35 @@ class MJProcess {
         this.NextItemsLinkId = this.Guid();
         var self = this;
 
-        var newContent = `<div class="port-wrapper">
-				<div class="port-head">
-					<h3 class="port-title"><t>consults</t></h3>
-					
-				</div>
-                <div class="port-box box-border">
-                    <div class="row">
-				        <div class="col-10">	
-                            <input type="text" class="form-control" id="` + this.TBSSId + `" placeholder="search"/>
-                        </div>
-                        <div class="col-2">
-                            <a class="btn btn-primary" onclick="mjProcess.Top=0; $('#` + this.ItemsContentId + `').empty(); mjProcess.PutNextPKListItems(` + blockId + `,'pkconsult')">
-                                <t>search</t>
-						    </a>
-                        </div>
+        var newContent = `< div class= "port-wrapper" >
+            <div class="port-head">
+                <h3 class="port-title"><t>consults</t></h3>
+
+            </div>
+            <div class="port-box box-border">
+                <div class="row">
+                    <div class="col-10">
+                        <input type="text" class="form-control" id="` + this.TBSSId + `" placeholder="search" />
                     </div>
-                    <br/><br/>
-                    <div id="` + this.ItemsContentId + `">
-					
-				    </div>
-                
-				</div>
-				<div class="port-footer">
-						<div class="port-link-item">
-							<a class="btn btn-primary" id="` + this.NextItemsLinkId + `" onclick="mjProcess.PutNextPKListItems(` + blockId + `, 'pkconsult')">
-                                <t>more</t>
-							</a>
-						</div>
-			</div>`;
+                    <div class="col-2">
+                        <a class="btn btn-primary" onclick="mjProcess.Top=0; $('#` + this.ItemsContentId + `').empty(); mjProcess.PutNextPKListItems(` + blockId + `,'pkconsult')">
+                            <t>search</t>
+                        </a>
+                    </div>
+                </div>
+                <br /><br />
+                <div id="` + this.ItemsContentId + `">
+
+                </div>
+
+            </div>
+            <div class="port-footer">
+                <div class="port-link-item">
+                    <a class="btn btn-primary" id="` + this.NextItemsLinkId + `" onclick="mjProcess.PutNextPKListItems(` + blockId + `, 'pkconsult')">
+                        <t>more</t>
+                    </a>
+                </div>
+            </div>`;
 
         oldDiv.replaceWith($(newContent));
         this.PutNextPKListItems(blockId, 'pkconsult');
@@ -1519,14 +1523,14 @@ class MJProcess {
         var divs = "<table class='table table-bordered'><tbody>";
         files.forEach(x =>
             divs += `
-            <tr>
-                <td><a href="/api/part/GetBlob?hash=`+ x.file + `">` + x.title[self.language] + `</a></td>
-                <td>
-                    `+ self.T(x.filetype) + `
+            < tr >
+            <td><a href="/api/part/GetBlob?hash=`+ x.file + `">` + x.title[self.language] + `</a></td>
+            <td>
+                `+ self.T(x.filetype) + `
                 </td>                
-            </tr>
+            </tr >
 
-        `);
+            `);
         divs += "</tbody><table>";
         $("#" + dFilesId).append(divs);
     }
@@ -1540,139 +1544,139 @@ class MJProcess {
         this.dFilesId = this.Guid();
         var self = this;
 
-        var newContent = `<div class="port-wrapper">
-				<div class="port-head">
-					<h3 class="port-title"><t>op</t></h3>
-					
-				</div>
-                <div class="port-box box-border">
-                    <div class="row">
-				        <div class="col-6">	
-                            <b><t>title</t></b>
-                        </div>
-                        <div class="col-6">	
-                            `+ self.T(obj.title) + `
-                        </div>
+        var newContent = `< div class= "port-wrapper" >
+            <div class="port-head">
+                <h3 class="port-title"><t>op</t></h3>
+
+            </div>
+            <div class="port-box box-border">
+                <div class="row">
+                    <div class="col-6">
+                        <b><t>title</t></b>
                     </div>
-                    <div class="row">
-				        <div class="col-6">
-                            <b><t>name</t></b>
+                    <div class="col-6">
+                        `+ self.T(obj.title) + `
                         </div>
-                        <div class="col-6">
-                            `+ self.T(obj.PBName) + `
-                        </div>
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <b><t>name</t></b>
                     </div>
-                    <div class="row">
-				        <div class="col-6">
-                            <b><t>aopnum</t></b>
+                    <div class="col-6">
+                        `+ self.T(obj.PBName) + `
                         </div>
-                        <div class="col-6">
-                            `+ obj.AOPNum + `
-                        </div>
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <b><t>aopnum</t></b>
                     </div>
-                    <div class="row">
-				        <div class="col-6">
-                            <b><t>elnum</t></b>
+                    <div class="col-6">
+                        `+ obj.AOPNum + `
                         </div>
-                        <div class="col-6">
-                            `+ obj.ElNum + `
-                        </div>
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <b><t>elnum</t></b>
                     </div>
-                    <div class="row">
-				        <div class="col-6">
-                            <b><t>proctype</t></b>
+                    <div class="col-6">
+                        `+ obj.ElNum + `
                         </div>
-                        <div class="col-6">
-                            `+ self.T(obj.proctype) + `
-                        </div>
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <b><t>proctype</t></b>
                     </div>
-                    <div class="row">
-				        <div class="col-6">
-                            <b><t>procobject</t></b>
+                    <div class="col-6">
+                        `+ self.T(obj.proctype) + `
                         </div>
-                        <div class="col-6">
-                            `+ self.T(obj.procobject) + `
-                        </div>
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <b><t>procobject</t></b>
                     </div>
-                    <div class="row">
-				        <div class="col-6">
-                            <b><t>subject</t></b>
+                    <div class="col-6">
+                        `+ self.T(obj.procobject) + `
                         </div>
-                        <div class="col-6">
-                            `+ self.T(obj.Subject) + `
-                        </div>
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <b><t>subject</t></b>
                     </div>
-                    <div class="row">
-				        <div class="col-6">
-                            <b><t>procstatus</t></b>
+                    <div class="col-6">
+                        `+ self.T(obj.Subject) + `
                         </div>
-                        <div class="col-6">
-                            `+ self.T(obj.procstatus) + `
-                        </div>
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <b><t>procstatus</t></b>
                     </div>
-                    <div class="row">
-				        <div class="col-6">
-                            <b><t>novatprognosis</t></b>
+                    <div class="col-6">
+                        `+ self.T(obj.procstatus) + `
                         </div>
-                        <div class="col-6">
-                            `+ obj.novatprognosis + `
-                        </div>
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <b><t>novatprognosis</t></b>
                     </div>
-                    <div class="row">
-				        <div class="col-6">
-                            <b><t>cpv</t></b>
+                    <div class="col-6">
+                        `+ obj.novatprognosis + `
                         </div>
-                        <div class="col-6">
-                            `+ obj.cpv + `
-                        </div>
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <b><t>cpv</t></b>
                     </div>
-                    <div class="row">
-				        <div class="col-6">
-                            <b><t>teritorry</t></b>
+                    <div class="col-6">
+                        `+ obj.cpv + `
                         </div>
-                        <div class="col-6">
-                            `+ self.T(obj.teritorry) + `
-                        </div>
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <b><t>teritorry</t></b>
                     </div>
-                    <div class="row">
-				        <div class="col-6">
-                            <b><t>novat</t></b>
+                    <div class="col-6">
+                        `+ self.T(obj.teritorry) + `
                         </div>
-                        <div class="col-6">
-                            `+ obj.novat + `
-                        </div>
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <b><t>novat</t></b>
                     </div>
-                    <div class="row">
-				        <div class="col-6">
-                            <b><t>enddate</t></b>
+                    <div class="col-6">
+                        `+ obj.novat + `
                         </div>
-                        <div class="col-6">
-                            `+ obj.enddate + `
-                        </div>
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <b><t>enddate</t></b>
                     </div>
-                    <div class="row">
-				        <div class="col-6">
-                            <b><t>business</t></b>
+                    <div class="col-6">
+                        `+ obj.enddate + `
                         </div>
-                        <div class="col-6">
-                            `+ self.T(obj.business) + `
-                        </div>
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <b><t>business</t></b>
                     </div>
+                    <div class="col-6">
+                        `+ self.T(obj.business) + `
+                        </div>
+                </div>
 
 
-				</div>
-                <div class="port-box box-border">
-                    <div class="row">
-				        <div class="col-12" id="`+ this.dFilesId + `">	
-                            
-                        </div>
+            </div>
+            <div class="port-box box-border">
+                <div class="row">
+                    <div class="col-12" id="`+ this.dFilesId + `">
+
                     </div>
-                    
-                
-				</div>
-				<div class="port-footer">
-					
-			</div>`;
+                </div>
+
+
+            </div>
+            <div class="port-footer">
+
+            </div>`;
 
 
 
@@ -1690,51 +1694,51 @@ class MJProcess {
         this.dFilesId = this.Guid();
         var self = this;
 
-        var newContent = `<div class="port-wrapper">
-				<div class="port-head">
-					<h3 class="port-title"><t>offer</t></h3>
-					
-				</div>
-                <div class="port-box box-border">
-                    <div class="row">
-				        <div class="col-6">	
-                            <b><t>title</t></b>
-                        </div>
-                        <div class="col-6">	
-                            `+ obj.title[self.language] + `
-                        </div>
+        var newContent = `< div class= "port-wrapper" >
+            <div class="port-head">
+                <h3 class="port-title"><t>offer</t></h3>
+
+            </div>
+            <div class="port-box box-border">
+                <div class="row">
+                    <div class="col-6">
+                        <b><t>title</t></b>
                     </div>
-                    <div class="row">
-				        <div class="col-6">
-                            <b><t>content</t></b>
+                    <div class="col-6">
+                        `+ obj.title[self.language] + `
                         </div>
-                        <div class="col-6">
-                            `+ self.FixText(obj.body[self.language]) + `
-                        </div>
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <b><t>content</t></b>
                     </div>
-                    <div class="row">
-				        <div class="col-6">
-                            <b><t>enddate</t></b>
+                    <div class="col-6">
+                        `+ self.FixText(obj.body[self.language]) + `
                         </div>
-                        <div class="col-6">
-                            `+ obj.enddate + `
-                        </div>
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <b><t>enddate</t></b>
                     </div>
+                    <div class="col-6">
+                        `+ obj.enddate + `
+                        </div>
+                </div>
 
 
-				</div>
-                <div class="port-box box-border">
-                    <div class="row">
-				        <div class="col-12" id="`+ this.dFilesId + `">	
-                            
-                        </div>
+            </div>
+            <div class="port-box box-border">
+                <div class="row">
+                    <div class="col-12" id="`+ this.dFilesId + `">
+
                     </div>
-                    
-                
-				</div>
-				<div class="port-footer">
-					
-			</div>`;
+                </div>
+
+
+            </div>
+            <div class="port-footer">
+
+            </div>`;
 
 
 
@@ -1752,44 +1756,44 @@ class MJProcess {
         this.dFilesId = this.Guid();
         var self = this;
 
-        var newContent = `<div class="port-wrapper">
-				<div class="port-head">
-					<h3 class="port-title"><t>message</t></h3>
-					
-				</div>
-                <div class="port-box box-border">
-                    <div class="row">
-				        <div class="col-6">	
-                            <b><t>title</t></b>
-                        </div>
-                        <div class="col-6">	
-                            `+ obj.title[self.language] + `
-                        </div>
+        var newContent = `< div class= "port-wrapper" >
+            <div class="port-head">
+                <h3 class="port-title"><t>message</t></h3>
+
+            </div>
+            <div class="port-box box-border">
+                <div class="row">
+                    <div class="col-6">
+                        <b><t>title</t></b>
                     </div>
-                    <div class="row">
-				        <div class="col-6">
-                            <b><t>content</t></b>
+                    <div class="col-6">
+                        `+ obj.title[self.language] + `
                         </div>
-                        <div class="col-6">
-                            `+ self.FixText(obj.body[self.language]) + `
-                        </div>
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <b><t>content</t></b>
                     </div>
-                    
+                    <div class="col-6">
+                        `+ self.FixText(obj.body[self.language]) + `
+                        </div>
+                </div>
 
 
-				</div>
-                <div class="port-box box-border">
-                    <div class="row">
-				        <div class="col-12" id="`+ this.dFilesId + `">	
-                            
-                        </div>
+
+            </div>
+            <div class="port-box box-border">
+                <div class="row">
+                    <div class="col-12" id="`+ this.dFilesId + `">
+
                     </div>
-                    
-                
-				</div>
-				<div class="port-footer">
-					
-			</div>`;
+                </div>
+
+
+            </div>
+            <div class="port-footer">
+
+            </div>`;
 
 
 
@@ -1808,59 +1812,59 @@ class MJProcess {
         this.dFilesId = this.Guid();
         var self = this;
 
-        var newContent = `<div class="port-wrapper">
-				<div class="port-head">
-					<h3 class="port-title"><t>consult</t></h3>
-					
-				</div>
-                <div class="port-box box-border">
-                    <div class="row">
-				        <div class="col-6">	
-                            <b><t>title</t></b>
-                        </div>
-                        <div class="col-6">	
-                            `+ self.T(obj.title) + `
-                        </div>
+        var newContent = `< div class= "port-wrapper" >
+            <div class="port-head">
+                <h3 class="port-title"><t>consult</t></h3>
+
+            </div>
+            <div class="port-box box-border">
+                <div class="row">
+                    <div class="col-6">
+                        <b><t>title</t></b>
                     </div>
-                    <div class="row">
-				        <div class="col-6">
-                            <b><t>elnum</t></b>
+                    <div class="col-6">
+                        `+ self.T(obj.title) + `
                         </div>
-                        <div class="col-6">
-                            `+ obj.code + `
-                        </div>
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <b><t>elnum</t></b>
                     </div>
-                    <div class="row">
-				        <div class="col-6">
-                            <b><t>content</t></b>
+                    <div class="col-6">
+                        `+ obj.code + `
                         </div>
-                        <div class="col-6">
-                            `+ self.FixText(self.T(obj.body)) + `
-                        </div>
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <b><t>content</t></b>
                     </div>
-                    <div class="row">
-				        <div class="col-6">
-                            <b><t>enddate</t></b>
+                    <div class="col-6">
+                        `+ self.FixText(self.T(obj.body)) + `
                         </div>
-                        <div class="col-6">
-                            `+ obj.enddate + `
-                        </div>
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <b><t>enddate</t></b>
                     </div>
+                    <div class="col-6">
+                        `+ obj.enddate + `
+                        </div>
+                </div>
 
 
-				</div>
-                <div class="port-box box-border">
-                    <div class="row">
-				        <div class="col-12" id="`+ this.dFilesId + `">	
-                            
-                        </div>
+            </div>
+            <div class="port-box box-border">
+                <div class="row">
+                    <div class="col-12" id="`+ this.dFilesId + `">
+
                     </div>
-                    
-                
-				</div>
-				<div class="port-footer">
-					
-			</div>`;
+                </div>
+
+
+            </div>
+            <div class="port-footer">
+
+            </div>`;
 
 
 
@@ -1879,16 +1883,16 @@ class MJProcess {
     ShowCareers() {
         var self = this;
         var toShow = this.careers.filter(x => x.type[self.language] === $("#" + self.TypeSelectId).val());
-        var html = `<ul class='list-group'>`;
+        var html = `< ul class= 'list-group' > `;
         toShow.forEach(c => {
-            var docHtml = `<ul class='list-group'>`;
-            c.docs.forEach(d => docHtml += `<li class='list-group-item'>
-            <a href="/api/part/GetBlob?hash=`+ d.link + `">` + d.title[this.language] + `</a></li>`);
+            var docHtml = `< ul class= 'list-group' > `;
+            c.docs.forEach(d => docHtml += `< li class= 'list-group-item' >
+            <a href="/api/part/GetBlob?hash=`+ d.link + `">` + d.title[this.language] + `</a></li > `);
             docHtml += "</ul>";
-            html += `<li class='list-group-item'>
-            <h4>`+ c.title[this.language] + `</h4><br/>` + c.body[this.language] + `<br/>
+            html += `< li class= 'list-group-item' >
+            <h4>`+ c.title[this.language] + `</h4> <br />` + c.body[this.language] + ` < br />
             `+ docHtml + `
-            </li>`;
+            </li > `;
         });
         $("#" + this.ItemsContentId).html(html);
     }
@@ -1901,18 +1905,18 @@ class MJProcess {
         this.TypeSelectId = this.Guid();
         var self = this;
 
-        var newContent = `<div class="port-wrapper">
-				<div class="port-head">
-					<h3 class="port-title">`+ this.TranslateWord("careers") + `</h3><br/>
-                    <h3 class="port-title"><select class="form-control" id=`+ this.TypeSelectId + ` onchange="mjProcess.ShowCareers()"></select>    </h3>
+        var newContent = `< div class= "port-wrapper" >
+            <div class="port-head">
+                <h3 class="port-title">`+ this.TranslateWord("careers") + `</h3><br />
+                <h3 class="port-title"><select class="form-control" id=`+ this.TypeSelectId + ` onchange="mjProcess.ShowCareers()"></select>    </h3>
                     
-				</div>
+				</div >
+
+            <div class="port-box box-border" id="` + this.ItemsContentId + `">
+
+            </div>
                 
-				<div class="port-box box-border" id="` + this.ItemsContentId + `">
-					
-				</div>
-                
-			</div>`;
+			</div > `;
 
         oldDiv.replaceWith($(newContent));
 

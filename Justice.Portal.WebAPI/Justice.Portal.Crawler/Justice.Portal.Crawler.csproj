@@ -9,4 +9,13 @@
     <ProjectReference Include="..\Justice.Portal.DB\Justice.Portal.DB.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="data\nourls.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="data\urls.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

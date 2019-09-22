@@ -38,6 +38,10 @@ namespace Justice.Portal.Crawler
                 Console.WriteLine("22.PKGDOCrawler");
                 Console.WriteLine("23.GDOCraw");
                 Console.WriteLine("24.ZPKONPI GDO");
+                Console.WriteLine("25.AV TEXT");
+                Console.WriteLine("26.AV Careers");
+                Console.WriteLine("27.AV PK");
+                Console.WriteLine("28.AV News");
 
                 var choice = Console.ReadLine();
                 switch (choice)
@@ -138,6 +142,22 @@ namespace Justice.Portal.Crawler
                     case "24":
                         var ZpkonpiGDO = new ZpkonpiGDO(db);
                         ZpkonpiGDO.Download();
+                        break;
+                    case "25":
+                        var AVText = new AVText(db);
+                        AVText.Download();
+                        break;
+                    case "26":
+                        var AVCareers = new AVCareers(db);
+                        AVCareers.Download();
+                        break;
+                    case "27":
+                        var AVPK = new AVPK(db);
+                        AVPK.Download();
+                        break;
+                    case "28":
+                        var AVNews = new AVNews(db);
+                        AVNews.Download();
                         break;
 
                 }
