@@ -427,14 +427,14 @@ class MJProcess {
 							`+ (JSON.parse(x.jsonContent).imageId ? '<img src="/api/part/GetBlob?hash=' + JSON.parse(x.jsonContent).imageId + '" alt="" style="max-width:100%;max-height:100%;"  class="list-article-img img-list"/>' : '') +
                         `<div>
 								<h6 class="date">`+ x.date + `</h6>
-                                <h2>` + self.NarrowText(JSON.parse(x.jsonContent).title[self.language], 100) + `</a></h2>     
+                                <h2><a href="`+ x.url + `">` + self.NarrowText(JSON.parse(x.jsonContent).title[self.language], 100) + `</a></h2>     
 
-								<h3><a href="`+ x.url + `">` + self.NarrowText(JSON.parse(x.jsonContent).body[self.language], 100) + `</a></h3>
+								<h3>` + self.NarrowText(JSON.parse(x.jsonContent).body[self.language], 100) + `</h3>
 							</div>
 						</div>
 					</div>
 					`;
-                    console.log(JSON.parse(x.jsonContent));
+                    console.log(divs);
                 });
 
             }
@@ -642,7 +642,7 @@ class MJProcess {
         var oldDiv = $("#" + divId);
         var obj = isMain ? this.MJPageData.main : this.MJPageData["block_" + divId].blockData;
         var self = this;
-        oldDiv.replaceWith($(`< article class= "article-container" >
+        oldDiv.replaceWith($(`<article class= "article-container" >
 
             <h1>`+ obj.title[self.language] + `
 				</h1>
@@ -663,7 +663,7 @@ class MJProcess {
         var oldDiv = $("#" + divId);
         var obj = isMain ? this.MJPageData.main : this.MJPageData["block_" + divId].blockData;
         var self = this;
-        oldDiv.replaceWith($(`< article class= "article-container" >
+        oldDiv.replaceWith($(`<article class= "article-container" >
 
             <h1>`+ obj.title[self.language] + `
 				</h1>
@@ -689,7 +689,7 @@ class MJProcess {
         var oldDiv = $("#" + divId);
         var obj = isMain ? this.MJPageData.main : this.MJPageData["block_" + divId].blockData;
         var self = this;
-        oldDiv.replaceWith($(`< article class= "article-container" >
+        oldDiv.replaceWith($(`<article class= "article-container" >
 
             <h1>`+ obj.title[self.language] +
             "<span>" + (obj.addinfo[self.language] || "") + "</span>" +
@@ -717,7 +717,7 @@ class MJProcess {
         var oldDiv = $("#" + divId);
         var obj = isMain ? this.MJPageData.main : this.MJPageData["block_" + divId].blockData;
         var self = this;
-        oldDiv.replaceWith($(`< article class= "article-container" >
+        oldDiv.replaceWith($(`<article class= "article-container" >
 
             <h1>`+ obj.title[self.language] + `
 				</h1>
@@ -993,7 +993,7 @@ class MJProcess {
         var divYears = "";
         self.years.forEach(x => {
             var hiddenDivId = "dMonth_" + this.Guid();
-            divYears += `< br /> <div class="article-content">
+            divYears += `<br /> <div class="article-content">
                 `;
             divYears += '<h2>' + x.year + '</h2>';
             x.months.forEach(m => divYears += '<a onclick="mjProcess.ShowMonth(' + x.year + ', ' + m.month + ',\'' + hiddenDivId + '\')" class="pnt"><t>month' + m.month + '</t></a>&nbsp;&nbsp;');
@@ -1005,7 +1005,7 @@ class MJProcess {
 
 
 
-        oldDiv.replaceWith($(`< article class= "article-container" >
+        oldDiv.replaceWith($(`<article class= "article-container" >
 
             <h1>`+ obj.title[self.language] + `
 				</h1>
@@ -1030,10 +1030,10 @@ class MJProcess {
 
         obj.links.sort((a, b) => a.id < b.id ? -1 : 1)
             .forEach(x =>
-                actsLI += `< li class= 'list-group-item' > <a href='/home/normdoc/` + x.link + `' target='_blank'>` + x.title[self.language] + `</a></li > `
+                actsLI += `<li class= 'list-group-item' > <a href='/home/normdoc/` + x.link + `' target='_blank'>` + x.title[self.language] + `</a></li > `
             );
 
-        oldDiv.replaceWith($(`< article class= "article-container" >
+        oldDiv.replaceWith($(`<article class= "article-container" >
 
             <h1>`+ obj.title[self.language] + `
 				</h1>
@@ -1057,7 +1057,7 @@ class MJProcess {
         var self = this;
 
 
-        oldDiv.replaceWith($(`< article class= "article-container" >
+        oldDiv.replaceWith($(`<article class= "article-container" >
 
             <h1>`+ obj.title[self.language] + `
 				</h1>
@@ -1076,7 +1076,7 @@ class MJProcess {
         var self = this;
 
 
-        oldDiv.replaceWith($(`< article class= "article-container" >
+        oldDiv.replaceWith($(`<article class= "article-container" >
 
             <h1>`+ obj.title[self.language] + `
 				</h1>
@@ -1523,12 +1523,12 @@ class MJProcess {
         var divs = "<table class='table table-bordered'><tbody>";
         files.forEach(x =>
             divs += `
-            < tr >
+            <tr>
             <td><a href="/api/part/GetBlob?hash=`+ x.file + `">` + x.title[self.language] + `</a></td>
             <td>
                 `+ self.T(x.filetype) + `
                 </td>                
-            </tr >
+            </tr>
 
             `);
         divs += "</tbody><table>";
@@ -1883,14 +1883,14 @@ class MJProcess {
     ShowCareers() {
         var self = this;
         var toShow = this.careers.filter(x => x.type[self.language] === $("#" + self.TypeSelectId).val());
-        var html = `< ul class= 'list-group' > `;
+        var html = `<ul class= 'list-group' > `;
         toShow.forEach(c => {
-            var docHtml = `< ul class= 'list-group' > `;
-            c.docs.forEach(d => docHtml += `< li class= 'list-group-item' >
+            var docHtml = `<ul class= 'list-group' > `;
+            c.docs.forEach(d => docHtml += `<li class= 'list-group-item' >
             <a href="/api/part/GetBlob?hash=`+ d.link + `">` + d.title[this.language] + `</a></li > `);
             docHtml += "</ul>";
-            html += `< li class= 'list-group-item' >
-            <h4>`+ c.title[this.language] + `</h4> <br />` + c.body[this.language] + ` < br />
+            html += `<li class= 'list-group-item' >
+            <h4>`+ c.title[this.language] + `</h4> <br />` + c.body[this.language] + ` <br />
             `+ docHtml + `
             </li > `;
         });

@@ -120,6 +120,7 @@ namespace Justice.Portal.Crawler.Crawlers
                     pageNo++;
                     list = Regex.Match(list, "</header>([\\w\\W]+?)<footer").Groups[1].Value;
                     var mcLinks = Regex.Matches(list, "<h2>\\s*<a href=\"(/bg/profil-na-kupuvacha/[^\"]+)\"");
+                    found = mcLinks.Count > 0;
                     foreach (Match mLink in mcLinks)
                     {
                         if (hsDownloaded.Contains(mLink.Groups[1].Value))
