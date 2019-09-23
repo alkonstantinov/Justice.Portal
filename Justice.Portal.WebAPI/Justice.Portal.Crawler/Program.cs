@@ -42,6 +42,9 @@ namespace Justice.Portal.Crawler
                 Console.WriteLine("26.AV Careers");
                 Console.WriteLine("27.AV PK");
                 Console.WriteLine("28.AV News");
+                Console.WriteLine("29.AV CHL12");
+                Console.WriteLine("30. AV ZPKONPI");
+                Console.WriteLine("300. AV FULL");
 
                 var choice = Console.ReadLine();
                 switch (choice)
@@ -158,6 +161,27 @@ namespace Justice.Portal.Crawler
                     case "28":
                         var AVNews = new AVNews(db);
                         AVNews.Download();
+                        break;
+                    case "29":
+                        var AVCHL12 = new AVCHL12(db);
+                        AVCHL12.Download();
+                        break;
+                    case "30":
+                        var AVZPKONPI = new AVZPKONPI(db);
+                        AVZPKONPI.Download();
+                        break;
+                    case "300":
+                        var AVText1 = new AVText(db);
+                        AVText1.Download();
+                        
+                        var AVCareers1 = new AVCareers(db);
+                        AVCareers1.Download();
+                        
+                        var AVPK1 = new AVPK(db);
+                        AVPK1.Download();
+                        
+                        var AVNews1 = new AVNews(db);
+                        AVNews1.Download();
                         break;
 
                 }

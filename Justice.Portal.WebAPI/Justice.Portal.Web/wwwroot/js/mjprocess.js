@@ -628,7 +628,7 @@ class MJProcess {
 				
 				<figure>
 
-					`+ (obj.imageId ? `<img class="half-pic" src="/api/part/GetBlob?hash=` + obj.imageId + `">` : ``) +`
+					`+ (obj.imageId ? `<img class="half-pic" src="/api/part/GetBlob?hash=` + obj.imageId + `">` : ``) + `
 				</figure >
             <div class="article-content">
                 `+ self.FixText(obj.body[self.language]) + `
@@ -693,10 +693,10 @@ class MJProcess {
 
             <h1>`+ obj.title[self.language] +
             "<span>" + (obj.addinfo[self.language] || "") + "</span>" +
-    
-    
-    
-                `
+
+
+
+            `
     
 				</h1>
 
@@ -752,7 +752,7 @@ class MJProcess {
             success: function (data) {
                 data.forEach(x => {
                     var data = JSON.parse(x.jsonvalues);
-                    divs += `< div class= "list-box" >
+                    divs += `<div class= "list-box">
             <div class="port-content">
                 `+ (data.imageId ? '<img src="/api/part/GetBlob?hash=' + JSON.parse(x.jsonvalues).imageId + '" alt="" style="-width:auto;height:auto;" class="list-article-img img-list" />' : '') +
                         `<div>
@@ -771,7 +771,7 @@ class MJProcess {
         });
 
 
-        var newContent = `< div class= "port-wrapper" >
+        var newContent = `<div class= "port-wrapper" >
             <div class="port-head">
                 <h3 class="port-title"><t>bios</t></h3>
 
@@ -914,22 +914,22 @@ class MJProcess {
             switch (parseInt(x.type)) {
                 case 1:
                     divSearchControls += `
-            < div class= "row" >
+            <div class="row">
             <div class="col-12">
                 <label class="control-label">`+ x.name[self.language] + `</label>
                 <input type="text" id="`+ x.id + `" class="form-control" />
             </div>
-                </div >
+                </div>
             `;
                     break;
                 case 2:
                     divSearchControls += `
-            < div class= "row" >
+            <div class="row">
             <div class="col-12">
                 <label class="control-label">`+ x.name[self.language] + `</label>
                 <input type="text" id="`+ x.id + `" class="form-control" />
             </div>
-                </div >
+                </div>
             `;
                     break;
 
@@ -938,13 +938,13 @@ class MJProcess {
         });
 
         divSearchControls += `
-            < div class= "row" >
+            <div class= "row">
             <div class="col-12">
                 <button class="btn btn-primary" onclick="mjProcess.SearchCollection()"><t>search</t></label>
             </div>
-                </div >
+                </div>
             `;
-        oldDiv.replaceWith($(`< article class= "article-container" >
+        oldDiv.replaceWith($(`<article class="article-container">
 
             <h1>`+ (obj.title ? obj.title[self.language] : "") + `
 				</h1>
@@ -998,7 +998,7 @@ class MJProcess {
             divYears += '<h2>' + x.year + '</h2>';
             x.months.forEach(m => divYears += '<a onclick="mjProcess.ShowMonth(' + x.year + ', ' + m.month + ',\'' + hiddenDivId + '\')" class="pnt"><t>month' + m.month + '</t></a>&nbsp;&nbsp;');
             divYears += '<br /><div id="' + hiddenDivId + '" />';
-    
+
             divYears += `</div>`;
         });
 
@@ -1297,7 +1297,7 @@ class MJProcess {
 
                 showMore = self.Top < data.count;
                 data.rows.forEach(x => {
-                    divs += `< div class= "list-box" >
+                    divs += `<div class= "list-box" >
             <div class="port-content">
                 `+ (JSON.parse(x.jsonContent).imageId ? '<img src="/api/part/GetBlob?hash=' + JSON.parse(x.jsonContent).imageId + '" alt="" style="max-width:100%;max-height:100%;" class="list-article-img img-list" />' : '') +
                         `<div>
@@ -1329,7 +1329,7 @@ class MJProcess {
         var self = this;
         self.fromDate = obj.fromDate;
         self.toDate = obj.toDate;
-        var newContent = `< div class= "port-wrapper" >
+        var newContent = `<div class= "port-wrapper" >
             <div class="port-head">
                 <h3 class="port-title"><t>ops</t></h3>
 
@@ -1375,7 +1375,7 @@ class MJProcess {
         this.NextItemsLinkId = this.Guid();
         var self = this;
 
-        var newContent = `< div class= "port-wrapper" >
+        var newContent = `<div class= "port-wrapper" >
             <div class="port-head">
                 <h3 class="port-title"><t>offers</t></h3>
 
@@ -1421,7 +1421,7 @@ class MJProcess {
         this.NextItemsLinkId = this.Guid();
         var self = this;
 
-        var newContent = `< div class= "port-wrapper" >
+        var newContent = `<div class= "port-wrapper" >
             <div class="port-head">
                 <h3 class="port-title">`+ obj.title[self.language] + `</h3>
 
@@ -1466,7 +1466,7 @@ class MJProcess {
         this.NextItemsLinkId = this.Guid();
         var self = this;
 
-        var newContent = `< div class= "port-wrapper" >
+        var newContent = `<div class= "port-wrapper" >
             <div class="port-head">
                 <h3 class="port-title"><t>consults</t></h3>
 
@@ -1544,7 +1544,7 @@ class MJProcess {
         this.dFilesId = this.Guid();
         var self = this;
 
-        var newContent = `< div class= "port-wrapper" >
+        var newContent = `<div class= "port-wrapper" >
             <div class="port-head">
                 <h3 class="port-title"><t>op</t></h3>
 
@@ -1694,7 +1694,7 @@ class MJProcess {
         this.dFilesId = this.Guid();
         var self = this;
 
-        var newContent = `< div class= "port-wrapper" >
+        var newContent = `<div class= "port-wrapper" >
             <div class="port-head">
                 <h3 class="port-title"><t>offer</t></h3>
 
@@ -1756,7 +1756,7 @@ class MJProcess {
         this.dFilesId = this.Guid();
         var self = this;
 
-        var newContent = `< div class= "port-wrapper" >
+        var newContent = `<div class= "port-wrapper" >
             <div class="port-head">
                 <h3 class="port-title"><t>message</t></h3>
 
@@ -1812,7 +1812,7 @@ class MJProcess {
         this.dFilesId = this.Guid();
         var self = this;
 
-        var newContent = `< div class= "port-wrapper" >
+        var newContent = `<div class= "port-wrapper" >
             <div class="port-head">
                 <h3 class="port-title"><t>consult</t></h3>
 
@@ -1905,7 +1905,7 @@ class MJProcess {
         this.TypeSelectId = this.Guid();
         var self = this;
 
-        var newContent = `< div class= "port-wrapper" >
+        var newContent = `<div class= "port-wrapper" >
             <div class="port-head">
                 <h3 class="port-title">`+ this.TranslateWord("careers") + `</h3><br />
                 <h3 class="port-title"><select class="form-control" id=`+ this.TypeSelectId + ` onchange="mjProcess.ShowCareers()"></select>    </h3>
