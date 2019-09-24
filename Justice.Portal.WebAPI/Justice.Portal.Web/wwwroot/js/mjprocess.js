@@ -69,7 +69,8 @@ class MJProcess {
         this.PutCareers = this.PutCareers.bind(this);
 
         this.PutNextPKListItems = this.PutNextPKListItems.bind(this);
-
+        this.PutFeedback = this.PutFeedback.bind(this);
+        this.SendFeedback = this.SendFeedback.bind(this);
 
 
         this.T = this.T.bind(this);
@@ -93,6 +94,9 @@ class MJProcess {
         if (!text)
             return "";
         //text = $(text).text();
+        text = text.replace(/<\/?[^>]+(>|$)/g, "");
+        text = text.replace(/&nbsp;/g, " ");
+
         if (text.length <= length)
             return text;
 
@@ -210,6 +214,7 @@ class MJProcess {
             case "pkmessage": this.PutMessage(blockId, isMain); break;
             case "pkconsult": this.PutConsult(blockId, isMain); break;
             case "career": this.PutCareers(blockId, isMain); break;
+            case "feedback": this.PutFeedback(blockId, isMain); break;
 
         }
     }
@@ -308,7 +313,7 @@ class MJProcess {
 
             success: function (data) {
                 data.forEach(x =>
-                    lis += '<li><h3><span>' + x.date + '</span><a href="home/index/' + x.url + '">' + self.NarrowText(JSON.parse(x.jsonContent).body[self.language], 140) + '</a></h3></li>'
+                    lis += '<li><h3><span>' + x.date + '</span><a href="home/index/' + x.url + '">' + self.NarrowText($(JSON.parse(x.jsonContent).body[self.language]).text(), 140) + '</a></h3></li>'
                 );
 
             }
@@ -356,7 +361,7 @@ class MJProcess {
                     `<div>
 								<h6 class="date">`+ x.date + `</h6>
                                 <h2>` + self.NarrowText(JSON.parse(x.jsonContent).title[self.language], 100) + `</a></h2>     
-								<h3><a href="`+ x.url + `">` + self.NarrowText(JSON.parse(x.jsonContent).body[self.language], 100) + `</a></h3>
+								<h3><a href="`+ x.url + `">` + self.NarrowText($(JSON.parse(x.jsonContent).body[self.language]).text(), 100) + `</a></h3>
 							</div>
 						</div>
 					</div>
@@ -500,7 +505,7 @@ class MJProcess {
                         <div class="port-content">
                             <img src="/api/part/GetBlob?hash=`+ data.imageId + `" alt="" class="list-article-img img-prime" style="max-width:100%;max-height:100%;"/>
                             <div>
-                                `+ self.NarrowText(data.body[self.language], 400) + `
+                                `+ self.NarrowText($(data.body[self.language]).text(), 400) + `
                                 <a class="btn btn-primary" href="/home/index/`+ x.url + `" role="button"><t>learnmore</t></a>
                             </div>
 						</div>
@@ -1937,6 +1942,104 @@ class MJProcess {
             return "";
         return obj[this.language];
     }
+
+
+    PutFeedback(divId, isMain) {
+        var oldDiv = $("#" + divId);
+        var obj = isMain ? this.MJPageData.main : this.MJPageData["block_" + divId].blockData;
+        var self = this;
+        var lMandatory = [];
+
+        var form = "<form action='/home/SendFeedback' method='POST' id='fFeedBack' target='_blank' enctype='multipart/form-data'><input type='hidden' name='id' value='" + window.location.href.split("/").pop() + "' />";
+        obj.datas.forEach(x => {
+            var element = "";
+            var id = "fbe_" + x.id;
+            switch (parseInt(x.type)) {
+                case 1:
+                    element = "<input type='text' id='" + id + "' class='form-control' name='" + x.title[self.language] + "'/>"; break;
+                case 2:
+                    element = "<textarea id='" + id + "' class='form-control' rows='6' name='" + x.title[self.language] + "'/>"; break;
+                case 3:
+                    element = "<input type='file' id='" + id + "' class='form-control' name='upload_" + id + "'/>"; break;
+
+            };
+            if (x.mandatory)
+                lMandatory.push({ id: id, title: x.title[self.language] });
+            form +=
+                `<div class="row">
+                <div class="col-12">
+                    <label class="control-label">`+ x.title[self.language] + (x.mandatory ? "*" : "") + `</label>
+                    `+ element + `
+                </div>
+             </div> `;
+        });
+        form += '</form>';
+        self.MandatoryFields = lMandatory;
+
+        oldDiv.replaceWith($(`<article class= "article-container" >
+
+            <h1>`+ obj.title[self.language] + `
+				</h1>
+            
+
+            <div class="article-content">
+            
+                `+ self.FixText(obj.body[self.language]) + `
+                `+ form + `
+                <div class="row">
+                    <div class="col-12">
+                        <a class="btn btn-primary" onclick="mjProcess.SendFeedback()"><t>send</t></a>
+                    </div>
+                </div>
+				</div>
+			</article > `));
+
+
+    }
+
+    SendFeedback() {
+        var self = this;
+        var ok = true;
+        var errors = "";
+        self.MandatoryFields.forEach(x => {
+            if (($("#" + x.id).val() || "") === "") {
+                errors += x.title + " ";
+                ok = false;
+            };
+        });
+
+        if (!ok) {
+            alert(self.TranslateWord("followingfieldsmusthavevalue") + ":\r\n" + errors);
+            return;
+        }
+
+        //console.log($("#fFeedBack"));
+        //$("#fFeedBack").submit(function (e) {
+        //    e.preventDefault(); // avoid to execute the actual submit of the form.
+
+        //    var form = $(this);
+        //    var url = form.attr('action');
+
+        //    $.ajax({
+        //        type: "POST",
+        //        url: url,
+        //        data: form.serialize(), // serializes the form's elements.
+        //        success: function (data) {
+        //            alert(data); // show response from the php script.
+        //        }
+        //    });
+        //    document.getElementById("fFeedBack").reset();
+
+        //});
+        document.getElementById("fFeedBack").submit();
+        document.getElementById("fFeedBack").reset();
+        
+
+        //
+
+
+    }
+
 
 
 

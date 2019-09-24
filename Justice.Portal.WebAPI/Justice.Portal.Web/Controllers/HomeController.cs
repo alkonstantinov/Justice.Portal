@@ -1,12 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net;
+using System.Net.Mail;
+using System.Text;
 using System.Threading.Tasks;
 using Justice.Portal.DB;
 using Justice.Portal.DB.JSModels;
 using Justice.Portal.DB.Models;
 using Justice.Portal.Web.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json.Linq;
 using Serilog;
 
@@ -17,11 +22,13 @@ namespace Justice.Portal.Web.Controllers
     {
         protected DBFuncs db;
         protected ICielaComm cielaComm;
+        protected IConfiguration config;
 
-        public HomeController(JusticePortalContext jpc, ICielaComm cielaComm)
+        public HomeController(JusticePortalContext jpc, ICielaComm cielaComm, IConfiguration config)
         {
             this.db = new DBFuncs(jpc);
             this.cielaComm = cielaComm;
+            this.config = config;
         }
         //[HttpGet("index/{url?}")]
         public IActionResult Index([FromRoute]string url)
@@ -74,6 +81,67 @@ namespace Justice.Portal.Web.Controllers
             return View("index", cielaComm.GetDocument(id));
         }
 
+        [HttpPost("home/SendFeedback")]
+        public IActionResult SendFeedback()
+        {
+            StringBuilder sb = new StringBuilder();
+            string id = null;
+            foreach (var k in Request.Form)
+            {
+                if (k.Key == "id")
+                    id = k.Value;
+                else
+                    sb.AppendLine(k.Key + ":" + k.Value);
+            }
 
+
+            var b = db.GetBlock(id);
+            var data = JObject.Parse(b.Jsonvalues);
+
+            // send email
+            var smtpConfig = config.GetSection("Smtp").Get<SmtpConfig>();
+
+            using (var smtp = new SmtpClient(smtpConfig.Host, smtpConfig.Port))
+            {
+                smtp.EnableSsl = smtpConfig.Ssl;
+                smtp.UseDefaultCredentials = false;
+                smtp.Credentials = new NetworkCredential(smtpConfig.Username, smtpConfig.Password);
+
+                var message = new MailMessage();
+                message.To.Add(data["sendTo"].ToString());
+                message.From = new MailAddress(smtpConfig.Username);
+                message.Subject = data["title"]["bg"].ToString();
+                message.Body = sb.ToString();
+
+                foreach (var f in Request.Form.Files)
+                {                    
+                    Attachment a = new Attachment(f.OpenReadStream(), f.FileName);
+                    message.Attachments.Add(a);
+                }
+
+
+                try
+                {
+                    smtp.Send(message);
+                }
+                catch (SmtpException e)
+                {
+                    return BadRequest();
+                }
+            }
+
+
+            return Json("OK");
+        }
     }
+
+    internal class SmtpConfig
+    {
+        public string Host { get; set; }
+        public int Port { get; set; }
+        public bool Ssl { get; set; }
+        public string Username { get; set; }
+        public string Password { get; set; }
+    }
+
 }
