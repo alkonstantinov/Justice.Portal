@@ -5,18 +5,18 @@ const bcKeyMain = "___main";
 
 
 class MJProcess {
-    translation = {};
-    language = "bg";
-    MJPageData = {};
-    LastBanner = null;
-    Top = 0;
-    ItemsContentId = "";
-    NextItemsLinkId = "";
-    years = [];
-    CollectionStructure;
-    CollectionContent;
 
     constructor() {
+
+        this.translation = {};
+        this.language = "bg";
+        this.MJPageData = {};
+        this.LastBanner = null;
+        this.Top = 0;
+        this.ItemsContentId = "";
+        this.NextItemsLinkId = "";
+        this.years = [];
+
         this.LoadTranslations = this.LoadTranslations.bind(this);
         this.Translate = this.Translate.bind(this);
         this.TranslateWord = this.TranslateWord.bind(this);
@@ -272,7 +272,7 @@ class MJProcess {
                 </div>
                 <div class="row">
                     <div class="col-6">
-                        <img src="/api/part/GetBlob?hash=`+ obj.imageId + `" alt="" style="max-width:100%;max-height:100%;"/>
+                        <img src="/api/part/GetBlob?hash=`+ obj.imageId + `" alt="" />
                     </div>
                     <div class="col-6">
                         `+ self.FixText(obj.body[self.language] || "") + `
@@ -357,7 +357,7 @@ class MJProcess {
                 data.rows.forEach(x =>
                     divs += `<div class="list-box">
 						<div class="port-content">
-							`+ (JSON.parse(x.jsonContent).imageId ? '<img src="/api/part/GetBlob?hash=' + JSON.parse(x.jsonContent).imageId + '" alt="" style="max-width:100%;max-height:100%;"  class="list-article-img img-list"/>' : '') +
+							`+ (JSON.parse(x.jsonContent).imageId ? '<img src="/api/part/GetBlob?hash=' + JSON.parse(x.jsonContent).imageId + '" alt=""   class="list-article-img img-list"/>' : '') +
                     `<div>
 								<h6 class="date">`+ x.date + `</h6>
                                 <h2>` + self.NarrowText(JSON.parse(x.jsonContent).title[self.language], 100) + `</a></h2>     
@@ -429,7 +429,7 @@ class MJProcess {
                 data.rows.forEach(x => {
                     divs += `<div class="list-box">
 						<div class="port-content">
-							`+ (JSON.parse(x.jsonContent).imageId ? '<img src="/api/part/GetBlob?hash=' + JSON.parse(x.jsonContent).imageId + '" alt="" style="max-width:100%;max-height:100%;"  class="list-article-img img-list"/>' : '') +
+							`+ (JSON.parse(x.jsonContent).imageId ? '<img src="/api/part/GetBlob?hash=' + JSON.parse(x.jsonContent).imageId + '" alt=""   class="list-article-img img-list"/>' : '') +
                         `<div>
 								<h6 class="date">`+ x.date + `</h6>
                                 <h2><a href="`+ x.url + `">` + self.NarrowText(JSON.parse(x.jsonContent).title[self.language], 100) + `</a></h2>     
@@ -503,7 +503,7 @@ class MJProcess {
                         <h6 class="date">`+ x.date + `</h6>
                         <h2>`+ (data.title[self.language] || "") + `</h2>
                         <div class="port-content">
-                            <img src="/api/part/GetBlob?hash=`+ data.imageId + `" alt="" class="list-article-img img-prime" style="max-width:100%;max-height:100%;"/>
+                            <img src="/api/part/GetBlob?hash=`+ data.imageId + `" alt="" class="list-article-img img-prime" />
                             <div>
                                 `+ self.NarrowText($(data.body[self.language]).text(), 400) + `
                                 <a class="btn btn-primary" href="/home/index/`+ x.url + `" role="button"><t>learnmore</t></a>
@@ -1304,7 +1304,7 @@ class MJProcess {
                 data.rows.forEach(x => {
                     divs += `<div class= "list-box" >
             <div class="port-content">
-                `+ (JSON.parse(x.jsonContent).imageId ? '<img src="/api/part/GetBlob?hash=' + JSON.parse(x.jsonContent).imageId + '" alt="" style="max-width:100%;max-height:100%;" class="list-article-img img-list" />' : '') +
+                `+ (JSON.parse(x.jsonContent).imageId ? '<img src="/api/part/GetBlob?hash=' + JSON.parse(x.jsonContent).imageId + '" alt="" class="list-article-img img-list" />' : '') +
                         `<div>
                     <h6 class="date">`+ x.date + `</h6>
                     <h3><a href="`+ x.url + `">` + self.NarrowText(JSON.parse(x.jsonContent).title[self.language], 100) + `</a></h3>
