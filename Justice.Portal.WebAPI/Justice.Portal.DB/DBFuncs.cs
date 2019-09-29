@@ -36,7 +36,7 @@ namespace Justice.Portal.DB
         public LoginResponse Login(LoginRequest model)
         {
             var u = db.PortalUser
-                .FirstOrDefault(x => x.UserName.Equals(model.UserName, StringComparison.InvariantCultureIgnoreCase) && x.Password.Equals(model.Password, StringComparison.InvariantCultureIgnoreCase));
+                .FirstOrDefault(x => x.UserName.Equals(model.UserName, StringComparison.InvariantCultureIgnoreCase) && x.Password.Equals(model.Password, StringComparison.InvariantCultureIgnoreCase) && x.Active);
 
             if (u != null)
             {

@@ -256,6 +256,12 @@ class MJProcess {
     PutBanner(divId, isMain) {
         var oldDiv = $("#" + divId);
         var obj = isMain ? this.MJPageData.main : this.MJPageData["block_" + divId].blockData;
+         
+        if (!obj) {
+            this.HasBanner = false;
+            return;
+        }
+        this.HasBanner = true;
         var self = this;
         oldDiv.replaceWith($(`
             <div class="modal fade" id="`+ divId + `" tabindex="-1" role="dialog" aria-labelledby="liveEmission" aria-hidden="true">
@@ -272,7 +278,7 @@ class MJProcess {
                 </div>
                 <div class="row">
                     <div class="col-6">
-                        <img src="/api/part/GetBlob?hash=`+ obj.imageId + `" alt="" />
+                        <img src="/api/part/GetBlob?hash=`+ obj.imageId + `" alt="" style="max-width:100%;max-height:100%"/>
                     </div>
                     <div class="col-6">
                         `+ self.FixText(obj.body[self.language] || "") + `
@@ -1122,6 +1128,8 @@ class MJProcess {
                 show = DaysDiff > 1;
             }
             else show = true;
+            
+            show = show && this.HasBanner;
             if (show) {
                 $('#' + self.LastBanner).modal('show');
                 localStorage.setItem(lsLastBannerTime, new Date().toISOString());
@@ -1193,6 +1201,9 @@ class MJProcess {
             });
         }
 
+        while (bc.length > 3) {
+            bc.splice(1, 1);
+        }
 
         localStorage.setItem(lsBreadcrumbs, JSON.stringify(bc));
     }
@@ -2033,7 +2044,7 @@ class MJProcess {
         //});
         document.getElementById("fFeedBack").submit();
         document.getElementById("fFeedBack").reset();
-        
+
 
         //
 
