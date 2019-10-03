@@ -350,6 +350,31 @@ namespace Justice.Portal.Web.Controllers
 
         }
 
+        [HttpGet("GetInnerDocs")]
+        public async Task<IActionResult> GetInnerDocs(string portalPartId)
+        {
+            string token = this.GetToken();
+            if (!db.IsAuthenticated(token))
+                return Unauthorized();
+
+            if (!this.CanDoPart(portalPartId))
+                return Unauthorized();
+            return Ok(db.GetInnerDocs(portalPartId));
+        }
+
+        [HttpPost("SetInnerDocs")]
+        public async Task<IActionResult> SetInnerDocs(JSInnerDoc doc)
+        {
+            string token = this.GetToken();
+            if (!db.IsAuthenticated(token))
+                return Unauthorized();
+
+            if (!this.CanDoPart(doc.PortalPartId))
+                return Unauthorized();
+            db.SetInnerDocs(doc);
+            return Ok();
+        }
+
 
     }
 }

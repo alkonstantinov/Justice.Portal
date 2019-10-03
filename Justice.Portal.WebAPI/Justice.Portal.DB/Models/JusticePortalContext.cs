@@ -22,6 +22,7 @@ namespace Justice.Portal.DB.Models
         public virtual DbSet<BlockTypePropertyValue> BlockTypePropertyValue { get; set; }
         public virtual DbSet<Collection> Collection { get; set; }
         public virtual DbSet<Header> Header { get; set; }
+        public virtual DbSet<InnerDoc> InnerDoc { get; set; }
         public virtual DbSet<Log> Log { get; set; }
         public virtual DbSet<Pklabel> Pklabel { get; set; }
         public virtual DbSet<PortalGroup> PortalGroup { get; set; }
@@ -43,7 +44,7 @@ namespace Justice.Portal.DB.Models
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-                optionsBuilder.UseSqlServer("Server=.;Database=JusticePortal;Trusted_Connection=True;persist security info=True;user id=sa;password=123;MultipleActiveResultSets=True;");
+                optionsBuilder.UseSqlServer("Server=DESKTOP-NIQT1U7;Database=JusticePortal;Trusted_Connection=True;persist security info=True;user id=sa;password=123;MultipleActiveResultSets=True;");
             }
         }
 
@@ -198,6 +199,21 @@ namespace Justice.Portal.DB.Models
                 entity.Property(e => e.Title).IsRequired();
             });
 
+            modelBuilder.Entity<InnerDoc>(entity =>
+            {
+                entity.HasIndex(e => e.PortalPartId)
+                    .HasName("idx_InnerDoc_PortalPartId");
+
+                entity.Property(e => e.PortalPartId)
+                    .IsRequired()
+                    .HasMaxLength(20);
+
+                entity.HasOne(d => d.PortalPart)
+                    .WithMany(p => p.InnerDoc)
+                    .HasForeignKey(d => d.PortalPartId)
+                    .HasConstraintName("fk_InnerDoc_PortalPartId");
+            });
+
             modelBuilder.Entity<Log>(entity =>
             {
                 entity.Property(e => e.Level).HasMaxLength(128);
@@ -319,11 +335,6 @@ namespace Justice.Portal.DB.Models
                     .WithMany(p => p.PortalUser2Group)
                     .HasForeignKey(d => d.PortalGroupId)
                     .HasConstraintName("fk_PortalUser2Group_PortalGroupId");
-
-                entity.HasOne(d => d.PortalUser)
-                    .WithMany(p => p.PortalUser2Group)
-                    .HasForeignKey(d => d.PortalUserId)
-                    .HasConstraintName("fk_PortalUser2Group_PortalUserId");
             });
 
             modelBuilder.Entity<PortalUser2Part>(entity =>
@@ -342,11 +353,6 @@ namespace Justice.Portal.DB.Models
                     .WithMany(p => p.PortalUser2Part)
                     .HasForeignKey(d => d.PortalPartId)
                     .HasConstraintName("fk_PortalUser2Part_PortalPartId");
-
-                entity.HasOne(d => d.PortalUser)
-                    .WithMany(p => p.PortalUser2Part)
-                    .HasForeignKey(d => d.PortalUserId)
-                    .HasConstraintName("fk_PortalUser2Part_PortalUserId");
             });
 
             modelBuilder.Entity<PortalUser2Right>(entity =>
@@ -360,11 +366,6 @@ namespace Justice.Portal.DB.Models
                 entity.Property(e => e.UserRightId)
                     .IsRequired()
                     .HasMaxLength(20);
-
-                entity.HasOne(d => d.PortalUser)
-                    .WithMany(p => p.PortalUser2Right)
-                    .HasForeignKey(d => d.PortalUserId)
-                    .HasConstraintName("fk_PortalUser2Right_PortalUserId");
 
                 entity.HasOne(d => d.UserRight)
                     .WithMany(p => p.PortalUser2Right)

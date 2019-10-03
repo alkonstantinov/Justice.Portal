@@ -256,7 +256,7 @@ class MJProcess {
     PutBanner(divId, isMain) {
         var oldDiv = $("#" + divId);
         var obj = isMain ? this.MJPageData.main : this.MJPageData["block_" + divId].blockData;
-         
+
         if (!obj) {
             this.HasBanner = false;
             return;
@@ -1128,7 +1128,7 @@ class MJProcess {
                 show = DaysDiff > 1;
             }
             else show = true;
-            
+
             show = show && this.HasBanner;
             if (show) {
                 $('#' + self.LastBanner).modal('show');
@@ -1216,7 +1216,7 @@ class MJProcess {
             $("#olBC li").remove();
             var bc = JSON.parse(localStorage.getItem(lsBreadcrumbs) || "[]");
             bc.forEach((x, i) =>
-                $("#olBC").append($('<li class="breadcrumb-item" aria-current="page"><a href="' + (x.key === bcKeyMain ? '/' : '/home/index/' + x.key) + '">' + self.NarrowText(x.title[self.language], 50) + '</a></li>'))
+                $("#olBC").append($('<li class="breadcrumb-item" aria-current="page"><a href="' + (x.key === bcKeyMain ? '/' : '/home/index/' + x.key) + '">' + self.NarrowText((x.title ? x.title[self.language] : "..."), 50) + '</a></li>'))
             );
 
         }

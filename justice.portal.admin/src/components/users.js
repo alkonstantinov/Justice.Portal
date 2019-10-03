@@ -34,6 +34,17 @@ export default class Users extends BaseComponent {
 
     }
 
+    TestPassword(pass) {
+
+        return pass !== null &&
+            pass.length >= 6 &&
+            pass.match(/[A-ZА-Я]{1}/) &&
+            pass.match(/[a-zа-я]{1}/) &&
+            pass.match(/[0-9]{1}/) &&
+            pass.match(/[_@!%()#*+\-./:=?$;^]{1}/)
+
+    }
+
     LoadData() {
         var self = this;
         this.setState({ mode: "loading" });
@@ -122,8 +133,8 @@ export default class Users extends BaseComponent {
             toast.error("Моля, въведете потребителско име");
             return;
         }
-        if (this.state.obj.password === "" && !this.state.obj.portalUserId) {
-            toast.error("Моля, въведете парола");
+        if (!this.TestPassword(this.state.obj.password) && !this.state.obj.portalUserId) {
+            toast.error("Паролата за вход трябва да съдържа минимум 6 символа, от които поне една малка буква, една главна буква и цифра.Разрешени специални символи са _ @ ! % ( ) # * + - . / : = ?$; ^");
             return;
         }
         if (this.state.obj.password !== this.state.obj.rePassword) {

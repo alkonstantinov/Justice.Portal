@@ -156,6 +156,14 @@ class MainMenu extends BaseComponent {
                         </span>
 
                     </div>
+                    <div className="col-3">
+                        <Link className="btn btn-default fillSpace" to='/insidedocs'>
+                            <i className="far fa-file-word"></i>
+                            <p>Вътрешни документи</p>
+                        </Link>
+
+
+                    </div>
 
 
 

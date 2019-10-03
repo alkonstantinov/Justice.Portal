@@ -10,6 +10,5 @@ namespace Justice.Portal.DB.Models
         public int PortalGroupId { get; set; }
 
         public virtual PortalGroup PortalGroup { get; set; }
-        public virtual PortalUser PortalUser { get; set; }
     }
 }

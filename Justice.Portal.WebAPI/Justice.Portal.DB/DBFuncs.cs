@@ -705,5 +705,26 @@ namespace Justice.Portal.DB
         }
 
 
+        public JArray GetInnerDocs(string portalPartId)
+        {
+            var id = db.InnerDoc.FirstOrDefault(x => x.PortalPartId == portalPartId);
+            return id?.Content != null ? JArray.Parse(id.Content) : new JArray();
+        }
+
+        public void SetInnerDocs(JSInnerDoc doc)
+        {
+            var id = db.InnerDoc.FirstOrDefault(x => x.PortalPartId == doc.PortalPartId);
+            if (id==null)
+            {
+                id = new InnerDoc();
+                id.PortalPartId = doc.PortalPartId;
+                
+                db.InnerDoc.Add(id);
+            }
+            id.Content = doc.Content;
+            db.SaveChanges();
+
+        }
+
     }
 }

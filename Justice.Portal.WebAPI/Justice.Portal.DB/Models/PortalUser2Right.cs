@@ -9,7 +9,6 @@ namespace Justice.Portal.DB.Models
         public int PortalUserId { get; set; }
         public string UserRightId { get; set; }
 
-        public virtual PortalUser PortalUser { get; set; }
         public virtual UserRight UserRight { get; set; }
     }
 }
