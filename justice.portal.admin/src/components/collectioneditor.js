@@ -168,9 +168,9 @@ export default class CollectionEditor extends BaseComponent {
 
     AddContent() {
         var content = this.state.content;
-        content.push({
+        content = [{
             id: uuidv4()
-        });
+        }].concat(content);
         this.setState({ content: content });
     }
 

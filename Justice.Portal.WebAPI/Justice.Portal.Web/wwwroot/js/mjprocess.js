@@ -72,6 +72,8 @@ class MJProcess {
         this.PutFeedback = this.PutFeedback.bind(this);
         this.SendFeedback = this.SendFeedback.bind(this);
 
+        this.RepairLinks = this.RepairLinks.bind(this);
+
 
         this.T = this.T.bind(this);
 
@@ -1159,7 +1161,7 @@ class MJProcess {
         self.ShowBannerIfNeeded();
         self.DisplayBreadCrumbs();
         self.PutAutomaticLinks();
-
+        self.RepairLinks();
     }
 
 
@@ -2048,6 +2050,14 @@ class MJProcess {
 
         //
 
+
+    }
+
+    RepairLinks() {
+        $("a").each(function (i, e) {
+            if ($(e).attr("href") && $(e).attr("href").indexOf("http") === 0)
+                $(e).attr("target", "_blank");
+        });
 
     }
 
