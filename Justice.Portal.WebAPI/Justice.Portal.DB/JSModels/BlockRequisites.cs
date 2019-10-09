@@ -9,5 +9,8 @@ namespace Justice.Portal.DB.JSModels
         public JSPortalPart[] Parts { get; set; }
 
         public JSBlockType[] BlockTypes { get; set; }
+
+        public JSRubric[] Rubrics { get; set; }
+
     }
 }

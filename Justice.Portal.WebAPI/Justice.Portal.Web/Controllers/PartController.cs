@@ -9,6 +9,7 @@ using Justice.Portal.DB.Models;
 using Justice.Portal.Web.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json.Linq;
 
 namespace Justice.Portal.Web.Controllers
 {
@@ -25,7 +26,10 @@ namespace Justice.Portal.Web.Controllers
             this.SolrComm = solrComm;
         }
 
-
+        /// <summary>
+        /// Извлича данни за част
+        /// </summary>
+        /// <returns>част</returns>
         [HttpGet("GetBlockRequisites")]
         public async Task<IActionResult> GetBlockRequisites()
         {
@@ -37,6 +41,7 @@ namespace Justice.Portal.Web.Controllers
             BlockRequisites result = new BlockRequisites();
             result.BlockTypes = db.GetBlockTypes();
             result.Parts = db.GetPortalParts(Guid.Parse(token));
+            result.Rubrics = db.GetPortalRubrics(Guid.Parse(token));
             return Ok(result);
         }
 
@@ -55,6 +60,11 @@ namespace Justice.Portal.Web.Controllers
         //    return Ok(result);
         //}
 
+            /// <summary>
+            /// извлича страница
+            /// </summary>
+            /// <param name="portalPartId">част</param>
+            /// <returns>страница</returns>
         [HttpGet("GetTemplates")]
         public async Task<IActionResult> GetTemplates(string portalPartId)
         {
@@ -80,6 +90,11 @@ namespace Justice.Portal.Web.Controllers
         //    return Ok(data);
         //}
 
+        /// <summary>
+        /// извлича видове блокове за част на портала
+        /// </summary>
+        /// <param name="portalPartId">част на портала</param>
+        /// <returns>блокове</returns>
         [HttpGet("GetBlocksPerPortalPart")]
         public async Task<IActionResult> GetBlocksPerPortalPart(string portalPartId)
         {
@@ -95,8 +110,15 @@ namespace Justice.Portal.Web.Controllers
         }
 
 
+        /// <summary>
+        /// извлича всички блокове отговарящи на критерии
+        /// </summary>
+        /// <param name="portalPartId">част</param>
+        /// <param name="blockTypeId">тип</param>
+        /// <param name="ss">текст за търсене</param>
+        /// <returns>блокове</returns>
         [HttpGet("GetBlocks")]
-        public async Task<IActionResult> GetBlocks(string portalPartId, string blockTypeId, string ss)
+        public async Task<IActionResult> GetBlocks(string portalPartId, string blockTypeId, int rubricId, string ss)
         {
             string token = this.GetToken();
             if (!db.IsAuthenticated(token))
@@ -105,9 +127,16 @@ namespace Justice.Portal.Web.Controllers
             if (!this.CanDoPart(portalPartId))
                 return Unauthorized();
 
-            return Ok(db.GetBlocks(portalPartId, blockTypeId, ss));
+            var rs = db.GetUserRubrics(token);
+            return Ok(db.GetBlocks(portalPartId, blockTypeId, rs, ss));
         }
 
+        /// <summary>
+        /// извлича данни на блок
+        /// </summary>
+        /// <param name="blockTypeId">тип</param>
+        /// <param name="blockId">блок</param>
+        /// <returns>блок</returns>
         [HttpGet("GetBlockData")]
         public async Task<IActionResult> GetBlockData(string blockTypeId, int? blockId)
         {
@@ -125,10 +154,16 @@ namespace Justice.Portal.Web.Controllers
                 result.Values = db.GetBlockPropertyValues(blockId.Value);
             }
             result.CanBePage = db.GetBlockType(blockTypeId).CanBePage;
+            result.Rubrics = db.GetPortalRubrics(Guid.Parse(token));
             return Ok(result);
         }
 
 
+        /// <summary>
+        /// добавя електронен оригинал
+        /// </summary>
+        /// <param name="image">оригинал</param>
+        /// <returns>хеш</returns>
         [HttpPost("AddBlob")]
         public async Task<IActionResult> AddBlob([FromForm]IFormFile image)
         {
@@ -153,12 +188,17 @@ namespace Justice.Portal.Web.Controllers
             b.Hash = hash;
             b.ContentType = image.ContentType;
             this.db.AddBlob(b);
+            this.SaveUserAction(this.GetUserAction("Добавяне на електронен оригинал", hash));
             return Ok(b.Hash);
 
         }
 
 
-
+        /// <summary>
+        /// извлича електронен оригинал
+        /// </summary>
+        /// <param name="hash">хеш</param>
+        /// <returns>оригинал</returns>
         [HttpGet("GetBlob")]
         public async Task<FileContentResult> GetBlob(string hash)
         {
@@ -167,7 +207,11 @@ namespace Justice.Portal.Web.Controllers
             return response;
         }
 
-
+        /// <summary>
+        /// записва блок
+        /// </summary>
+        /// <param name="data">данни на блока</param>
+        /// <returns>идентификатор</returns>
         [HttpPost("SetBlock")]
         public async Task<IActionResult> SetBlock([FromBody]BlockData data)
         {
@@ -184,15 +228,19 @@ namespace Justice.Portal.Web.Controllers
             if (bt.IsSearchable)
 
                 await Task.Run(() => SolrComm.UpdateBlock(block));
+            this.SaveUserAction(this.GetUserAction("Запис на част", JObject.FromObject(data).ToString()));
 
             return Ok();
 
         }
 
 
-
+        /// <summary>
+        /// извлича страница
+        /// </summary>
+        /// <param name="templateId">идентификатор на страница</param>
+        /// <returns>страница</returns>
         [HttpGet("GetTemplate")]
-
         public async Task<IActionResult> GetTemplate(int templateId)
         {
             if (!this.HasRight("admintemplates"))
@@ -205,6 +253,12 @@ namespace Justice.Portal.Web.Controllers
                 return Unauthorized();
             return Ok(template);
         }
+
+        /// <summary>
+        /// записва страница
+        /// </summary>
+        /// <param name="template">страница</param>
+        /// <returns>идентификатор</returns>
         [HttpPost("SetTemplate")]
         public async Task<IActionResult> SetTemplate([FromBody]JSTemplate template)
         {
@@ -218,9 +272,14 @@ namespace Justice.Portal.Web.Controllers
             if (!this.CanDoPart(oldPage.PortalPartId))
                 return Unauthorized();
             db.SetTemplate(template);
+            this.SaveUserAction(this.GetUserAction("Запис на страница", JObject.FromObject(template).ToString()));
             return Ok();
         }
 
+        /// <summary>
+        /// извлича колекции
+        /// </summary>
+        /// <returns>колекции</returns>
         [HttpGet("GetCollections")]
         public async Task<IActionResult> GetCollections()
         {
@@ -232,6 +291,12 @@ namespace Justice.Portal.Web.Controllers
 
             return Ok(db.GetCollections());
         }
+
+        /// <summary>
+        /// извлича колекциq
+        /// </summary>
+        /// 
+        /// <returns>колекциq</returns>
 
         [HttpGet("GetCollection")]
         public async Task<IActionResult> GetCollection(int collectionId)
@@ -245,6 +310,11 @@ namespace Justice.Portal.Web.Controllers
             return Ok(db.GetCollection(collectionId));
         }
 
+        /// <summary>
+        /// изтрива колекция
+        /// </summary>
+        /// <param name="collectionId">идентификатор</param>
+        /// <returns></returns>
         [HttpDelete("DeleteCollection/{collectionId}")]
         public async Task<IActionResult> DeleteCollection([FromRoute]int collectionId)
         {
@@ -255,10 +325,18 @@ namespace Justice.Portal.Web.Controllers
                 return Unauthorized();
 
             db.DeleteCollection(collectionId);
+            this.SaveUserAction(this.GetUserAction("Изтриване на колекция", collectionId.ToString()));
+
             return Ok();
 
         }
 
+
+        /// <summary>
+        /// записва колекция
+        /// </summary>
+        /// <param name="collection">данни на колекцията</param>
+        /// <returns></returns>
         [HttpPost("SaveCollection")]
         public async Task<IActionResult> SaveCollection([FromBody]JSCollection collection)
         {
@@ -268,19 +346,30 @@ namespace Justice.Portal.Web.Controllers
             if (!db.IsAuthenticated(token))
                 return Unauthorized();
             db.SaveCollection(collection);
+            this.SaveUserAction(this.GetUserAction("Запис на колекция", JObject.FromObject(collection).ToString()));
+
             return Ok();
         }
 
 
 
 
-
+        /// <summary>
+        /// проверява дали има такова урл
+        /// </summary>
+        /// <param name="url">урл</param>
+        /// <param name="blockId">идентификатор на част</param>
+        /// <returns>да/не</returns>
         [HttpGet("UrlExists")]
         public async Task<IActionResult> UrlExists([FromQuery]string url, [FromQuery]int? blockId)
         {
             return Ok(db.UrlExists(url, blockId));
         }
 
+        /// <summary>
+        /// извлича заглавни части
+        /// </summary>
+        /// <returns>заглавни части</returns>
         [HttpGet("GetHeaders")]
         public async Task<IActionResult> GetHeaders()
         {
@@ -292,6 +381,11 @@ namespace Justice.Portal.Web.Controllers
             return Ok(db.GetHeaders());
         }
 
+        /// <summary>
+        /// извлича заглавн част
+        /// </summary>
+        /// <param name="headerId">идентификатор</param>
+        /// <returns>заглавн част</returns>
         [HttpGet("GetHeader")]
         public async Task<IActionResult> GetHeader(int headerId)
         {
@@ -303,6 +397,11 @@ namespace Justice.Portal.Web.Controllers
             return Ok(db.GetHeader(headerId));
         }
 
+        /// <summary>
+        /// Записва заглавна част
+        /// </summary>
+        /// <param name="header">данни за частта</param>
+        /// <returns></returns>
         [HttpPost("SaveHeader")]
         public async Task<IActionResult> SaveHeader([FromBody]JSHeader header)
         {
@@ -312,9 +411,16 @@ namespace Justice.Portal.Web.Controllers
             if (!this.HasRight("adminheaders"))
                 return Unauthorized();
             db.SaveHeader(header);
+            this.SaveUserAction(this.GetUserAction("Запис на заглавна част", JObject.FromObject(header).ToString()));
+
             return Ok();
         }
 
+        /// <summary>
+        /// Изтрива заглавна част
+        /// </summary>
+        /// <param name="headerId">идентификатор</param>
+        /// <returns></returns>
         [HttpDelete("DeleteHeader/{headerId}")]
         public async Task<IActionResult> DeleteHeader([FromRoute]int headerId)
         {
@@ -324,6 +430,8 @@ namespace Justice.Portal.Web.Controllers
             if (!this.HasRight("adminheaders"))
                 return Unauthorized();
             db.DeleteHeader(headerId);
+            this.SaveUserAction(this.GetUserAction("Изтриване на заглавна част", headerId.ToString()));
+
 
 
             return Ok();
@@ -336,7 +444,11 @@ namespace Justice.Portal.Web.Controllers
             return Ok(db.GetPKLabels(group));
         }
 
-
+        /// <summary>
+        /// изтрива част
+        /// </summary>
+        /// <param name="blockId">идентификатор</param>
+        /// <returns></returns>
         [HttpDelete("DeleteBlock/{blockId}")]
         public async Task<IActionResult> DeleteBlock([FromRoute]int blockId)
         {
@@ -345,11 +457,17 @@ namespace Justice.Portal.Web.Controllers
                 return Unauthorized();
             db.DeleteBlock(blockId);
 
+            this.SaveUserAction(this.GetUserAction("Изтриване на част", blockId.ToString()));
 
             return Ok();
 
         }
 
+        /// <summary>
+        /// Извлича вътрешни документи
+        /// </summary>
+        /// <param name="portalPartId">част на портала</param>
+        /// <returns>вътрешни документи</returns>
         [HttpGet("GetInnerDocs")]
         public async Task<IActionResult> GetInnerDocs(string portalPartId)
         {
@@ -362,6 +480,11 @@ namespace Justice.Portal.Web.Controllers
             return Ok(db.GetInnerDocs(portalPartId));
         }
 
+        /// <summary>
+        /// Записва вътрешни документи
+        /// </summary>
+        /// <param name="doc">вътрешни документи</param>
+        /// <returns></returns>
         [HttpPost("SetInnerDocs")]
         public async Task<IActionResult> SetInnerDocs(JSInnerDoc doc)
         {
@@ -372,8 +495,72 @@ namespace Justice.Portal.Web.Controllers
             if (!this.CanDoPart(doc.PortalPartId))
                 return Unauthorized();
             db.SetInnerDocs(doc);
+            this.SaveUserAction(this.GetUserAction("Запис на вътрешни документи", JObject.FromObject(doc).ToString()));
+
             return Ok();
         }
+
+        /// <summary>
+        /// Извлича рубрики
+        /// </summary>
+        /// <param name="portalPartId">част на портала</param>
+        /// <returns></returns>
+        [HttpGet("SelectRubric")]
+        public async Task<IActionResult> SelectRubric([FromQuery]string portalPartId)
+        {
+            string token = this.GetToken();
+            if (!db.IsAuthenticated(token))
+                return Unauthorized();
+
+            if (!this.CanDoPart(portalPartId))
+                return Unauthorized();
+
+            return Ok(db.SelectRubric(portalPartId));
+        }
+
+        /// <summary>
+        /// Изтрива рубрика
+        /// </summary>
+        /// <param name="rubricId">рубрика</param>
+        /// <returns></returns>
+        [HttpDelete("DeleteRubric")]
+        public async Task<IActionResult> DeleteRubric([FromQuery]int rubricId)
+        {
+            string token = this.GetToken();
+            if (!db.IsAuthenticated(token))
+                return Unauthorized();
+
+
+            db.DeleteRubric(rubricId);
+            return Ok();
+        }
+
+        /// <summary>
+        /// обновява рубрики
+        /// </summary>
+        /// <param name="rubrics">рубрики</param>
+        /// <returns></returns>
+        [HttpPost("UpdateRubric")]
+        public async Task<IActionResult> UpdateRubric([FromBody]JSRubric[] rubrics)
+        {
+            string token = this.GetToken();
+            if (!db.IsAuthenticated(token))
+                return Unauthorized();
+            if (rubrics.Length == 0)
+                return Ok();
+            if (!this.CanDoPart(rubrics[0].PortalPartId))
+                return Unauthorized();
+            foreach (var r in rubrics)
+                if (r.RubricId.HasValue)
+                    db.UpdateRubric(r);
+                else
+                    db.InsertRubric(r);
+
+            return Ok();
+        }
+
+
+
 
 
     }

@@ -15,7 +15,7 @@ namespace Justice.Portal.Web.Controllers
 
     [Route("api/[controller]")]
     [ApiController]
-
+   
     public class CielaController : BaseController
     {
 
@@ -27,12 +27,21 @@ namespace Justice.Portal.Web.Controllers
         }
 
 
+        /// <summary>
+        /// Извлича списък с документи
+        /// </summary>
+        /// <returns>списък с документи</returns>
         [HttpGet("GetDocList")]
         public async Task<IActionResult> GetDocList()
         {
             return Ok(ciela.GetDocuments());
         }
 
+        /// <summary>
+        /// Извлича документ
+        /// </summary>
+        /// <param name="id">Идентификатор</param>
+        /// <returns>HTML на документ</returns>
         [HttpGet("GetDoc")]
         public async Task<IActionResult> GetDoc(int id)
         {

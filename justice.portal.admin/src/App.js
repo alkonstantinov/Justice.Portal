@@ -22,6 +22,8 @@ import HeaderEditor from './components/headereditor';
 import Translations from './components/translations';
 import Uploader from './components/uploader';
 import InsideDocs from './components/insidedocs';
+import Audit from './components/audit';
+import Rubric from './components/rubric';
 
 class App extends BaseComponent {
 
@@ -93,6 +95,8 @@ class App extends BaseComponent {
                 <Route exact path='/editheader/:id?' component={HeaderEditor} />
                 <Route exact path='/uploader' component={Uploader} />
                 <Route exact path='/insidedocs' component={InsideDocs} />
+                <Route exact path='/audit' component={Audit} />
+                <Route exact path='/rubric' component={Rubric} />
                 <Route component={MainMenu} />
               </Switch>
           }

@@ -26,7 +26,10 @@ namespace Justice.Portal.Web.Controllers
             
         }
 
-
+        /// <summary>
+        /// Извлича данни за преводите
+        /// </summary>
+        /// <returns></returns>
         [HttpGet("GetTranslation")]
         public async Task<IActionResult> GetTranslation()
         {
@@ -34,6 +37,11 @@ namespace Justice.Portal.Web.Controllers
             
         }
 
+        /// <summary>
+        /// Записва данни за преводите
+        /// </summary>
+        /// <param name="trans">данни за преводите</param>
+        /// <returns></returns>
         [HttpPost("SetTranslation")]
         public async Task<IActionResult> SetTranslation([FromBody] JSTranslation trans)
         {

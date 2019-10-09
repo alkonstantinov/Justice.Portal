@@ -7,7 +7,7 @@ namespace Justice.Portal.DB.JSModels
     {
         public JSBlock()
         {
-            
+
         }
 
         public int BlockId { get; set; }
@@ -16,6 +16,8 @@ namespace Justice.Portal.DB.JSModels
         public string Name { get; set; }
         public string Url { get; set; }
         public string Jsonvalues { get; set; }
+        public bool? IsActive { get; set; }
+        public int RubricId { get; set; }
 
 
     }

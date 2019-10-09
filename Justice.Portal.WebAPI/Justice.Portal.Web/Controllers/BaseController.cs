@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Primitives;
+using Newtonsoft.Json.Linq;
 
 namespace Justice.Portal.Web.Controllers
 {
@@ -48,6 +49,22 @@ namespace Justice.Portal.Web.Controllers
             if (token == null)
                 return false;
             return db.CanDoPart(token, portalPartId);
+        }
+
+        protected void SaveUserAction(UserAction ua)
+        {
+            db.SaveUserAction(ua);
+        }
+
+        protected UserAction GetUserAction(string title, string content, string token = null)
+        {
+            UserAction ua = new UserAction();
+            token = token ?? this.GetToken();
+            ua.PortalUserId = db.GetUserByToken(token).PortalUserId;
+            ua.OnTime = DateTime.Now;
+            ua.Content = content;
+            ua.Title = title;
+            return ua;
         }
     }
 }

@@ -25,6 +25,8 @@ export default class Groups extends BaseComponent {
         this.Edit = this.Edit.bind(this);
         this.CheckPart = this.CheckPart.bind(this);
         this.CheckRight = this.CheckRight.bind(this);
+        this.CheckRubric = this.CheckRubric.bind(this);
+
         this.Save = this.Save.bind(this);
         this.Delete = this.Delete.bind(this);
         this.state.mode = "loading";
@@ -38,10 +40,12 @@ export default class Groups extends BaseComponent {
 
         Comm.Instance().get('security/GetGroupsForAdmin')
             .then(result => {
+
                 self.setState({
                     groups: result.data.groups,
                     parts: result.data.parts,
                     rights: result.data.rights,
+                    rubrics: result.data.rubrics,
                     mode: "list"
                 })
             })
@@ -66,7 +70,8 @@ export default class Groups extends BaseComponent {
                 portalGroupId: null,
                 name: "",
                 parts: [],
-                rights: []
+                rights: [],
+                rubrics: []
             }
         this.setState({ obj: obj, mode: "edit" })
     }
@@ -90,6 +95,18 @@ export default class Groups extends BaseComponent {
             obj.rights.push(right);
         else
             obj.rights.splice(this.state.obj.rights.indexOf(right), 1);
+        this.setState({ obj: obj });
+
+    }
+
+
+    CheckRubric(rubric, checked) {
+
+        var obj = this.state.obj
+        if (checked)
+            obj.rubrics.push(rubric);
+        else
+            obj.rubrics = obj.rubrics.filter(x => x != rubric);
         this.setState({ obj: obj });
 
     }
@@ -240,6 +257,28 @@ export default class Groups extends BaseComponent {
                                                         <label className="form-check-label" for="defaultCheck1">
                                                             {obj.name}
                                                         </label>
+                                                        <ul className="list-group">
+                                                            {
+                                                                self.state.rubrics.filter(x => x.portalPartId == obj.portalPartId).map(
+                                                                    rub =>
+                                                                        <li className="list-group-item">
+                                                                            <div className="form-check">
+                                                                                <input className="form-check-input" type="checkbox"
+                                                                                    checked={self.state.obj.rubrics.indexOf(rub.rubricId) > -1}
+                                                                                    onChange={(e) => self.CheckRubric(rub.rubricId, e.target.checked)}
+
+
+                                                                                ></input>
+                                                                                <label className="form-check-label">
+                                                                                    {rub.titleBg}
+                                                                                </label>
+                                                                            </div>
+                                                                        </li>
+
+
+                                                                )
+                                                            }
+                                                        </ul>
                                                     </div>
                                                 </li>)
                                         }

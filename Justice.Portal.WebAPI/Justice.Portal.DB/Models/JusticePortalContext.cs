@@ -28,15 +28,19 @@ namespace Justice.Portal.DB.Models
         public virtual DbSet<PortalGroup> PortalGroup { get; set; }
         public virtual DbSet<PortalGroup2Part> PortalGroup2Part { get; set; }
         public virtual DbSet<PortalGroup2Right> PortalGroup2Right { get; set; }
+        public virtual DbSet<PortalGroup2Rubric> PortalGroup2Rubric { get; set; }
         public virtual DbSet<PortalPart> PortalPart { get; set; }
         public virtual DbSet<PortalUser> PortalUser { get; set; }
         public virtual DbSet<PortalUser2Group> PortalUser2Group { get; set; }
         public virtual DbSet<PortalUser2Part> PortalUser2Part { get; set; }
         public virtual DbSet<PortalUser2Right> PortalUser2Right { get; set; }
+        public virtual DbSet<PortalUser2Rubric> PortalUser2Rubric { get; set; }
         public virtual DbSet<Property> Property { get; set; }
+        public virtual DbSet<Rubric> Rubric { get; set; }
         public virtual DbSet<Session> Session { get; set; }
         public virtual DbSet<Template> Template { get; set; }
         public virtual DbSet<Translation> Translation { get; set; }
+        public virtual DbSet<UserAction> UserAction { get; set; }
         public virtual DbSet<UserRight> UserRight { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -83,6 +87,9 @@ namespace Justice.Portal.DB.Models
                 entity.HasIndex(e => e.PortalPartId)
                     .HasName("idx_Block_PortalPartId");
 
+                entity.HasIndex(e => e.RubricId)
+                    .HasName("ix_block_rubricId");
+
                 entity.HasIndex(e => e.Url)
                     .HasName("ix_block_url")
                     .IsUnique();
@@ -90,6 +97,10 @@ namespace Justice.Portal.DB.Models
                 entity.Property(e => e.BlockTypeId)
                     .IsRequired()
                     .HasMaxLength(20);
+
+                entity.Property(e => e.IsActive)
+                    .IsRequired()
+                    .HasDefaultValueSql("((1))");
 
                 entity.Property(e => e.Jsonvalues).HasColumnName("JSONValues");
 
@@ -114,6 +125,12 @@ namespace Justice.Portal.DB.Models
                     .WithMany(p => p.Block)
                     .HasForeignKey(d => d.PortalPartId)
                     .HasConstraintName("fk_Block_PortalPartId");
+
+                entity.HasOne(d => d.Rubric)
+                    .WithMany(p => p.Block)
+                    .HasForeignKey(d => d.RubricId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("fk_Block_RubricID");
             });
 
             modelBuilder.Entity<BlockType>(entity =>
@@ -297,6 +314,25 @@ namespace Justice.Portal.DB.Models
                     .HasConstraintName("fk_PortalGroup2Right_UserRightId");
             });
 
+            modelBuilder.Entity<PortalGroup2Rubric>(entity =>
+            {
+                entity.HasIndex(e => e.PortalGroupId)
+                    .HasName("idx_PortalGroup2Rubric_PortalGroupId");
+
+                entity.HasIndex(e => e.RubricId)
+                    .HasName("idx_PortalGroup2Rubric_RubricId");
+
+                entity.HasOne(d => d.PortalGroup)
+                    .WithMany(p => p.PortalGroup2Rubric)
+                    .HasForeignKey(d => d.PortalGroupId)
+                    .HasConstraintName("fk_PortalGroup2Rubric_PortalGroupId");
+
+                entity.HasOne(d => d.Rubric)
+                    .WithMany(p => p.PortalGroup2Rubric)
+                    .HasForeignKey(d => d.RubricId)
+                    .HasConstraintName("fk_PortalGroup2Rubric_RubricId");
+            });
+
             modelBuilder.Entity<PortalPart>(entity =>
             {
                 entity.Property(e => e.PortalPartId)
@@ -373,6 +409,25 @@ namespace Justice.Portal.DB.Models
                     .HasConstraintName("fk_PortalUser2Right_UserRightId");
             });
 
+            modelBuilder.Entity<PortalUser2Rubric>(entity =>
+            {
+                entity.HasIndex(e => e.PortalUserId)
+                    .HasName("idx_PortalUser2Rubric_PortalUserId");
+
+                entity.HasIndex(e => e.RubricId)
+                    .HasName("idx_PortalUser2Rubric_RubricId");
+
+                entity.HasOne(d => d.PortalUser)
+                    .WithMany(p => p.PortalUser2Rubric)
+                    .HasForeignKey(d => d.PortalUserId)
+                    .HasConstraintName("fk_PortalUser2Rubric_PortalUserId");
+
+                entity.HasOne(d => d.Rubric)
+                    .WithMany(p => p.PortalUser2Rubric)
+                    .HasForeignKey(d => d.RubricId)
+                    .HasConstraintName("fk_PortalUser2Rubric_RubricId");
+            });
+
             modelBuilder.Entity<Property>(entity =>
             {
                 entity.Property(e => e.PropertyId)
@@ -386,6 +441,29 @@ namespace Justice.Portal.DB.Models
                 entity.Property(e => e.PropertyType)
                     .IsRequired()
                     .HasMaxLength(20);
+            });
+
+            modelBuilder.Entity<Rubric>(entity =>
+            {
+                entity.HasIndex(e => e.PortalPartId)
+                    .HasName("idx_Rubric_PortalPartId");
+
+                entity.Property(e => e.PortalPartId)
+                    .IsRequired()
+                    .HasMaxLength(20);
+
+                entity.Property(e => e.TitleBg)
+                    .IsRequired()
+                    .HasColumnName("TitleBG");
+
+                entity.Property(e => e.TitleEn)
+                    .IsRequired()
+                    .HasColumnName("TitleEN");
+
+                entity.HasOne(d => d.PortalPart)
+                    .WithMany(p => p.Rubric)
+                    .HasForeignKey(d => d.PortalPartId)
+                    .HasConstraintName("fk_Rubric_PortalPartId");
             });
 
             modelBuilder.Entity<Session>(entity =>
@@ -437,6 +515,21 @@ namespace Justice.Portal.DB.Models
                 entity.Property(e => e.TranslationId).ValueGeneratedNever();
 
                 entity.Property(e => e.Content).IsRequired();
+            });
+
+            modelBuilder.Entity<UserAction>(entity =>
+            {
+                entity.HasIndex(e => e.PortalUserId)
+                    .HasName("idx_UserAction_PortalUserId");
+
+                entity.Property(e => e.OnTime).HasColumnType("datetime");
+
+                entity.Property(e => e.Title).IsRequired();
+
+                entity.HasOne(d => d.PortalUser)
+                    .WithMany(p => p.UserAction)
+                    .HasForeignKey(d => d.PortalUserId)
+                    .HasConstraintName("fk_UserAction_PortalUserId");
             });
 
             modelBuilder.Entity<UserRight>(entity =>

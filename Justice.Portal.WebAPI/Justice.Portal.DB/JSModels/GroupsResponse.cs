@@ -13,5 +13,6 @@ namespace Justice.Portal.DB.JSModels
 
         public JSUserRight[] Rights { get; set; }
 
+        public JSRubric[] Rubrics { get; set; }
     }
 }

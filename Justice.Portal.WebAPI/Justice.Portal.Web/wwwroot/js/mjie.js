@@ -84,6 +84,7 @@ var MJProcess =
             this.PutNextPKListItems = this.PutNextPKListItems.bind(this);
             this.PutFeedback = this.PutFeedback.bind(this);
             this.SendFeedback = this.SendFeedback.bind(this);
+            this.RepairLinks = this.RepairLinks.bind(this);
             this.T = this.T.bind(this);
             this.LoadTranslations();
         }
@@ -322,8 +323,15 @@ var MJProcess =
             value: function PutBanner(divId, isMain) {
                 var oldDiv = $("#" + divId);
                 var obj = isMain ? this.MJPageData.main : this.MJPageData["block_" + divId].blockData;
+
+                if (!obj) {
+                    this.HasBanner = false;
+                    return;
+                }
+
+                this.HasBanner = true;
                 var self = this;
-                oldDiv.replaceWith($("\n            <div class=\"modal fade\" id=\"" + divId + "\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"liveEmission\" aria-hidden=\"true\">\n  \t<div class=\"modal-dialog m-video-dialog\" role=\"document\">\n    \t<div class=\"modal-content\">\n\t\t    <div class=\"modal-body\">\n                <div class=\"row\">\n                    <div class=\"col-12\">\n\n       \t\t\t        <button type=\"button\" class=\"close-video\" data-dismiss=\"modal\" aria-label=\"Close\">\n          \t\t\t        <span aria-hidden=\"true\">&times;</span>\n        \t\t        </button>        \n                    </div>\n                </div>\n                <div class=\"row\">\n                    <div class=\"col-6\">\n                        <img src=\"/api/part/GetBlob?hash=" + obj.imageId + "\" alt=\"\" />\n                    </div>\n                    <div class=\"col-6\">\n                        " + self.FixText(obj.body[self.language] || "") + "\n                    </div>\n                </div>\n                \n\t\t    </div>\n    \t</div>\n  \t</div>\n</div> \n\n\n             "));
+                oldDiv.replaceWith($("\n            <div class=\"modal fade\" id=\"" + divId + "\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"liveEmission\" aria-hidden=\"true\">\n  \t<div class=\"modal-dialog m-video-dialog\" role=\"document\">\n    \t<div class=\"modal-content\">\n\t\t    <div class=\"modal-body\">\n                <div class=\"row\">\n                    <div class=\"col-12\">\n\n       \t\t\t        <button type=\"button\" class=\"close-video\" data-dismiss=\"modal\" aria-label=\"Close\">\n          \t\t\t        <span aria-hidden=\"true\">&times;</span>\n        \t\t        </button>        \n                    </div>\n                </div>\n                <div class=\"row\">\n                    <div class=\"col-6\">\n                        <img src=\"/api/part/GetBlob?hash=" + obj.imageId + "\" alt=\"\" style=\"max-width:100%;max-height:100%\"/>\n                    </div>\n                    <div class=\"col-6\">\n                        " + self.FixText(obj.body[self.language] || "") + "\n                    </div>\n                </div>\n                \n\t\t    </div>\n    \t</div>\n  \t</div>\n</div> \n\n\n             "));
             }
         }, {
             key: "PutHtml",
@@ -833,6 +841,8 @@ var MJProcess =
                         show = DaysDiff > 1;
                     } else show = true;
 
+                    show = show && this.HasBanner;
+
                     if (show) {
                         $('#' + self.LastBanner).modal('show');
                         localStorage.setItem(lsLastBannerTime, new Date().toISOString());
@@ -858,6 +868,7 @@ var MJProcess =
                 self.ShowBannerIfNeeded();
                 self.DisplayBreadCrumbs();
                 self.PutAutomaticLinks();
+                self.RepairLinks();
             }
         }, {
             key: "SwitchLanguage",
@@ -904,6 +915,10 @@ var MJProcess =
                     });
                 }
 
+                while (bc.length > 3) {
+                    bc.splice(1, 1);
+                }
+
                 localStorage.setItem(lsBreadcrumbs, JSON.stringify(bc));
             }
         }, {
@@ -916,7 +931,7 @@ var MJProcess =
                     $("#olBC li").remove();
                     var bc = JSON.parse(localStorage.getItem(lsBreadcrumbs) || "[]");
                     bc.forEach(function (x, i) {
-                        return $("#olBC").append($('<li class="breadcrumb-item" aria-current="page"><a href="' + (x.key === bcKeyMain ? '/' : '/home/index/' + x.key) + '">' + self.NarrowText(x.title[self.language], 50) + '</a></li>'));
+                        return $("#olBC").append($('<li class="breadcrumb-item" aria-current="page"><a href="' + (x.key === bcKeyMain ? '/' : '/home/index/' + x.key) + '">' + self.NarrowText(x.title ? x.title[self.language] : "...", 50) + '</a></li>'));
                     });
                 }
             }
@@ -1278,6 +1293,13 @@ var MJProcess =
 
                 document.getElementById("fFeedBack").submit();
                 document.getElementById("fFeedBack").reset(); //
+            }
+        }, {
+            key: "RepairLinks",
+            value: function RepairLinks() {
+                $("a").each(function (i, e) {
+                    if ($(e).attr("href") && $(e).attr("href").indexOf("http") === 0) $(e).attr("target", "_blank");
+                });
             }
         }]);
 

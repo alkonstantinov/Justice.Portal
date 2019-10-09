@@ -164,6 +164,30 @@ class MainMenu extends BaseComponent {
 
 
                     </div>
+                    <div className="col-3">
+                        {
+                            session.rights.find(x => x === "audit") ?
+                                <Link className="btn btn-default fillSpace" to='/audit'>
+                                    <i className="fas fa-bug"></i>
+                                    <p>Одит</p>
+                                </Link>
+                                : null
+                        }
+
+
+                    </div>
+                    <div className="col-3">
+                        {
+                            session.rights.find(x => x === "rubricedit") ?
+                                <Link className="btn btn-default fillSpace" to='/rubric'>
+                                    <i className="fas fa-project-diagram"></i>
+                                    <p>Рубрики</p>
+                                </Link>
+                                : null
+                        }
+
+
+                    </div>
 
 
 

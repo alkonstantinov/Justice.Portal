@@ -5,10 +5,11 @@ import eventClient from '../modules/eventclient';
 import Loader from 'react-loader-spinner';
 import Comm from '../modules/comm';
 import { toast } from 'react-toastify';
-import UIContext from '../modules/context'
+import UIContext from '../modules/context';
+import uuidv4 from 'uuid/v4';
 
 
-export default class Blocks extends BaseComponent {
+export default class Rubric extends BaseComponent {
     constructor(props) {
         super(props);
         if (this.props.mode !== "select")
@@ -19,18 +20,17 @@ export default class Blocks extends BaseComponent {
                     href: ""
                 },
                 {
-                    title: "Части"
+                    title: "Рубрики"
                 }
                 ]
             );
 
 
         this.LoadData = this.LoadData.bind(this);
-        this.EditBlock = this.EditBlock.bind(this);
-        this.DeleteBlock = this.DeleteBlock.bind(this);
-
-
-
+        this.New = this.New.bind(this);
+        this.SetData = this.SetData.bind(this);
+        this.Delete = this.Delete.bind(this);
+        this.Save = this.Save.bind(this);
 
     }
 
@@ -38,17 +38,12 @@ export default class Blocks extends BaseComponent {
         var self = this;
         this.setState({ mode: "loading" });
 
-        if (this.props.mode !== "select") {
-            UIContext.LastBlockTypeId = this.state.blockTypeId;
-            UIContext.LastPortalPartId = this.state.portalPartId;
-            UIContext.SS = this.state.ss;
-        }
 
-
-        Comm.Instance().get('part/GetBlocks?portalPartId=' + self.state.portalPartId + "&blockTypeId=" + self.state.blockTypeId + "&ss=" + (self.state.ss || ""))
+        Comm.Instance().get('part/SelectRubric?portalPartId=' + self.state.portalPartId)
             .then(result => {
+                console.log(result.data);
                 self.setState({
-                    blocks: result.data,
+                    rubrics: result.data,
                     mode: "list"
                 })
             })
@@ -65,15 +60,11 @@ export default class Blocks extends BaseComponent {
     componentDidMount() {
         var self = this;
         this.setState({ mode: "loading" });
-
         Comm.Instance().get('part/GetBlockRequisites')
             .then(result => {
                 self.setState({
-                    blockTypes: result.data.blockTypes,
-                    blockTypeId: UIContext.LastBlockTypeId || result.data.blockTypes[0].blockTypeId,
                     parts: result.data.parts,
-                    portalPartId: (UIContext.LastPortalPartId || result.data.parts[0].portalPartId),
-                    ss: UIContext.SS
+                    portalPartId: UIContext.LastPortalPartId || result.data.parts[0].portalPartId
                 }, () => self.LoadData());
             })
             .catch(error => {
@@ -90,20 +81,69 @@ export default class Blocks extends BaseComponent {
     }
 
 
-    EditBlock(blockId) {
-        this.setState({
-            EditBlockId: blockId,
-            ShowEdit: true
-        })
+    SetData(id, prop, val) {
+        var rubrics = this.state.rubrics;
+        rubrics.find(x => x.rubricId == id)[prop] = val;
+        this.setState({ rubrics: rubrics });
     }
 
-    DeleteBlock(blockId) {
-        if (!window.confirm("Моля, потвърдете"))
-            return;
+    New() {
+        var rubrics = this.state.rubrics;
+        rubrics.push({
+            titleBg: "Рубрика",
+            titleEn: "Rubric",
+            portalPartId: this.state.portalPartId,
+            rubricId: uuidv4(),
+            canDel: true,
+            isNew: true
+        });
+        this.setState({ rubrics: rubrics });
+
+    }
+
+    Delete(id) {
+        var rubrics = this.state.rubrics;
+        var isNew = rubrics.find(x => x.rubricId == id).isNew || false;
+        rubrics = rubrics.filter(x => x.rubricId != id);
+        this.setState({ rubrics: rubrics });
+        if (!isNew) {
+            Comm.Instance().delete('part/DeleteRubric?rubricId=' + id)
+                .then(result => {
+
+                })
+                .catch(error => {
+                    if (error.response && error.response.status === 401)
+                        toast.error("Липса на права", {
+                            onClose: this.Logout
+                        });
+                    else
+                        toast.error(error.message);
+
+                });
+
+        }
+
+    }
+
+    Save() {
         var self = this;
-        Comm.Instance().delete('part/DeleteBlock/' + blockId)
+        var data = [];
+        var rubrics = this.state.rubrics;
+        rubrics.forEach(x => {
+            var rec = JSON.parse(JSON.stringify(x));
+            if (rec.isNew)
+                rec.rubricId = null;
+            data.push(rec);
+
+
+        });
+
+        console.log(data);
+
+        Comm.Instance().post('part/UpdateRubric', data)
             .then(result => {
                 self.LoadData();
+
             })
             .catch(error => {
                 if (error.response && error.response.status === 401)
@@ -117,19 +157,12 @@ export default class Blocks extends BaseComponent {
     }
 
 
-
-
     render() {
         var self = this;
         if (this.SM.IsSessionExpired()) {
             this.Logout();
             return (<Redirect to="/login"></Redirect>)
         }
-        if (self.state.ShowEdit)
-            return (
-                <Redirect to={"/editblock/" + this.state.blockTypeId + "/" + this.state.portalPartId + "/" + (this.state.EditBlockId || "")}>
-                </Redirect>
-            );
 
 
         return (
@@ -151,23 +184,12 @@ export default class Blocks extends BaseComponent {
                                     }
                                 </select>
                             </div>
-                            <div className="col-4">
-                                <select className="form-control" value={self.state.blockTypeId} onChange={(e) => self.setState({ blockTypeId: e.target.value }, () => self.LoadData())}>
-                                    {
-                                        self.state.blockTypes.map(x => <option value={x.blockTypeId}>{x.name}</option>)
-                                    }
-                                </select>
-                            </div>
-                            <div className="col-3">
-                                <input className="form-control" value={self.state.ss} onChange={(e) => self.setState({ ss: e.target.value })}></input>
-                            </div>
-                            <div className="col-1">
-                                <button className="btn btn-primary pull-right" onClick={() => self.LoadData()}>Търси</button>
-                            </div>
+
+
                         </div>
                         <div className="row">
                             <div className="col-2">
-                                <button className="btn btn-primary pull-right" onClick={() => self.EditBlock(null)}>Нов</button>
+                                <button className="btn btn-primary pull-right" onClick={self.New}>Нова</button>
                             </div>
                         </div>
                         <div className="row">
@@ -175,31 +197,39 @@ export default class Blocks extends BaseComponent {
                                 <table className="table table-striped">
                                     <thead>
                                         <th width="10%"></th>
-                                        <th width="90%">Име</th>
+                                        <th width="45%">Име БГ</th>
+                                        <th width="45%">Име EN</th>
                                     </thead>
                                     <tbody>
                                         {
-                                            self.state.blocks.map(obj =>
+                                            self.state.rubrics.map(obj =>
                                                 <tr>
                                                     <td>
-                                                        {
-                                                            self.props.mode === "select" ?
-                                                                <button className="btn btn-light" onClick={() => self.props.selectFunc(obj.url, obj.name)}><i className="fas fa-check"></i></button>
-                                                                :
-
-                                                                [
-                                                                    <button className="btn btn-danger" onClick={() => self.DeleteBlock(obj.blockId)}><i className="far fa-trash-alt"></i></button>,
-                                                                    <button className="btn btn-light" onClick={() => self.EditBlock(obj.blockId)}><i className="fas fa-edit"></i></button>
-                                                                ]
+                                                        {obj.canDel ?
+                                                            <button className="btn btn-danger" onClick={() => self.Delete(obj.rubricId)}><i className="far fa-trash-alt"></i></button>
+                                                            : null
                                                         }
                                                     </td>
-                                                    <td>{obj.name}</td>
+                                                    <td>
+                                                        <input type="text" className="form-control" value={obj.titleBg} onChange={(e) => self.SetData(obj.rubricId, "titleBg", e.target.value)}></input>
+                                                    </td>
+                                                    <td>
+                                                        <input type="text" className="form-control" value={obj.titleEn} onChange={(e) => self.SetData(obj.rubricId, "titleEn", e.target.value)}></input>
+                                                    </td>
 
                                                 </tr>
                                             )
                                         }
                                     </tbody>
                                 </table>
+                            </div>
+                        </div>
+                        <div className="row">
+                            <div className="col-2">
+                                <button className="btn btn-primary" onClick={self.Save}>Запис</button>
+                            </div>
+                            <div className="col-2">
+                                <button className="btn btn-danger" onClick={() => self.LoadData()}>Отказ</button>
                             </div>
                         </div>
                     </div>

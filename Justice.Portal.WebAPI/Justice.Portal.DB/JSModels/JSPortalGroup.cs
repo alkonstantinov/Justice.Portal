@@ -15,6 +15,7 @@ namespace Justice.Portal.DB.JSModels
         public bool? CanDel { get; set; }
         public string[] Parts { get; set; }
         public string[] Rights { get; set; }
+        public int[] Rubrics { get; set; }
 
 
 

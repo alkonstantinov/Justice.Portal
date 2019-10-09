@@ -17,5 +17,6 @@ namespace Justice.Portal.DB.JSModels
         public string[] Parts { get; set; }
         public string[] Rights { get; set; }
         public int[] Groups { get; set; }
+        public int[] Rubrics { get; set; }
     }
 }

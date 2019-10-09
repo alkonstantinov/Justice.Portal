@@ -1,0 +1,398 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Justice.Portal.Web</name>
+    </assembly>
+    <members>
+        <member name="M:Justice.Portal.Web.Controllers.CielaController.GetDocList">
+            <summary>
+            Извлича списък с документи
+            </summary>
+            <returns>списък с документи</returns>
+        </member>
+        <member name="M:Justice.Portal.Web.Controllers.CielaController.GetDoc(System.Int32)">
+            <summary>
+            Извлича документ
+            </summary>
+            <param name="id">Идентификатор</param>
+            <returns>HTML на документ</returns>
+        </member>
+        <member name="M:Justice.Portal.Web.Controllers.ContentController.GetAdsSQData(System.Int32,System.Int32)">
+            <summary>
+            Извлича данни за каре обявления
+            </summary>
+            <param name="count">брой обявления</param>
+            <param name="blockId">част</param>
+            <returns>извлечени обявления</returns>
+        </member>
+        <member name="M:Justice.Portal.Web.Controllers.ContentController.GetNewsSQData(System.Int32,System.Int32)">
+            <summary>
+            Извлича данни за каре новини
+            </summary>
+            <param name="count">брой новини</param>
+            <param name="blockId">част</param>
+            <returns>извлечени новини</returns>
+        </member>
+        <member name="M:Justice.Portal.Web.Controllers.ContentController.GetAdsData(System.Int32,System.Int32,System.Int32)">
+            <summary>
+            извлича обявления
+            </summary>
+            <param name="top">начало</param>
+            <param name="count">брой</param>
+            <param name="blockId">част</param>
+            <returns>обявления</returns>
+        </member>
+        <member name="M:Justice.Portal.Web.Controllers.ContentController.GetNewsData(System.Int32,System.Int32,System.Int32)">
+            <summary>
+            извлича новини
+            </summary>
+            <param name="top">начало</param>
+            <param name="count">брой</param>
+            <param name="blockId">част</param>
+            <returns>новини</returns>
+        </member>
+        <member name="M:Justice.Portal.Web.Controllers.ContentController.GetSearchResultBlock(System.String)">
+            <summary>
+            Извлича част резултат от търсене
+            </summary>
+            <param name="portalPartId">идентификатор на част</param>
+            <returns>част</returns>
+        </member>
+        <member name="M:Justice.Portal.Web.Controllers.ContentController.Search(System.String,System.Int32,System.Int32,System.String)">
+            <summary>
+            провежда търсене
+            </summary>
+            <param name="query">заявка</param>
+            <param name="from">от елемент</param>
+            <param name="size">брой</param>
+            <param name="part">част на портала</param>
+            <returns></returns>
+        </member>
+        <member name="M:Justice.Portal.Web.Controllers.ContentController.GetCabinetBios">
+            <summary>
+            Извлича биографии
+            </summary>
+            <returns>биографии</returns>
+        </member>
+        <member name="M:Justice.Portal.Web.Controllers.ContentController.GetCollection(System.Int32)">
+            <summary>
+            извлича колекция
+            </summary>
+            <param name="collectionId">идентификатор</param>
+            <returns>колекция</returns>
+        </member>
+        <member name="M:Justice.Portal.Web.Controllers.ContentController.GetHeaderByBlockid(System.Int32)">
+            <summary>
+            Извлича заглавна част
+            </summary>
+            <param name="blockId">част</param>
+            <returns>заглавна част</returns>
+        </member>
+        <member name="M:Justice.Portal.Web.Controllers.ContentController.GetFirstOfKindUrl(System.String,System.String)">
+            <summary>
+            Извлича път към първа част от тип
+            </summary>
+            <param name="portalPartId">портална част</param>
+            <param name="blockTypeId">тип част</param>
+            <returns>част</returns>
+        </member>
+        <member name="M:Justice.Portal.Web.Controllers.ErrorController.Index">
+            <summary>
+            връща страница за грешка
+            </summary>
+            <returns>страница за грешка</returns>
+        </member>
+        <member name="M:Justice.Portal.Web.Controllers.HomeController.Index(System.String)">
+            <summary>
+            връща страница
+            </summary>
+            <param name="url">уникален идентификатор</param>
+            <returns>страница</returns>
+        </member>
+        <member name="M:Justice.Portal.Web.Controllers.HomeController.NormDoc(System.Int64)">
+            <summary>
+            извлича нормативен документ
+            </summary>
+            <param name="id">идентификатор</param>
+            <returns>документ</returns>
+        </member>
+        <member name="M:Justice.Portal.Web.Controllers.HomeController.SendFeedback">
+            <summary>
+            изпраща обратна връзка
+            </summary>
+            <returns>ок</returns>
+        </member>
+        <member name="M:Justice.Portal.Web.Controllers.PartController.GetBlockRequisites">
+            <summary>
+            Извлича данни за част
+            </summary>
+            <returns>част</returns>
+        </member>
+        <member name="M:Justice.Portal.Web.Controllers.PartController.GetTemplates(System.String)">
+            <summary>
+            извлича страница
+            </summary>
+            <param name="portalPartId">част</param>
+            <returns>страница</returns>
+        </member>
+        <member name="M:Justice.Portal.Web.Controllers.PartController.GetBlocksPerPortalPart(System.String)">
+            <summary>
+            извлича видове блокове за част на портала
+            </summary>
+            <param name="portalPartId">част на портала</param>
+            <returns>блокове</returns>
+        </member>
+        <member name="M:Justice.Portal.Web.Controllers.PartController.GetBlocks(System.String,System.String,System.Int32,System.String)">
+            <summary>
+            извлича всички блокове отговарящи на критерии
+            </summary>
+            <param name="portalPartId">част</param>
+            <param name="blockTypeId">тип</param>
+            <param name="ss">текст за търсене</param>
+            <returns>блокове</returns>
+        </member>
+        <member name="M:Justice.Portal.Web.Controllers.PartController.GetBlockData(System.String,System.Nullable{System.Int32})">
+            <summary>
+            извлича данни на блок
+            </summary>
+            <param name="blockTypeId">тип</param>
+            <param name="blockId">блок</param>
+            <returns>блок</returns>
+        </member>
+        <member name="M:Justice.Portal.Web.Controllers.PartController.AddBlob(Microsoft.AspNetCore.Http.IFormFile)">
+            <summary>
+            добавя електронен оригинал
+            </summary>
+            <param name="image">оригинал</param>
+            <returns>хеш</returns>
+        </member>
+        <member name="M:Justice.Portal.Web.Controllers.PartController.GetBlob(System.String)">
+            <summary>
+            извлича електронен оригинал
+            </summary>
+            <param name="hash">хеш</param>
+            <returns>оригинал</returns>
+        </member>
+        <member name="M:Justice.Portal.Web.Controllers.PartController.SetBlock(Justice.Portal.DB.JSModels.BlockData)">
+            <summary>
+            записва блок
+            </summary>
+            <param name="data">данни на блока</param>
+            <returns>идентификатор</returns>
+        </member>
+        <member name="M:Justice.Portal.Web.Controllers.PartController.GetTemplate(System.Int32)">
+            <summary>
+            извлича страница
+            </summary>
+            <param name="templateId">идентификатор на страница</param>
+            <returns>страница</returns>
+        </member>
+        <member name="M:Justice.Portal.Web.Controllers.PartController.SetTemplate(Justice.Portal.DB.JSModels.JSTemplate)">
+            <summary>
+            записва страница
+            </summary>
+            <param name="template">страница</param>
+            <returns>идентификатор</returns>
+        </member>
+        <member name="M:Justice.Portal.Web.Controllers.PartController.GetCollections">
+            <summary>
+            извлича колекции
+            </summary>
+            <returns>колекции</returns>
+        </member>
+        <member name="M:Justice.Portal.Web.Controllers.PartController.GetCollection(System.Int32)">
+            <summary>
+            извлича колекциq
+            </summary>
+            
+            <returns>колекциq</returns>
+        </member>
+        <member name="M:Justice.Portal.Web.Controllers.PartController.DeleteCollection(System.Int32)">
+            <summary>
+            изтрива колекция
+            </summary>
+            <param name="collectionId">идентификатор</param>
+            <returns></returns>
+        </member>
+        <member name="M:Justice.Portal.Web.Controllers.PartController.SaveCollection(Justice.Portal.DB.JSModels.JSCollection)">
+            <summary>
+            записва колекция
+            </summary>
+            <param name="collection">данни на колекцията</param>
+            <returns></returns>
+        </member>
+        <member name="M:Justice.Portal.Web.Controllers.PartController.UrlExists(System.String,System.Nullable{System.Int32})">
+            <summary>
+            проверява дали има такова урл
+            </summary>
+            <param name="url">урл</param>
+            <param name="blockId">идентификатор на част</param>
+            <returns>да/не</returns>
+        </member>
+        <member name="M:Justice.Portal.Web.Controllers.PartController.GetHeaders">
+            <summary>
+            извлича заглавни части
+            </summary>
+            <returns>заглавни части</returns>
+        </member>
+        <member name="M:Justice.Portal.Web.Controllers.PartController.GetHeader(System.Int32)">
+            <summary>
+            извлича заглавн част
+            </summary>
+            <param name="headerId">идентификатор</param>
+            <returns>заглавн част</returns>
+        </member>
+        <member name="M:Justice.Portal.Web.Controllers.PartController.SaveHeader(Justice.Portal.DB.JSModels.JSHeader)">
+            <summary>
+            Записва заглавна част
+            </summary>
+            <param name="header">данни за частта</param>
+            <returns></returns>
+        </member>
+        <member name="M:Justice.Portal.Web.Controllers.PartController.DeleteHeader(System.Int32)">
+            <summary>
+            Изтрива заглавна част
+            </summary>
+            <param name="headerId">идентификатор</param>
+            <returns></returns>
+        </member>
+        <member name="M:Justice.Portal.Web.Controllers.PartController.DeleteBlock(System.Int32)">
+            <summary>
+            изтрива част
+            </summary>
+            <param name="blockId">идентификатор</param>
+            <returns></returns>
+        </member>
+        <member name="M:Justice.Portal.Web.Controllers.PartController.GetInnerDocs(System.String)">
+            <summary>
+            Извлича вътрешни документи
+            </summary>
+            <param name="portalPartId">част на портала</param>
+            <returns>вътрешни документи</returns>
+        </member>
+        <member name="M:Justice.Portal.Web.Controllers.PartController.SetInnerDocs(Justice.Portal.DB.JSModels.JSInnerDoc)">
+            <summary>
+            Записва вътрешни документи
+            </summary>
+            <param name="doc">вътрешни документи</param>
+            <returns></returns>
+        </member>
+        <member name="M:Justice.Portal.Web.Controllers.PartController.SelectRubric(System.String)">
+            <summary>
+            Извлича рубрики
+            </summary>
+            <param name="portalPartId">част на портала</param>
+            <returns></returns>
+        </member>
+        <member name="M:Justice.Portal.Web.Controllers.PartController.DeleteRubric(System.Int32)">
+            <summary>
+            Изтрива рубрика
+            </summary>
+            <param name="rubricId">рубрика</param>
+            <returns></returns>
+        </member>
+        <member name="M:Justice.Portal.Web.Controllers.PartController.UpdateRubric(Justice.Portal.DB.JSModels.JSRubric[])">
+            <summary>
+            обновява рубрики
+            </summary>
+            <param name="rubrics">рубрики</param>
+            <returns></returns>
+        </member>
+        <member name="M:Justice.Portal.Web.Controllers.SearchController.Search(System.String,System.Int32,System.Int32,System.String)">
+            <summary>
+            Пълнотекстово търсене
+            </summary>
+            <param name="query">заявка</param>
+            <param name="from">от</param>
+            <param name="size">брой</param>
+            <param name="part">част на портала</param>
+            <returns>открити страници</returns>
+        </member>
+        <member name="M:Justice.Portal.Web.Controllers.SearchController.Reindex">
+            <summary>
+            преиндексира съдържанието
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Justice.Portal.Web.Controllers.SecurityController.Login(Justice.Portal.DB.JSModels.LoginRequest)">
+            <summary>
+            вход в системата
+            </summary>
+            <param name="model">данни за вход</param>
+            <returns>резултат от автентикацията</returns>
+        </member>
+        <member name="M:Justice.Portal.Web.Controllers.SecurityController.GetGroupsForAdmin">
+            <summary>
+            извлича групи за администриране
+            </summary>
+            <returns>групи </returns>
+        </member>
+        <member name="M:Justice.Portal.Web.Controllers.SecurityController.SetGroup(Justice.Portal.DB.JSModels.JSPortalGroup)">
+            <summary>
+            Записва група
+            </summary>
+            <param name="group">данни за група</param>
+            <returns></returns>
+        </member>
+        <member name="M:Justice.Portal.Web.Controllers.SecurityController.DelGroup(System.Int32)">
+            <summary>
+            Изтрива група
+            </summary>
+            <param name="groupId">идентификатор</param>
+            <returns></returns>
+        </member>
+        <member name="M:Justice.Portal.Web.Controllers.SecurityController.GetUsersForAdmin">
+            <summary>
+            Извлича потребители за администриране
+            </summary>
+            <returns>потребители</returns>
+        </member>
+        <member name="M:Justice.Portal.Web.Controllers.SecurityController.UserNameExists(System.String)">
+            <summary>
+            Съществува ли това потребителско име
+            </summary>
+            <param name="username">потребителско име</param>
+            <returns></returns>
+        </member>
+        <member name="M:Justice.Portal.Web.Controllers.SecurityController.SetUser(Justice.Portal.DB.JSModels.JSPortalUser)">
+            <summary>
+            Записва данни за потребител
+            </summary>
+            <param name="user">данни за потребител</param>
+            <returns></returns>
+        </member>
+        <member name="M:Justice.Portal.Web.Controllers.SecurityController.Logout">
+            <summary>
+            Изход от системата
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Justice.Portal.Web.Controllers.SecurityController.ChangePassword(Justice.Portal.DB.JSModels.ChangePasswordData)">
+            <summary>
+            Смяна на парола
+            </summary>
+            <param name="data">данни за паролата</param>
+            <returns></returns>
+        </member>
+        <member name="M:Justice.Portal.Web.Controllers.SecurityController.Audit(Justice.Portal.DB.JSModels.AuditModel)">
+            <summary>
+            одит на потребителски действия
+            </summary>
+            <param name="model">данни за одит на потребителски действия</param>
+            <returns>потребителски действия</returns>
+        </member>
+        <member name="M:Justice.Portal.Web.Controllers.TranslateController.GetTranslation">
+            <summary>
+            Извлича данни за преводите
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Justice.Portal.Web.Controllers.TranslateController.SetTranslation(Justice.Portal.DB.JSModels.JSTranslation)">
+            <summary>
+            Записва данни за преводите
+            </summary>
+            <param name="trans">данни за преводите</param>
+            <returns></returns>
+        </member>
+    </members>
+</doc>

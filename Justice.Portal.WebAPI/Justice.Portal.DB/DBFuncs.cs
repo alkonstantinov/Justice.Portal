@@ -10,7 +10,7 @@ using System.Text;
 
 namespace Justice.Portal.DB
 {
-    //Scaffold-DbContext "Server=DESKTOP-NIQT1U7\SQLEXPRESS;Database=JusticePortal;Trusted_Connection=True;persist security info=True;user id=sa;password=123;MultipleActiveResultSets=True;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models -Force
+    //Scaffold-DbContext "Server=DESKTOP-NIQT1U7;Database=JusticePortal;Trusted_Connection=True;persist security info=True;user id=sa;password=123;MultipleActiveResultSets=True;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models -Force
     public class DBFuncs
     {
         protected JusticePortalContext db;
@@ -30,6 +30,32 @@ namespace Justice.Portal.DB
         public HashSet<string> GetUserParts(int userId)
         {
             return db.PortalPart.FromSql($"select * from vwUserParts where PortalUserId={userId}", userId).Select(x => x.PortalPartId).Distinct().ToHashSet();
+        }
+
+
+        public HashSet<int> GetUserRubrics(string token)
+        {
+            var user = db.Session.Include(x => x.PortalUser).First(x => x.SessionKey == Guid.Parse(token));
+            return GetUserRubrics(user.PortalUserId);
+
+
+        }
+
+        public HashSet<int> GetUserRubrics(int userId)
+        {
+            var fromUser = db.PortalUser2Rubric.Where(x => x.PortalUserId == userId).Select(x => x.RubricId).ToArray();
+            var fromGroups = (from g in db.PortalUser2Group
+                              join g2r in db.PortalGroup2Rubric on new { gid = g.PortalGroupId } equals new { gid = g2r.PortalGroupId }
+                              where g.PortalUserId == userId
+                              select g2r.RubricId
+                             ).ToArray();
+
+            List<int> l = new List<int>();
+            l.AddRange(fromUser);
+            l.AddRange(fromGroups);
+            return l.ToHashSet<int>();
+
+
         }
 
 
@@ -76,6 +102,7 @@ namespace Justice.Portal.DB
                     g.CanDel = !db.PortalUser2Group.Any(x => x.PortalGroupId == g.PortalGroupId);
                     g.Parts = db.PortalGroup2Part.Include(x => x.PortalPart).Where(x => x.PortalGroupId == g.PortalGroupId).Select(x => x.PortalPart.PortalPartId).ToArray();
                     g.Rights = db.PortalGroup2Right.Include(x => x.UserRight).Where(x => x.PortalGroupId == g.PortalGroupId).Select(x => x.UserRight.UserRightId).ToArray();
+                    g.Rubrics = db.PortalGroup2Rubric.Include(x => x.Rubric).Where(x => x.PortalGroupId == g.PortalGroupId).Select(x => x.Rubric.RubricId).ToArray();
                 }
             }
 
@@ -91,7 +118,7 @@ namespace Justice.Portal.DB
                 u.Parts = db.PortalUser2Part.Include(x => x.PortalPart).Where(x => x.PortalUserId == u.PortalUserId).Select(x => x.PortalPart.PortalPartId).ToArray();
                 u.Rights = db.PortalUser2Right.Include(x => x.UserRight).Where(x => x.PortalUserId == u.PortalUserId).Select(x => x.UserRight.UserRightId).ToArray();
                 u.Groups = db.PortalUser2Group.Where(x => x.PortalUserId == u.PortalUserId).Select(x => x.PortalGroupId).ToArray();
-
+                u.Rubrics = db.PortalUser2Rubric.Include(x => x.Rubric).Where(x => x.PortalUserId == u.PortalUserId).Select(x => x.Rubric.RubricId).ToArray();
             }
 
             return usrs;
@@ -141,6 +168,16 @@ namespace Justice.Portal.DB
                 rght.PortalGroupId = newGroup.PortalGroupId;
                 rght.UserRightId = r;
                 db.PortalGroup2Right.Add(rght);
+
+            }
+
+            db.PortalGroup2Rubric.RemoveRange(db.PortalGroup2Rubric.Where(x => x.PortalGroupId == newGroup.PortalGroupId));
+            foreach (var r in grp.Rubrics)
+            {
+                var rub = new PortalGroup2Rubric();
+                rub.PortalGroupId = newGroup.PortalGroupId;
+                rub.RubricId = r;
+                db.PortalGroup2Rubric.Add(rub);
 
             }
 
@@ -244,6 +281,16 @@ namespace Justice.Portal.DB
 
             }
 
+            db.PortalUser2Rubric.RemoveRange(db.PortalUser2Rubric.Where(x => x.PortalUserId == newUser.PortalUserId));
+            foreach (var r in usr.Rubrics)
+            {
+                var rub = new PortalUser2Rubric();
+                rub.PortalUserId = newUser.PortalUserId;
+                rub.RubricId = r;
+                db.PortalUser2Rubric.Add(rub);
+
+            }
+
             db.SaveChanges();
 
 
@@ -288,11 +335,24 @@ namespace Justice.Portal.DB
             return ModelMapper.Instance.Mapper.Map<ICollection<PortalPart>, ICollection<JSPortalPart>>(parts.ToArray()).ToArray();
         }
 
+        public JSRubric[] GetPortalRubrics(Guid token)
+        {
+            var user = db.Session.Include(x => x.PortalUser).First(x => x.SessionKey == token);
+            var allowedRubrics = GetUserRubrics(user.PortalUserId);
+            var rubrics = db.Rubric.Where(x => allowedRubrics.Contains(x.RubricId));
 
-        public JSBlock[] GetBlocks(string portalPartId, string blockTypeId, string ss)
+            return ModelMapper.Instance.Mapper.Map<ICollection<Rubric>, ICollection<JSRubric>>(rubrics.ToArray()).ToArray();
+        }
+
+
+        public JSBlock[] GetBlocks(string portalPartId, string blockTypeId, HashSet<int> rs, string ss)
         {
             return ModelMapper.Instance.Mapper.Map<ICollection<Block>, ICollection<JSBlock>>(db.Block
-                .Where(x => x.BlockTypeId == blockTypeId && x.PortalPartId == portalPartId && (string.IsNullOrEmpty(ss) || x.Name.Contains(ss, StringComparison.InvariantCultureIgnoreCase))).OrderBy(x => x.Name).Take(50).ToArray()).ToArray();
+                .Where(x => x.BlockTypeId == blockTypeId
+                && x.PortalPartId == portalPartId
+                && rs.Contains(x.RubricId)
+                && (string.IsNullOrEmpty(ss) || x.Name.Contains(ss, StringComparison.InvariantCultureIgnoreCase)))
+                .OrderBy(x => x.Name).Take(50).ToArray()).ToArray();
         }
 
 
@@ -333,13 +393,13 @@ namespace Justice.Portal.DB
 
         public JSBlock GetBlock(string url)
         {
-            return ModelMapper.Instance.Mapper.Map<JSBlock>(db.Block.First(x => x.Url.Equals(url, StringComparison.InvariantCultureIgnoreCase)));
+            return ModelMapper.Instance.Mapper.Map<JSBlock>(db.Block.First(x => x.IsActive.Value && x.Url.Equals(url, StringComparison.InvariantCultureIgnoreCase)));
         }
 
 
         public JSBlock GetBlockForPart(string part)
         {
-            return ModelMapper.Instance.Mapper.Map<JSBlock>(db.Block.First(x => (string.IsNullOrEmpty(part) || x.PortalPartId == part) && x.BlockTypeId == "main"));
+            return ModelMapper.Instance.Mapper.Map<JSBlock>(db.Block.First(x => x.IsActive.Value && (string.IsNullOrEmpty(part) || x.PortalPartId == part) && x.BlockTypeId == "main"));
         }
 
 
@@ -401,6 +461,7 @@ namespace Justice.Portal.DB
                 block.Jsonvalues = data.Block.Jsonvalues;
                 block.Name = data.Block.Name;
                 block.Url = data.Block.Url;
+                block.IsActive = data.Block.IsActive;
 
             }
             db.SaveChanges();
@@ -714,17 +775,77 @@ namespace Justice.Portal.DB
         public void SetInnerDocs(JSInnerDoc doc)
         {
             var id = db.InnerDoc.FirstOrDefault(x => x.PortalPartId == doc.PortalPartId);
-            if (id==null)
+            if (id == null)
             {
                 id = new InnerDoc();
                 id.PortalPartId = doc.PortalPartId;
-                
+
                 db.InnerDoc.Add(id);
             }
             id.Content = doc.Content;
             db.SaveChanges();
 
         }
+
+        public void SaveUserAction(UserAction ua)
+        {
+            db.UserAction.Add(ua);
+            db.SaveChanges();
+        }
+
+        public PortalUser GetUserByToken(string token)
+        {
+            var guid = Guid.Parse(token);
+            return db.Session.Include(x => x.PortalUser).FirstOrDefault(x => x.SessionKey == guid)?.PortalUser;
+        }
+
+        public JSUserAction[] Audit(AuditModel model)
+        {
+            return db.UserAction
+                .Where(x => (!model.PortalUserId.HasValue || model.PortalUserId.Value == x.PortalUserId) && (DateTime.Compare(model.FromDate.Value, x.OnTime) <= 0) && (DateTime.Compare(model.ToDate.Value.AddDays(1), x.OnTime) >= 0))
+                .OrderBy(x => x.OnTime)
+                .Select(x => new JSUserAction()
+                {
+                    Content = x.Content,
+                    PortalUserId = x.PortalUserId,
+                    OnTime = x.OnTime,
+                    Title = x.Title,
+                    UserActionId = x.UserActionId,
+                    UserName = x.PortalUser.Name
+                })
+                .ToArray();
+        }
+
+
+        public JSRubric[] SelectRubric(string portalPartId)
+        {
+            var res = ModelMapper.Instance.Mapper.Map<ICollection<Rubric>, JSRubric[]>(db.Rubric.Where(x => string.IsNullOrEmpty(portalPartId) || x.PortalPartId == portalPartId).ToList());
+            foreach (var r in res)
+                r.CanDel = !db.Block.Any(x => x.RubricId == r.RubricId);
+            return res;
+        }
+
+        public void DeleteRubric(int rubricId)
+        {
+            db.Rubric.Remove(db.Rubric.First(x => x.RubricId == rubricId));
+            db.SaveChanges();
+        }
+
+        public void InsertRubric(JSRubric r)
+        {
+            db.Rubric.Add(ModelMapper.Instance.Mapper.Map<Rubric>(r));
+            db.SaveChanges();
+        }
+
+        public void UpdateRubric(JSRubric r)
+        {
+            var dbr = db.Rubric.First(x => x.RubricId == r.RubricId);
+            dbr.TitleBg = r.TitleBg;
+            dbr.TitleEn = r.TitleEn;
+            db.SaveChanges();
+        }
+
+
 
     }
 }

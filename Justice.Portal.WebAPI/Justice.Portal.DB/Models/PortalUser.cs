@@ -7,7 +7,9 @@ namespace Justice.Portal.DB.Models
     {
         public PortalUser()
         {
+            PortalUser2Rubric = new HashSet<PortalUser2Rubric>();
             Session = new HashSet<Session>();
+            UserAction = new HashSet<UserAction>();
         }
 
         public int PortalUserId { get; set; }
@@ -16,6 +18,8 @@ namespace Justice.Portal.DB.Models
         public string Name { get; set; }
         public bool Active { get; set; }
 
+        public virtual ICollection<PortalUser2Rubric> PortalUser2Rubric { get; set; }
         public virtual ICollection<Session> Session { get; set; }
+        public virtual ICollection<UserAction> UserAction { get; set; }
     }
 }

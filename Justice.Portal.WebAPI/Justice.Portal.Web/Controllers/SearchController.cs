@@ -28,13 +28,24 @@ namespace Justice.Portal.Web.Controllers
             this.SolrComm = solrComm;
         }
 
-
+        /// <summary>
+        /// Пълнотекстово търсене
+        /// </summary>
+        /// <param name="query">заявка</param>
+        /// <param name="from">от</param>
+        /// <param name="size">брой</param>
+        /// <param name="part">част на портала</param>
+        /// <returns>открити страници</returns>
         [HttpGet("Search")]
         public async Task<IActionResult> Search(string query, int from, int size, string part)
         {
             return Ok(SolrComm.Search(query, from, size, part));
         }
 
+        /// <summary>
+        /// преиндексира съдържанието
+        /// </summary>
+        /// <returns></returns>
         [HttpGet("Reindex")]
         public async Task<IActionResult> Reindex()
         {

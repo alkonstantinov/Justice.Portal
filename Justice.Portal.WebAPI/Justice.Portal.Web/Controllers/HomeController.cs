@@ -31,6 +31,12 @@ namespace Justice.Portal.Web.Controllers
             this.config = config;
         }
         //[HttpGet("index/{url?}")]
+
+            /// <summary>
+            /// връща страница
+            /// </summary>
+            /// <param name="url">уникален идентификатор</param>
+            /// <returns>страница</returns>
         public IActionResult Index([FromRoute]string url)
         {
 
@@ -75,12 +81,23 @@ namespace Justice.Portal.Web.Controllers
 
             return View("index", html);
         }
+
+        /// <summary>
+        /// извлича нормативен документ
+        /// </summary>
+        /// <param name="id">идентификатор</param>
+        /// <returns>документ</returns>
         [HttpGet("home/NormDoc/{id}")]
         public IActionResult NormDoc([FromRoute]Int64 id)
         {
             return View("index", cielaComm.GetDocument(id));
         }
 
+
+        /// <summary>
+        /// изпраща обратна връзка
+        /// </summary>
+        /// <returns>ок</returns>
         [HttpPost("home/SendFeedback")]
         public IActionResult SendFeedback()
         {

@@ -11,6 +11,7 @@ namespace Justice.Portal.DB.Models
             InnerDoc = new HashSet<InnerDoc>();
             PortalGroup2Part = new HashSet<PortalGroup2Part>();
             PortalUser2Part = new HashSet<PortalUser2Part>();
+            Rubric = new HashSet<Rubric>();
             Template = new HashSet<Template>();
         }
 
@@ -21,6 +22,7 @@ namespace Justice.Portal.DB.Models
         public virtual ICollection<InnerDoc> InnerDoc { get; set; }
         public virtual ICollection<PortalGroup2Part> PortalGroup2Part { get; set; }
         public virtual ICollection<PortalUser2Part> PortalUser2Part { get; set; }
+        public virtual ICollection<Rubric> Rubric { get; set; }
         public virtual ICollection<Template> Template { get; set; }
     }
 }

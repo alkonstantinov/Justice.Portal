@@ -356,10 +356,13 @@ export default class BlockEditor extends BaseComponent {
             .then(result => {
                 self.setState({
                     Name: result.data.block ? result.data.block.name : "",
+                    Active: result.data.block ? result.data.block.isActive : true,
                     properties: result.data.properties,
                     values: result.data.values,
                     block: result.data.block,
                     Url: result.data.block ? result.data.block.url : uuidv4(),
+                    rubricId: result.data.block ? result.data.block.rubricId : result.data.rubrics.filter(x => x.portalPartId == self.props.match.params.portalPartId)[0].rubricId,
+                    rubrics: result.data.rubrics,
                     CanBePage: result.data.canBePage,
                     mode: "edit"
                 })
@@ -437,6 +440,8 @@ export default class BlockEditor extends BaseComponent {
                 portalPartId: this.props.match.params.portalPartId,
                 BlockTypeId: this.props.match.params.blockTypeId,
                 Name: this.state.Name,
+                RubricId: this.state.rubricId,
+                IsActive: this.state.Active,
                 Url: this.state.Url,
                 Jsonvalues: JSON.stringify(partData)
             },
@@ -495,9 +500,28 @@ export default class BlockEditor extends BaseComponent {
                         </div>
                     </div>
                     <div className="row">
-                        <div className="col-12">
+                        <div className="col-10">
                             <label className="control-label" htmlFor="Date">Заглавие</label>
                             <input type="text" className="form-control" value={this.state.Name} onChange={(e) => self.setState({ Name: e.target.value })}></input>
+                        </div>
+                        <div className="col-2">
+                            <input className="form-check-input" type="checkbox"
+                                checked={self.state.Active}
+                                onChange={(e) => self.setState({ Active: e.target.checked })}
+                            ></input>
+                            <label className="form-check-label">
+                                Активен
+                                        </label>
+                        </div>
+                    </div>
+                    <div className="row">
+                        <div className="col-12">
+                            <label className="control-label">Рубрика</label>
+                            <select className="form-control" value={self.state.rubricId} onChange={(e) => self.setState({ rubricId: e.target.value }, () => self.LoadData())}>
+                                {
+                                    self.state.rubrics.filter(x => x.portalPartId == self.props.match.params.portalPartId).map(x => <option value={x.rubricId}>{x.titleBg}</option>)
+                                }
+                            </select>
                         </div>
                     </div>
                     {
