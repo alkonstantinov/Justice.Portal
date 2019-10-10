@@ -1162,6 +1162,14 @@ class MJProcess {
         self.DisplayBreadCrumbs();
         self.PutAutomaticLinks();
         self.RepairLinks();
+        $("#tbSS").keyup(function (e) {
+            var code = (e.keyCode ? e.keyCode : e.which);
+            if (code === 13) {
+                e.preventDefault();
+                self.InitiateSearch($('#tbSS').val());
+            }
+            
+        });
     }
 
 
