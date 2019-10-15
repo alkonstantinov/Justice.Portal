@@ -739,7 +739,7 @@ namespace Justice.Portal.DB
         {
             var rows = (from b in db.Block
                         join btpv in db.BlockTypePropertyValue on new { bid = b.BlockId, pid = "date" } equals new { bid = btpv.BlockId, pid = btpv.PropertyId }
-                        where b.PortalPartId == portalPartId && b.BlockTypeId == "pkmessage" && (string.IsNullOrEmpty(ss) || b.Jsonvalues.Contains(ss)) && b.Jsonvalues.Contains($"\"type\": \"{type}\"")
+                        where b.PortalPartId == portalPartId && b.BlockTypeId == "pkmessage" && (string.IsNullOrEmpty(ss) || b.Jsonvalues.Contains(ss)) && JObject.Parse(b.Jsonvalues)["type"].ToString() == type
                         orderby btpv.Value descending
                         select new PKListItem()
                         {

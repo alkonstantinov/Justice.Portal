@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Mail;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Justice.Portal.DB;
 using Justice.Portal.DB.JSModels;
@@ -32,11 +33,11 @@ namespace Justice.Portal.Web.Controllers
         }
         //[HttpGet("index/{url?}")]
 
-            /// <summary>
-            /// връща страница
-            /// </summary>
-            /// <param name="url">уникален идентификатор</param>
-            /// <returns>страница</returns>
+        /// <summary>
+        /// връща страница
+        /// </summary>
+        /// <param name="url">уникален идентификатор</param>
+        /// <returns>страница</returns>
         public IActionResult Index([FromRoute]string url)
         {
 
@@ -51,6 +52,9 @@ namespace Justice.Portal.Web.Controllers
             //var institution = db.GetInstitutionByBlock(block.BlockId);
             var template = db.GetTemplateByBlock(block.BlockTypeId, block.PortalPartId);
             string html = template.TemplateJson;
+            html = Regex.Replace(html, "href=\"/home/index/([^\"]+?)\"", "href=\"/home/index/$1?top=1\"");
+
+
 
             JObject joPageData = new JObject();
             joPageData["main"] = JObject.Parse(block.Jsonvalues);
@@ -131,7 +135,7 @@ namespace Justice.Portal.Web.Controllers
                 message.Body = sb.ToString();
 
                 foreach (var f in Request.Form.Files)
-                {                    
+                {
                     Attachment a = new Attachment(f.OpenReadStream(), f.FileName);
                     message.Attachments.Add(a);
                 }

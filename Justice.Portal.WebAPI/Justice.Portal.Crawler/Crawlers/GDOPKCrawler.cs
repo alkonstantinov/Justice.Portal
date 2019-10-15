@@ -84,7 +84,7 @@ namespace Justice.Portal.Crawler.Crawlers
                             body = JObject.FromObject(new { bg = text }),
                         }
                         );
-                        var mcFiles = Regex.Matches(pageOP, "<a href=\"(/Uploads[^\"]+?)\">([\\w\\W]+?)</a>");
+                        var mcFiles = Regex.Matches(pageOP, "<a href=\"(/Uploads[^\"]+?)\">([\\w\\W]+?)</a>[\\w\\W]+?<td class=\"publ\">([0-9\\.]+?)</td>");
                         var jaFiles = new JArray();
                         foreach (Match f in mcFiles)
                         {
@@ -131,6 +131,7 @@ namespace Justice.Portal.Crawler.Crawlers
                                         id = Guid.NewGuid().ToString(),
                                         title = JObject.FromObject(new { bg = f.Groups[2].Value }),
                                         fileType = "",
+                                        date = DateTime.Parse(f.Groups[3].Value).ToString("yyyy-MM-dd"),
                                         file = hash
                                     }
                                     )
@@ -143,6 +144,7 @@ namespace Justice.Portal.Crawler.Crawlers
                             Block = new JSBlock()
                             {
                                 BlockId = 0,
+                                RubricId = 4,
                                 BlockTypeId = "pkmessage",
                                 Name = title.Length > 199 ? title.Substring(0, 199) : title,
                                 PortalPartId = "gdo",

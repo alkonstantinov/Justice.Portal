@@ -1168,7 +1168,7 @@ class MJProcess {
                 e.preventDefault();
                 self.InitiateSearch($('#tbSS').val());
             }
-            
+
         });
     }
 
@@ -1550,9 +1550,9 @@ class MJProcess {
         files.forEach(x =>
             divs += `
             <tr>
-            <td><a href="/api/part/GetBlob?hash=`+ x.file + `">` + x.title[self.language] + `</a></td>
+            <td><a href="/api/part/GetBlob?hash=`+ x.file + `">` + x.title[self.language] + `</a>  </td>
             <td>
-                `+ self.T(x.filetype) + `
+                <small><t>uploaddate</t></small>: ` + x.date + `
                 </td>                
             </tr>
 

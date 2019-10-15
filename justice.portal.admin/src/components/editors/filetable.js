@@ -3,6 +3,11 @@ import BaseComponent from '../basecomponent';
 import uuidv4 from 'uuid/v4';
 import Comm from '../../modules/comm';
 import { toast } from 'react-toastify';
+import moment from 'moment';
+import { Calendar } from 'primereact/calendar';
+import 'primereact/resources/themes/nova-light/theme.css';
+import 'primereact/resources/primereact.min.css';
+import 'primeicons/primeicons.css';
 
 export default class FileTable extends BaseComponent {
 
@@ -36,6 +41,7 @@ export default class FileTable extends BaseComponent {
             id: uuidv4(),
             title: {},
             fileType: {},
+            date: moment().format("YYYY-MM-DD"),
             file: null
         });
         this.props.setRows('files', files);
@@ -71,7 +77,7 @@ export default class FileTable extends BaseComponent {
                         {
                             self.props.files.map(x =>
                                 <div className="row" key={x.id}>
-                                    <div className="col-4">
+                                    <div className="col-6">
                                         <label className="control-label">Заглавие</label>
                                         <input className="form-control" value={x.title[self.props.lang] || ""} onChange={(e) => {
                                             var files = self.props.files;
@@ -80,14 +86,18 @@ export default class FileTable extends BaseComponent {
                                             self.props.setRows('files', files)
                                         }}></input>
                                     </div>
-                                    <div className="col-6">
-                                        <label className="control-label">Тип</label>
-                                        <input className="form-control" value={x.fileType ? x.fileType[self.props.lang] || "" : ""} onChange={(e) => {
-                                            var files = self.props.files;
-                                            var row = files.find(r => r.id === x.id);
-                                            row.fileType[self.props.lang] = e.target.value;
-                                            self.props.setRows('files', files)
-                                        }}></input>
+                                    <div className="col-4">
+                                        <label className="control-label">Дата</label>
+                                        <Calendar dateFormat="dd.mm.yy" value={moment(x.date, "YYYY-MM-DD").toDate()}
+                                            onChange={(e) => {
+                                                var files = self.props.files;
+                                                var row = files.find(r => r.id === x.id);
+                                                row.date = moment(e.value).format("YYYY-MM-DD");
+                                                self.props.setRows('files', files);
+
+                                            }}
+                                            readOnlyInput="true" inputClassName="form-control"></Calendar>
+
                                     </div>
 
                                     <div className="col-1">

@@ -67,16 +67,16 @@ namespace Justice.Portal.Crawler.Crawlers
                     var found = false;
                     do
                     {
-                        
+
                         string pageLinks = this.Download10Times(url.Item1 + "&page=" + page.ToString(), cookies);
-                        
+
                         page++;
                         var mcLinks = Regex.Matches(pageLinks, "<h6>\\s*<a href=\"(/[^\"]{32})\"");
                         found = mcLinks.Count > 0;
                         foreach (Match lnk in mcLinks)
                         {
                             string pageOP = this.Download10Times("http://profile.gdin.bg" + lnk.Groups[1].Value, cookies);
-                            
+
                             var mTitle = Regex.Match(pageOP, "<h4><i[\\w\\W]+?/i>([\\w\\W]+?)</h4>");
                             var mDate = Regex.Match(pageOP, "Дата на създаване на преписката: ([0-9\\.]{10})</div>");
                             var mText = Regex.Match(pageOP, "<div class=\"page-header\">[\\w\\W]+?</div>[\\w\\W]*?>([\\w\\W]+?)<hr />");
@@ -94,7 +94,7 @@ namespace Justice.Portal.Crawler.Crawlers
                                 body = JObject.FromObject(new { bg = text }),
                             }
                             );
-                            var mcFiles = Regex.Matches(pageOP, "<a href=\"(/file[^\"]+?)\"[^>]+?>([\\w\\W]+?)</a>");
+                            var mcFiles = Regex.Matches(pageOP, "<a href=\"(/file[^\"]+?)\"[^>]+?>([\\w\\W]+?)</a>\\s*<small>([^<]+?)</small>");
                             var jaFiles = new JArray();
                             foreach (Match f in mcFiles)
                             {
@@ -141,6 +141,7 @@ namespace Justice.Portal.Crawler.Crawlers
                                             id = Guid.NewGuid().ToString(),
                                             title = JObject.FromObject(new { bg = f.Groups[2].Value }),
                                             fileType = "",
+                                            date = f.Groups[3].Value,
                                             file = hash
                                         }
                                         )
@@ -153,6 +154,7 @@ namespace Justice.Portal.Crawler.Crawlers
                                 Block = new JSBlock()
                                 {
                                     BlockId = 0,
+                                    RubricId = 3,
                                     BlockTypeId = "pkmessage",
                                     Name = mTitle.Groups[1].Value.Length > 199 ? mTitle.Groups[1].Value.Substring(0, 199) : mTitle.Groups[1].Value,
                                     PortalPartId = "gdin",

@@ -149,7 +149,7 @@ namespace Justice.Portal.Crawler.Crawlers
                         mb = Regex.Matches(page, "<a[\\w\\W]*?href=\"(/media[^\"]+?)\"[\\w\\W]*?>([\\w\\W]+?)</a>");
                         foreach (Match m in mb)
                         {
-                            string newUrl = "/api/part/GetBlob?hash=" + UploadBlob(m.Groups[1].Value);
+                            string newUrl = "part/GetBlob?hash=" + UploadBlob(m.Groups[1].Value);
                             lBlobs.Add(new Tuple<string, string>(m.Groups[1].Value, newUrl));
                         }
 
@@ -167,7 +167,7 @@ namespace Justice.Portal.Crawler.Crawlers
                         var mDate = Regex.Match(page, "<time datetime=\"([\\w\\W]+?)\">[\\w\\W]+?</time>");
                         page = page.Replace(mDate.Value, "");
                         var jaFiles = new JArray();
-                        foreach (Match mF in Regex.Matches(docs, "<a href=\"(/media/[^\"]+?)\" target=\"_blank\">([^<]+?)</a>"))
+                        foreach (Match mF in Regex.Matches(docs, "<a href=\"(/media/[^\"]+?)\" target=\"_blank\">([^<]+?)</a>[\\w\\W]+?качено на ([0-9\\.]+?)</small"))
                         {
                             var hash = UploadBlob(mF.Groups[1].Value);
                             jaFiles.Add(
@@ -177,6 +177,7 @@ namespace Justice.Portal.Crawler.Crawlers
                                         id = Guid.NewGuid().ToString(),
                                         title = JObject.FromObject(new { bg = mF.Groups[2].Value }),
                                         fileType = "",
+                                        date = DateTime.Parse(mF.Groups[3].Value).ToString("yyyy-MM-dd"),
                                         file = hash
                                     }
                                     )
@@ -194,6 +195,7 @@ namespace Justice.Portal.Crawler.Crawlers
                                 Name = title.Length > 199 ? title.Substring(0, 199) : title,
                                 PortalPartId = "av",
                                 Url = Guid.NewGuid().ToString(),
+                                RubricId = 1,
                                 Jsonvalues = JObject.FromObject(new
                                 {
                                     title = JObject.FromObject(new { bg = title }),
