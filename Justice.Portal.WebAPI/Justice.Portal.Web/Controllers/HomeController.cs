@@ -54,6 +54,18 @@ namespace Justice.Portal.Web.Controllers
             string html = template.TemplateJson;
             html = Regex.Replace(html, "href=\"/home/index/([^\"]+?)\"", "href=\"/home/index/$1?top=1\"");
 
+            var jv = JObject.Parse(block.Jsonvalues);
+
+            if (jv["title"] == null)
+            {
+                jv["title"] = JObject.FromObject(new
+                {
+                    bg = block.Name
+                });
+
+                block.Jsonvalues = jv.ToString();
+
+            }
 
 
             JObject joPageData = new JObject();

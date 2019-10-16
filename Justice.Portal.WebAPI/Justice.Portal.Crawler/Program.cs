@@ -45,7 +45,8 @@ namespace Justice.Portal.Crawler
                 Console.WriteLine("29.AV CHL12");
                 Console.WriteLine("30. AV ZPKONPI");
                 Console.WriteLine("300. AV FULL");
-
+                Console.WriteLine("301. MinProjects");
+                
                 var choice = Console.ReadLine();
                 switch (choice)
                 {
@@ -183,6 +184,13 @@ namespace Justice.Portal.Crawler
                         var AVNews1 = new AVNews(db);
                         AVNews1.Download();
                         break;
+
+                    case "301":
+                        var MinProjects = new MinProjects(db);
+                        MinProjects.Download();
+
+                        break;
+
 
                 }
 
