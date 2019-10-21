@@ -164,7 +164,8 @@ class MJProcess {
             $(element).attr("placeholder", "");
             return;
         }
-
+        if (!$(element).attr("placeholder"))
+            return;
         var wording = lng[$(element).attr("placeholder").toLowerCase()];
         if (!wording) {
             $(element).attr("placeholder", "");
@@ -565,6 +566,7 @@ class MJProcess {
         var divs = "";
         var showMore = false;
         var query = localStorage.getItem(lsSearchString) || "";
+        query = encodeURI(query);
         $.ajax({
             url: "/api/content/search?size=10&query=" + query + "&from=" + self.Top + "&part=" + (this.MJPageData.mainpartid === "min" ? "" : this.MJPageData.mainpartid),
             dataType: 'json',
@@ -1312,7 +1314,7 @@ class MJProcess {
         var self = this;
         var divs = "";
         var showMore = false;
-        var url = "/api/content/GetPKListData?count=10&blockId=" + blockId + "&top=" + self.Top + "&blockTypeId=" + itemType + "&type=" + self.PKType + "&ss=" + $("#" + this.TBSSId).val();
+        var url = "/api/content/GetPKListData?count=10&blockId=" + blockId + "&top=" + self.Top + "&blockTypeId=" + itemType + "&type=" + encodeURI(self.PKType) + "&ss=" + $("#" + this.TBSSId).val();
         $.ajax({
             url: url,
             dataType: 'json',

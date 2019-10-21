@@ -129,18 +129,18 @@ var MJProcess =
                 var lng = this.translation[this.language];
 
                 if (!lng) {
-                    element.replaceWith("");
+                    $(element).replaceWith("");
                     return;
                 }
 
                 var wording = lng[element.innerText.toLowerCase()];
 
                 if (!wording) {
-                    element.replaceWith("");
+                    $(element).replaceWith("");
                     return;
                 }
 
-                element.replaceWith(wording);
+                $(element).replaceWith(wording);
             }
         }, {
             key: "TranslateWord",
@@ -316,7 +316,7 @@ var MJProcess =
                 var oldDiv = $("#" + divId);
                 var obj = isMain ? this.MJPageData.main : this.MJPageData["block_" + divId].blockData;
                 var self = this;
-                oldDiv.replaceWith($("\n            <div class= \"port-wrapper grid-item-emission\" >\n            <div class=\"port-head\">\n                <h3 class=\"port-title\"><t>emissions</t></h3>\n                <div class=\"port-link-item\">\n                </div>\n            </div>\n            <div class=\"port-box p-0 bgr-black box-border height-350\">\n                <div class=\"abs-content\" style='background-image: url(\"/api/part/GetBlob?hash=" + obj.imageId + "\");'>\n                    <div class=\"abs-cover\"></div>\n                    <div class=\"emission-label\">\n                        <img src=\"/images/live-symbol.png\">\n                            <span><t>live</t></span>\n\t\t\t\t\t\t</div>\n                        <div class=\"emission-title\">\n                            <h2 class=\"white\">" + obj.title[self.language] + "                                \n\t\t\t\t\t\t\t</h2>\n                            <a role=\"button\" class=\"btn btn-emission js-video\" data-toggle=\"modal\" data-src=\"" + obj.url + "\" data-target=\"#liveEmission\">\n                                <svg class=\"icon icon-play-button\"><use xlink: href=\"images/symbol-defs.svg#icon-play-button\"></use></svg>\n                            <t>watchlive</t>\n\t\t\t\t\t\t\t</a>\n                    </div>\n                </div>\n            </div>\n\t\t\t</div>\n             "));
+                $(oldDiv).replaceWith($("\n            <div class= \"port-wrapper grid-item-emission\" >\n            <div class=\"port-head\">\n                <h3 class=\"port-title\"><t>emissions</t></h3>\n                <div class=\"port-link-item\">\n                </div>\n            </div>\n            <div class=\"port-box p-0 bgr-black box-border height-350\">\n                <div class=\"abs-content\" style='background-image: url(\"/api/part/GetBlob?hash=" + obj.imageId + "\");'>\n                    <div class=\"abs-cover\"></div>\n                    <div class=\"emission-label\">\n                        <img src=\"/images/live-symbol.png\">\n                            <span><t>live</t></span>\n\t\t\t\t\t\t</div>\n                        <div class=\"emission-title\">\n                            <h2 class=\"white\">" + obj.title[self.language] + "                                \n\t\t\t\t\t\t\t</h2>\n                            <a role=\"button\" class=\"btn btn-emission js-video\" data-toggle=\"modal\" data-src=\"" + obj.url + "\" data-target=\"#liveEmission\">\n                                <svg class=\"icon icon-play-button\"><use xlink: href=\"images/symbol-defs.svg#icon-play-button\"></use></svg>\n                            <t>watchlive</t>\n\t\t\t\t\t\t\t</a>\n                    </div>\n                </div>\n            </div>\n\t\t\t</div>\n             "));
             }
         }, {
             key: "PutBanner",
@@ -458,6 +458,7 @@ var MJProcess =
                 var divs = "";
                 var showMore = false;
                 var query = localStorage.getItem(lsSearchString) || "";
+                query = encodeURI(query);
                 $.ajax({
                     url: "/api/content/search?size=10&query=" + query + "&from=" + self.Top + "&part=" + (this.MJPageData.mainpartid === "min" ? "" : this.MJPageData.mainpartid),
                     dataType: 'json',
@@ -583,11 +584,11 @@ var MJProcess =
                 var self = this;
                 var download = this.TranslateWord("download");
                 var ul = "<ul class='list-group'>";
-                this.years.find(function (x) {
+                this.years.filter(function (x) {
                     return x.year === year;
-                }).months.find(function (x) {
+                })[0].months.filter(function (x) {
                     return x.month === month;
-                }).docs.forEach(function (x) {
+                })[0].docs.forEach(function (x) {
                     var li = "";
 
                     if (x.docId !== "") {
@@ -712,9 +713,9 @@ var MJProcess =
                 });
                 list.forEach(function (i) {
                     var date = new Date(i.date);
-                    var y = self.years.find(function (x) {
+                    var y = self.years.filter(function (x) {
                         return parseInt(x.year) === date.getFullYear();
-                    });
+                    })[0];
 
                     if (!y) {
                         y = {
@@ -760,9 +761,9 @@ var MJProcess =
                         self.years.push(y);
                     }
 
-                    var m = y.months.find(function (x) {
+                    var m = y.months.filter(function (x) {
                         return parseInt(x.month) === date.getMonth() + 1;
-                    });
+                    })[0];
                     m.docs.push({
                         title: i.title,
                         docId: i.docId,
@@ -902,9 +903,9 @@ var MJProcess =
                 });
                 var urlParts = window.location.href.split('/');
                 var key = (urlParts.length === 4 || urlParts[urlParts.length - 1] === "" ? bcKeyMain : urlParts[urlParts.length - 1]).toLowerCase();
-                var me = bc.find(function (x) {
+                var me = bc.filter(function (x) {
                     return x.key === key;
-                });
+                })[0];
 
                 if (me) {
                     bc.splice(bc.indexOf(me) + 1);
@@ -1004,7 +1005,7 @@ var MJProcess =
                 var self = this;
                 var divs = "";
                 var showMore = false;
-                var url = "/api/content/GetPKListData?count=10&blockId=" + blockId + "&top=" + self.Top + "&blockTypeId=" + itemType + "&type=" + self.PKType + "&ss=" + $("#" + this.TBSSId).val();
+                var url = "/api/content/GetPKListData?count=10&blockId=" + blockId + "&top=" + self.Top + "&blockTypeId=" + itemType + "&type=" + encodeURI(self.PKType) + "&ss=" + $("#" + this.TBSSId).val();
                 $.ajax({
                     url: url,
                     dataType: 'json',

@@ -24,10 +24,10 @@ namespace Justice.Portal.Crawler.Crawlers
 
 
 
-            new Tuple<string, string>("http://profile.mjs.bg/category?a=100","Обществени поръчки открити след 15.04.2016 г."),
+            new Tuple<string, string>("http://profile.mjs.bg/category?a=100","Процедури"),
             new Tuple<string, string>("http://profile.mjs.bg/category?c=16","Пазарни консултации"),
-            new Tuple<string, string>("http://profile.mjs.bg/?c=2","Процедури по ЗОП"),
-            new Tuple<string, string>("http://profile.mjs.bg/?c=1","Публични покани по ЗОП")
+            new Tuple<string, string>("http://profile.mjs.bg/?c=2","Обществени поръчки, открити преди 15.04.2016 г."),
+            new Tuple<string, string>("http://profile.mjs.bg/?c=1","Обществени поръчки, открити преди 15.04.2016 г.")
         };
 
 
@@ -60,7 +60,7 @@ namespace Justice.Portal.Crawler.Crawlers
         public void Download()
         {
 
-           
+
             foreach (var url in lUrls)
             {
                 var page = 0;
@@ -71,7 +71,7 @@ namespace Justice.Portal.Crawler.Crawlers
                     string pageLinks = this.Download10Times(url.Item1 + "&page=" + page.ToString());
 
                     page++;
-                    var mcLinks = Regex.Matches(pageLinks, "<h6>\\s*<a href=\"(/[^\"]{32})\"");
+                    var mcLinks = Regex.Matches(pageLinks, "<h6>\\s*<a href=\"(/[^\"]{32})\"[\\w\\W]+?</h6>\\s*<p>([^<]+?)</p>");
                     found = mcLinks.Count > 0;
                     foreach (Match lnk in mcLinks)
                     {
@@ -86,11 +86,19 @@ namespace Justice.Portal.Crawler.Crawlers
                         text = Regex.Replace(text, "<[/]*i[\\w\\W]*?>", "");
 
 
+                        var pkType = url.Item2;
+                        switch (lnk.Groups[2].Value)
+                        {
+                            case "Покана до определени лица": pkType = "Събиране на оферти с обява или покана до определени лица"; break;
+                            case "Събиране на оферти с обява": pkType = "Събиране на оферти с обява или покана до определени лица"; break;
+                        }
+
+
                         var op = JObject.FromObject(
                         new
                         {
                             title = JObject.FromObject(new { bg = mTitle.Groups[1].Value }),
-                            type = url.Item2,
+                            type = pkType,
                             body = JObject.FromObject(new { bg = text }),
                         }
                         );

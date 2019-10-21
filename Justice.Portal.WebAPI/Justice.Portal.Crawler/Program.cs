@@ -46,7 +46,11 @@ namespace Justice.Portal.Crawler
                 Console.WriteLine("30. AV ZPKONPI");
                 Console.WriteLine("300. AV FULL");
                 Console.WriteLine("301. MinProjects");
+                Console.WriteLine("302. GDIN Page");
+                Console.WriteLine("303. MinPKArchiveCrawler");
                 
+
+
                 var choice = Console.ReadLine();
                 switch (choice)
                 {
@@ -191,7 +195,17 @@ namespace Justice.Portal.Crawler
 
                         break;
 
+                    case "302":
+                        var GdinPage = new GdinPage(db);
+                        GdinPage.Download();
 
+                        break;
+                    case "303":
+                        var MinPKArchiveCrawler = new MinPKArchiveCrawler(db);
+                        MinPKArchiveCrawler.Download();
+
+                        break;
+                        
                 }
 
             }

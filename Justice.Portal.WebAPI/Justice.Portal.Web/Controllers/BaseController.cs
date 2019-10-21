@@ -60,6 +60,7 @@ namespace Justice.Portal.Web.Controllers
         {
             UserAction ua = new UserAction();
             token = token ?? this.GetToken();
+            
             ua.PortalUserId = db.GetUserByToken(token).PortalUserId;
             ua.OnTime = DateTime.Now;
             ua.Content = content;

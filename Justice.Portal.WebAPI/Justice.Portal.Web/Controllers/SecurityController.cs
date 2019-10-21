@@ -142,9 +142,10 @@ namespace Justice.Portal.Web.Controllers
         [HttpGet("Logout")]
         public async Task<IActionResult> Logout()
         {
-            db.Logout(this.GetToken());
             this.SaveUserAction(this.GetUserAction("Излизане", ""));
 
+            db.Logout(this.GetToken());
+            
             return Ok();
         }
 

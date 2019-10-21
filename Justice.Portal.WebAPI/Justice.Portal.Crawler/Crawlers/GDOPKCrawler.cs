@@ -24,7 +24,9 @@ namespace Justice.Portal.Crawler.Crawlers
         List<Tuple<string,string>> urls = new List<Tuple<string, string>>()
         {
             new Tuple<string, string>("http://www.gdo.bg/jobs/p57","Първоначално постъпване"),
-            new Tuple<string, string>("http://www.gdo.bg/jobs/p58","Вътрешно израстване")
+            new Tuple<string, string>("http://www.gdo.bg/jobs/p58","Вътрешно израстване"),
+            new Tuple<string, string>("http://www.gdo.bg/orders/p55","Предварителни обявления"),
+            new Tuple<string, string>("http://www.gdo.bg/orders/p56","Обществени поръчки")
         };
 
         public string Download10Times(string url)
