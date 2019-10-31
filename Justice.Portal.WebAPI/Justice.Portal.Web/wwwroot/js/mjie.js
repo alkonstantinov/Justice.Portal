@@ -129,18 +129,18 @@ var MJProcess =
                 var lng = this.translation[this.language];
 
                 if (!lng) {
-                    $(element).replaceWith("");
+                    element.replaceWith("");
                     return;
                 }
 
                 var wording = lng[element.innerText.toLowerCase()];
 
                 if (!wording) {
-                    $(element).replaceWith("");
+                    element.replaceWith("");
                     return;
                 }
 
-                $(element).replaceWith(wording);
+                element.replaceWith(wording);
             }
         }, {
             key: "TranslateWord",
@@ -169,6 +169,7 @@ var MJProcess =
                     return;
                 }
 
+                if (!$(element).attr("placeholder")) return;
                 var wording = lng[$(element).attr("placeholder").toLowerCase()];
 
                 if (!wording) {
@@ -316,7 +317,7 @@ var MJProcess =
                 var oldDiv = $("#" + divId);
                 var obj = isMain ? this.MJPageData.main : this.MJPageData["block_" + divId].blockData;
                 var self = this;
-                $(oldDiv).replaceWith($("\n            <div class= \"port-wrapper grid-item-emission\" >\n            <div class=\"port-head\">\n                <h3 class=\"port-title\"><t>emissions</t></h3>\n                <div class=\"port-link-item\">\n                </div>\n            </div>\n            <div class=\"port-box p-0 bgr-black box-border height-350\">\n                <div class=\"abs-content\" style='background-image: url(\"/api/part/GetBlob?hash=" + obj.imageId + "\");'>\n                    <div class=\"abs-cover\"></div>\n                    <div class=\"emission-label\">\n                        <img src=\"/images/live-symbol.png\">\n                            <span><t>live</t></span>\n\t\t\t\t\t\t</div>\n                        <div class=\"emission-title\">\n                            <h2 class=\"white\">" + obj.title[self.language] + "                                \n\t\t\t\t\t\t\t</h2>\n                            <a role=\"button\" class=\"btn btn-emission js-video\" data-toggle=\"modal\" data-src=\"" + obj.url + "\" data-target=\"#liveEmission\">\n                                <svg class=\"icon icon-play-button\"><use xlink: href=\"images/symbol-defs.svg#icon-play-button\"></use></svg>\n                            <t>watchlive</t>\n\t\t\t\t\t\t\t</a>\n                    </div>\n                </div>\n            </div>\n\t\t\t</div>\n             "));
+                oldDiv.replaceWith($("\n            <div class= \"port-wrapper grid-item-emission\" >\n            <div class=\"port-head\">\n                <h3 class=\"port-title\"><t>emissions</t></h3>\n                <div class=\"port-link-item\">\n                </div>\n            </div>\n            <div class=\"port-box p-0 bgr-black box-border height-350\">\n                <div class=\"abs-content\" style='background-image: url(\"/api/part/GetBlob?hash=" + obj.imageId + "\");'>\n                    <div class=\"abs-cover\"></div>\n                    <div class=\"emission-label\">\n                        <img src=\"/images/live-symbol.png\">\n                            <span><t>live</t></span>\n\t\t\t\t\t\t</div>\n                        <div class=\"emission-title\">\n                            <h2 class=\"white\">" + obj.title[self.language] + "                                \n\t\t\t\t\t\t\t</h2>\n                            <a role=\"button\" class=\"btn btn-emission js-video\" data-toggle=\"modal\" data-src=\"" + obj.url + "\" data-target=\"#liveEmission\">\n                                <svg class=\"icon icon-play-button\"><use xlink: href=\"images/symbol-defs.svg#icon-play-button\"></use></svg>\n                            <t>watchlive</t>\n\t\t\t\t\t\t\t</a>\n                    </div>\n                </div>\n            </div>\n\t\t\t</div>\n             "));
             }
         }, {
             key: "PutBanner",
@@ -870,6 +871,14 @@ var MJProcess =
                 self.DisplayBreadCrumbs();
                 self.PutAutomaticLinks();
                 self.RepairLinks();
+                $("#tbSS").keyup(function (e) {
+                    var code = e.keyCode ? e.keyCode : e.which;
+
+                    if (code === 13) {
+                        e.preventDefault();
+                        self.InitiateSearch($('#tbSS').val());
+                    }
+                });
             }
         }, {
             key: "SwitchLanguage",
@@ -1100,7 +1109,7 @@ var MJProcess =
                 var self = this;
                 var divs = "<table class='table table-bordered'><tbody>";
                 files.forEach(function (x) {
-                    return divs += "\n            <tr>\n            <td><a href=\"/api/part/GetBlob?hash=" + x.file + "\">" + x.title[self.language] + "</a></td>\n            <td>\n                " + self.T(x.filetype) + "\n                </td>                \n            </tr>\n\n            ";
+                    return divs += "\n            <tr>\n            <td><a href=\"/api/part/GetBlob?hash=" + x.file + "\">" + x.title[self.language] + "</a>  </td>\n            <td>\n                <small><t>uploaddate</t></small>: " + x.date + "\n                </td>                \n            </tr>\n\n            ";
                 });
                 divs += "</tbody><table>";
                 $("#" + dFilesId).append(divs);

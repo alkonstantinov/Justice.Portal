@@ -68,8 +68,11 @@ namespace Justice.Portal.Web.Controllers
             }
 
 
+        
+
+
             JObject joPageData = new JObject();
-            joPageData["main"] = JObject.Parse(block.Jsonvalues);
+            joPageData["main"] = JObject.Parse(block.Jsonvalues.Replace("https://localhost:5001",""));
             joPageData["maintype"] = block.BlockTypeId;
             joPageData["mainid"] = block.BlockId;
             joPageData["mainpartid"] = block.PortalPartId;
