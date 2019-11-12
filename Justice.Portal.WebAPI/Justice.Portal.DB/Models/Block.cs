@@ -18,6 +18,7 @@ namespace Justice.Portal.DB.Models
         public string Jsonvalues { get; set; }
         public bool? IsActive { get; set; }
         public int RubricId { get; set; }
+        public bool IsMain { get; set; }
 
         public virtual BlockType BlockType { get; set; }
         public virtual PortalPart PortalPart { get; set; }

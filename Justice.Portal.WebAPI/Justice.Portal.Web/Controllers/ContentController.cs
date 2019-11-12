@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Justice.Portal.DB.JSModels;
 using Justice.Portal.DB.Models;
@@ -143,7 +144,9 @@ namespace Justice.Portal.Web.Controllers
         [HttpGet("GetHeaderByBlockid")]
         public async Task<IActionResult> GetHeaderByBlockid(int blockId)
         {
-            return Ok(db.GetHeaderByBlockId(blockId));
+            var hdr = db.GetHeaderByBlockId(blockId);
+            hdr.Content = Regex.Replace(hdr.Content, "href=\"/home/index/([^\"]+?)\"", "href=\"/home/index/$1?top=1\"");
+            return Ok(hdr);
         }
 
 

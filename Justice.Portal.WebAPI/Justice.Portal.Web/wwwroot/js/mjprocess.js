@@ -280,7 +280,7 @@ class MJProcess {
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-6">
+                    <div class="col-`+ ((obj.body[self.language] && obj.body[self.language].length > 0) ? "6" : "12") + `">
                         <img src="/api/part/GetBlob?hash=`+ obj.imageId + `" alt="" style="max-width:100%;max-height:100%"/>
                     </div>
                     <div class="col-6">
@@ -1194,29 +1194,45 @@ class MJProcess {
     }
 
     FindMeOrAddMeInBreadCrumbs() {
-        var bc = JSON.parse(localStorage.getItem(lsBreadcrumbs) || "[]");
-        if (bc.length === 0)
-            bc.push({
-                key: bcKeyMain,
-                title: { bg: this.translation.bg.start, en: this.translation.en.start }
-            });
+        var bc = [];
         var urlParts = window.location.href.split('/');
         var key = ((urlParts.length === 4 || urlParts[urlParts.length - 1] === "") ? bcKeyMain : urlParts[urlParts.length - 1]).toLowerCase();
-        var me = bc.find(x => x.key === key);
-        if (me) {
-            bc.splice(bc.indexOf(me) + 1);
+        if (key.indexOf('?') > -1)
+            key = key.substring(0, key.indexOf('?'));
+        if (this.GetUrlParameter("top") == 1) {
+            var foundInPath = false;
+            self.MJPageData.bcpath.forEach(x => {
+                bc.push({
+                    key: x.Url,
+                    title: x.Title
+                });
+                foundInPath = foundInPath || x.Url == key;
+            });
+            if (!foundInPath)
+                bc.push({
+                    key: key,
+                    title: this.MJPageData.main.title
+                });
         }
         else {
-            bc.push({
-                key: key,
-                title: this.MJPageData.main.title
-            });
-        }
 
-        while (bc.length > 3) {
-            bc.splice(1, 1);
+            bc = JSON.parse(localStorage.getItem(lsBreadcrumbs) || "[]");
+            if (bc.length === 0)
+                bc.push({
+                    key: bcKeyMain,
+                    title: { bg: this.translation.bg.start, en: this.translation.en.start }
+                });
+            var me = bc.find(x => x.key === key);
+            if (me) {
+                bc.splice(bc.indexOf(me) + 1);
+            }
+            else {
+                bc.push({
+                    key: key,
+                    title: this.MJPageData.main.title
+                });
+            }
         }
-
         localStorage.setItem(lsBreadcrumbs, JSON.stringify(bc));
     }
 
@@ -1228,7 +1244,7 @@ class MJProcess {
             $("#olBC li").remove();
             var bc = JSON.parse(localStorage.getItem(lsBreadcrumbs) || "[]");
             bc.forEach((x, i) =>
-                $("#olBC").append($('<li class="breadcrumb-item" aria-current="page"><a href="' + (x.key === bcKeyMain ? '/' : '/home/index/' + x.key) + '">' + self.NarrowText((x.title ? x.title[self.language] : "..."), 50) + '</a></li>'))
+                $("#olBC").append($('<li class="breadcrumb-item" aria-current="page"><a href="' + ((x.key == '' || x.key === bcKeyMain) ? '/' : '/home/index/' + x.key) + '">' + self.NarrowText((x.title ? x.title[self.language] : "..."), 50) + '</a></li>'))
             );
 
         }
@@ -2070,6 +2086,13 @@ class MJProcess {
         });
 
     }
+
+    GetUrlParameter(name) {
+        name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+        var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+        var results = regex.exec(location.search);
+        return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+    };
 
 
 

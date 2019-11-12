@@ -41,7 +41,7 @@ export default class BlockMain extends BaseComponent {
 
     GetData() {
         return {
-
+            title: this.state.title
         };
     }
 

@@ -94,6 +94,11 @@ namespace Justice.Portal.DB.Models
                     .HasName("ix_block_url")
                     .IsUnique();
 
+                entity.HasIndex(e => new { e.PortalPartId, e.IsMain })
+                    .HasName("ix_block_part_main")
+                    .IsUnique()
+                    .HasFilter("([IsMain]=(1))");
+
                 entity.Property(e => e.BlockTypeId)
                     .IsRequired()
                     .HasMaxLength(20);

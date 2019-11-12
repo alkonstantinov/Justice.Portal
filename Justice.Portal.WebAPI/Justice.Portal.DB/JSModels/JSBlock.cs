@@ -17,6 +17,7 @@ namespace Justice.Portal.DB.JSModels
         public string Url { get; set; }
         public string Jsonvalues { get; set; }
         public bool? IsActive { get; set; }
+        public bool IsMain { get; set; }
         public int RubricId { get; set; }
 
 

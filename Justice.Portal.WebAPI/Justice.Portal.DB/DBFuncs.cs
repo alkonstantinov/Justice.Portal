@@ -462,6 +462,7 @@ namespace Justice.Portal.DB
                 block.Name = data.Block.Name;
                 block.Url = data.Block.Url;
                 block.IsActive = data.Block.IsActive;
+                block.IsMain = data.Block.IsMain;
 
             }
             db.SaveChanges();
@@ -843,6 +844,16 @@ namespace Justice.Portal.DB
             dbr.TitleBg = r.TitleBg;
             dbr.TitleEn = r.TitleEn;
             db.SaveChanges();
+        }
+
+
+        public JArray GetMainPath(string portalPartId)
+        {
+            var blocks = db.Block
+                .Where(x => x.IsMain && (x.PortalPartId == portalPartId || x.PortalPartId == "min"))
+                .Select(x => new { Order = x.PortalPartId == "min" ? 1 : 2, Title = JObject.Parse(x.Jsonvalues)["title"], Url = x.PortalPartId == "min" ? "" : x.Url })
+                .OrderBy(x => x.Order);
+            return JArray.FromObject(blocks.ToArray());
         }
 
 

@@ -357,6 +357,7 @@ export default class BlockEditor extends BaseComponent {
                 self.setState({
                     Name: result.data.block ? result.data.block.name : "",
                     Active: result.data.block ? result.data.block.isActive : true,
+                    IsMain: result.data.block ? result.data.block.isMain : false,
                     properties: result.data.properties,
                     values: result.data.values,
                     block: result.data.block,
@@ -442,6 +443,7 @@ export default class BlockEditor extends BaseComponent {
                 Name: this.state.Name,
                 RubricId: this.state.rubricId,
                 IsActive: this.state.Active,
+                IsMain: this.state.IsMain,
                 Url: this.state.Url,
                 Jsonvalues: JSON.stringify(partData)
             },
@@ -500,7 +502,7 @@ export default class BlockEditor extends BaseComponent {
                         </div>
                     </div>
                     <div className="row">
-                        <div className="col-10">
+                        <div className="col-8">
                             <label className="control-label" htmlFor="Date">Заглавие</label>
                             <input type="text" className="form-control" value={this.state.Name} onChange={(e) => self.setState({ Name: e.target.value })}></input>
                         </div>
@@ -511,9 +513,19 @@ export default class BlockEditor extends BaseComponent {
                             ></input>
                             <label className="form-check-label">
                                 Активен
+                                </label>
+                        </div>
+                        <div className="col-2">
+                            <input className="form-check-input" type="checkbox"
+                                checked={self.state.IsMain}
+                                onChange={(e) => self.setState({ IsMain: e.target.checked })}
+                            ></input>
+                            <label className="form-check-label">
+                                Главна страница
                                         </label>
                         </div>
                     </div>
+
                     <div className="row">
                         <div className="col-12">
                             <label className="control-label">Рубрика</label>
