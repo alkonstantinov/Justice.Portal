@@ -12,13 +12,13 @@ using System.Text.RegularExpressions;
 
 namespace Justice.Portal.Crawler.Crawlers
 {
-    
+
     public class AVCareers
     {
         WebClient wc;
         DB.DBFuncs db;
         HashSet<string> hsDownloaded = new HashSet<string>();
-    
+
         public AVCareers(DB.DBFuncs db)
         {
             wc = new WebClient();
@@ -68,7 +68,7 @@ namespace Justice.Portal.Crawler.Crawlers
             return hash;
         }
 
-        
+
 
         public string DownloadString(string url)
         {
@@ -108,7 +108,7 @@ namespace Justice.Portal.Crawler.Crawlers
                 var list = DownloadString("https://www.registryagency.bg/bg/karieri/?&page=" + pageNo.ToString());
                 pageNo++;
                 list = Regex.Match(list, "</header>([\\w\\W]+?)<footer").Groups[1].Value;
-                var mcLinks = Regex.Matches(list,"<h2>\\s*<a href=\"(/bg/karieri/[^\"]+)\"");
+                var mcLinks = Regex.Matches(list, "<h2>\\s*<a href=\"(/bg/karieri/[^\"]+)\"");
                 foreach (Match mLink in mcLinks)
                 {
                     if (hsDownloaded.Contains(mLink.Groups[1].Value))
@@ -121,7 +121,7 @@ namespace Justice.Portal.Crawler.Crawlers
                     var title = Regex.Match(page, "<h1>([\\w\\W]+?)</h1>").Groups[1].Value;
                     page = Regex.Match(page, "</header>([\\w\\W]+?)<footer").Groups[1].Value;
                     page = ClearPage(page);
-                    
+
                     List<Tuple<string, string>> lBlobs = new List<Tuple<string, string>>();
 
                     var mb = Regex.Matches(page, "<img[\\w\\W]*?src=\"([^\"]+?)\"");
@@ -141,13 +141,13 @@ namespace Justice.Portal.Crawler.Crawlers
                     foreach (var ru in lBlobs)
                         page = page.Replace(ru.Item1, ru.Item2);
 
-                    
+
 
 
                     page = Regex.Replace(page, "<div[\\w\\W]*?>", "<br />");
                     page = Regex.Replace(page, "</*div[\\w\\W]*?>", "");
                     page = ReplaceWhileExists(page, "<br />\\s*<br />", "<br />");
-                    
+
 
                     var mDate = Regex.Match(page, "<time datetime=\"([\\w\\W]+?)\">[\\w\\W]+?</time>");
                     page = page.Replace(mDate.Value, "");
@@ -160,6 +160,7 @@ namespace Justice.Portal.Crawler.Crawlers
                             BlockId = 0,
                             BlockTypeId = "ad",
                             Name = title.Length > 199 ? title.Substring(0, 199) : title,
+                            RubricId = 1,
                             PortalPartId = "av",
                             Url = Guid.NewGuid().ToString(),
                             Jsonvalues = JObject.FromObject(new

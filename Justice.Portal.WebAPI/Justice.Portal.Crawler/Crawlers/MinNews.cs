@@ -41,6 +41,7 @@ namespace Justice.Portal.Crawler.Crawlers
                             Name = mData.Groups[1].Value.Length > 199 ? mData.Groups[1].Value.Substring(0, 199) : mData.Groups[1].Value,
                             PortalPartId = "min",
                             Url = Guid.NewGuid().ToString(),
+                            RubricId = 5,
                             Jsonvalues = JObject.FromObject(new
                             {
                                 title = JObject.FromObject(new { bg = mData.Groups[1].Value }),

@@ -1026,7 +1026,7 @@ class MJProcess {
 				</h1>
 
             <div class="article-content">
-                `+ self.FixText(obj.body ? obj.body[self.language] : "") + `
+                `+ self.FixText(obj.text ? obj.text[self.language] : "") + `
 				</div>
                 `+ divYears + `
 			</article > `));

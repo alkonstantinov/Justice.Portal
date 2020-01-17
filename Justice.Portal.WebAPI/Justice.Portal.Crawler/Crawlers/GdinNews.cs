@@ -131,6 +131,8 @@ namespace Justice.Portal.Crawler.Crawlers
                             BlockTypeId = type == "Новина" ? "new" : "ad",
                             Name = title.Length > 199 ? title.Substring(0, 199) : title,
                             PortalPartId = "gdin",
+                            RubricId = 3,
+                            
                             Url = Guid.NewGuid().ToString(),
                             Jsonvalues = JObject.FromObject(new
                             {

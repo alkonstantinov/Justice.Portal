@@ -119,6 +119,7 @@ namespace Justice.Portal.Crawler.Crawlers
                             BlockTypeId = "new",
                             Name = title.Length > 199 ? title.Substring(0, 199) : title,
                             PortalPartId = "nbpp",
+                            RubricId = 6,
                             Url = Guid.NewGuid().ToString(),
                             Jsonvalues = JObject.FromObject(new
                             {

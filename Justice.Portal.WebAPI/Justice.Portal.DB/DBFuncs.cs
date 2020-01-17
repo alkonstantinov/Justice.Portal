@@ -461,6 +461,7 @@ namespace Justice.Portal.DB
                 block.Jsonvalues = data.Block.Jsonvalues;
                 block.Name = data.Block.Name;
                 block.Url = data.Block.Url;
+                block.RubricId = data.Block.RubricId;
                 block.IsActive = data.Block.IsActive;
                 block.IsMain = data.Block.IsMain;
 
