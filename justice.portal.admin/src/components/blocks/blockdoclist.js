@@ -39,7 +39,7 @@ export default class BlockDocList extends BaseComponent {
         if (this.props.block) {
             var obj = JSON.parse(this.props.block.jsonvalues);
             state.title = obj.title || {};
-            state.body = obj.body || {};
+            state.body = obj.body || obj.text || {};
             state.docs = obj.docs || [];
             state.docs = state.docs.sort((a, b) => a.date > b.date ? 1 : -1);
         }
