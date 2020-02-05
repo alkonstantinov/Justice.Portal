@@ -6,9 +6,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Web;
 
 namespace Justice.Portal.Crawler.Crawlers
 {
@@ -16,6 +18,7 @@ namespace Justice.Portal.Crawler.Crawlers
     {
         WebClient wc;
         DB.DBFuncs db;
+        public string DownloadFilename { get; set; }
         //url, ime
         List<Tuple<string, string>> lUrls = new List<Tuple<string, string>>()
         {
@@ -34,7 +37,31 @@ namespace Justice.Portal.Crawler.Crawlers
         public PKMinCrawler(DB.DBFuncs db)
         {
             wc = new WebClient();
+
+
+            System.Net.ServicePointManager.SecurityProtocol = System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls | System.Net.SecurityProtocolType.Tls11 | System.Net.SecurityProtocolType.Tls12;
+
+
             this.db = db;
+        }
+
+        public byte[] DownloadFile(string url)
+        {
+
+
+            try
+            {
+                var res = wc.DownloadData(url);
+                DownloadFilename = url;
+                return res;
+            }
+            catch (WebException ex)
+            {
+                if (ex.Message.Contains("302"))
+                    return DownloadFile(ex.Response.Headers["Location"]);
+                else throw ex;
+            }
+
         }
 
         public string Download10Times(string url)
@@ -75,7 +102,7 @@ namespace Justice.Portal.Crawler.Crawlers
                     found = mcLinks.Count > 0;
                     foreach (Match lnk in mcLinks)
                     {
-                        string pageOP = this.Download10Times("http://profile.mjs.bg" + lnk.Groups[1].Value);
+                        string pageOP = this.Download10Times("https://profile.mjs.bg" + lnk.Groups[1].Value);
 
                         var mTitle = Regex.Match(pageOP, "<h3><i[\\w\\W]+?/i>([\\w\\W]+?)</h3>");
                         var mDate = Regex.Match(pageOP, "Дата на създаване на преписката: ([0-9\\.]{10})</div>");
@@ -107,13 +134,17 @@ namespace Justice.Portal.Crawler.Crawlers
                         foreach (Match f in mcFiles)
                         {
                             byte[] file;
+
+
                             try
                             {
-                                file = wc.DownloadData("http://profile.mjs.bg" + f.Groups[1].Value);
+                                //file = wc.DownloadData("https://profile.mjs.bg" + f.Groups[1].Value);
+                                file = this.DownloadFile("https://profile.mjs.bg" + f.Groups[1].Value);
                             }
+
                             catch (Exception e)
                             {
-                                Console.WriteLine(e.Message);
+                                Console.WriteLine("https://profile.mjs.bg" + lnk.Groups[1].Value + "           " + e.Message);
                                 continue;
                             }
                             System.Threading.Thread.Sleep(1000);
@@ -123,16 +154,7 @@ namespace Justice.Portal.Crawler.Crawlers
                                 hash = string.Join("", md5.ComputeHash(file).Select(x => x.ToString("X2")));
                             }
 
-                            string header = wc.ResponseHeaders["Content-Disposition"] ?? string.Empty;
-                            string filename = "filename=";
-                            string fileName = "";
-                            int index = header.LastIndexOf(filename, StringComparison.OrdinalIgnoreCase);
-                            if (index > -1)
-                            {
-                                fileName = header.Substring(index + filename.Length);
-                            }
-                            else
-                                fileName = Guid.NewGuid().ToString() + ".pdf";
+                            var fileName = DownloadFilename;
                             Blob b = new Blob()
                             {
                                 Content = file,

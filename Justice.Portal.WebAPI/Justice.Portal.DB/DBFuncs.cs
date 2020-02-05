@@ -20,6 +20,7 @@ namespace Justice.Portal.DB
 
 
             this.db = jpc;
+            
         }
 
         public HashSet<string> GetUserRights(int userId)

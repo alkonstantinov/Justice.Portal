@@ -48,7 +48,8 @@ namespace Justice.Portal.DB.Models
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-                optionsBuilder.UseSqlServer("Server=DESKTOP-NIQT1U7;Database=JusticePortal;Trusted_Connection=True;persist security info=True;user id=sa;password=123;MultipleActiveResultSets=True;");
+                //optionsBuilder.UseSqlServer("Server=DESKTOP-NIQT1U7;Database=JusticePortal;Trusted_Connection=True;persist security info=True;user id=sa;password=123;MultipleActiveResultSets=True;");
+                optionsBuilder.UseSqlServer("Server=172.16.0.56\\MSSQLSERVER2017;Database=JusticePortal;Trusted_Connection=False;persist security info=True;user id=sa;password=@D1mitrov;MultipleActiveResultSets=True;");
             }
         }
 

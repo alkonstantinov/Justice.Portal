@@ -11,6 +11,7 @@ namespace Justice.Portal.Crawler
             JusticePortalContext jpc = new JusticePortalContext();
 
             DB.DBFuncs db = new DB.DBFuncs(jpc);
+            
             while (true)
             {
                 Console.WriteLine("Choose:");
@@ -48,7 +49,8 @@ namespace Justice.Portal.Crawler
                 Console.WriteLine("301. MinProjects");
                 Console.WriteLine("302. GDIN Page");
                 Console.WriteLine("303. MinPKArchiveCrawler");
-                
+                Console.WriteLine("304. CitizenshipProtoPage");
+
 
 
                 var choice = Console.ReadLine();
@@ -205,8 +207,15 @@ namespace Justice.Portal.Crawler
                         MinPKArchiveCrawler.Download();
 
                         break;
-                        
+
+                    case "304":
+                        var CitizenshipProtoPage = new CitizenshipProtoPage(db);
+                        CitizenshipProtoPage.Download();
+
+                        break;
                 }
+                Console.WriteLine("Press key");
+                Console.ReadKey();
 
             }
         }

@@ -40,7 +40,7 @@ namespace Justice.Portal.Crawler.Crawlers
                 byte[] file;
                 try
                 {
-                     file = fUrl.Contains("http") ? wc.DownloadData(fUrl) : wc.DownloadData("http://www.justice.government.bg" + fUrl);
+                     file = fUrl.Contains("http") ? wc.DownloadData(fUrl) : wc.DownloadData("http://mjs.bg" + fUrl);
                 }
                 catch (Exception e)
                 {
