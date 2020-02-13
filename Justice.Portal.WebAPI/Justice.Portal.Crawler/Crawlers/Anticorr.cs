@@ -30,7 +30,7 @@ namespace Justice.Portal.Crawler.Crawlers
             {
                 for (int month = 1; month < 13; month++)
                 {
-                    var page = wc.DownloadString($"http://www.justice.government.bg/62/{year}/{month}");
+                    var page = wc.DownloadString($"http://www.mjs.bg/62/{year}/{month}");
                     var mTable = Regex.Match(page, "<div class=\"TableS\">\\s*(<table>[\\w\\W]+?</table>)");
                     if (mTable.Success)
                     {

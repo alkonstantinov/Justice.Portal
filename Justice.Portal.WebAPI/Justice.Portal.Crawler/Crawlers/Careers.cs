@@ -16,10 +16,10 @@ namespace Justice.Portal.Crawler.Crawlers
         WebClient wc;
         DB.DBFuncs db;
         Tuple<string, string>[] urls = new Tuple<string, string>[4] {
-            new Tuple<string, string>("http://www.justice.government.bg/110/", "Министерство на правосъдието"),
-            new Tuple<string, string>("http://www.justice.government.bg/112/", "ЦРОЗ"),
-            new Tuple<string, string>("http://www.justice.government.bg/114/", "ЗСВ"),
-            new Tuple<string, string>("http://www.justice.government.bg/115/", "ЗННД")
+            new Tuple<string, string>("http://www.mjs.bg/110/", "Министерство на правосъдието"),
+            new Tuple<string, string>("http://www.mjs.bg/112/", "ЦРОЗ"),
+            new Tuple<string, string>("http://www.mjs.bg/114/", "ЗСВ"),
+            new Tuple<string, string>("http://www.mjs.bg/115/", "ЗННД")
         };
         public Careers(DB.DBFuncs db)
         {
@@ -69,7 +69,7 @@ namespace Justice.Portal.Crawler.Crawlers
                         {
                             Console.WriteLine($"download{f.Groups[1].Value}");
                             System.Threading.Thread.Sleep(1000);
-                            byte[] file = wc.DownloadData("http://www.justice.government.bg" + f.Groups[1].Value);
+                            byte[] file = wc.DownloadData("http://www.mjs.bg" + f.Groups[1].Value);
                             string hash;
                             using (var md5 = MD5.Create())
                             {

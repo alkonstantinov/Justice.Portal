@@ -57,7 +57,7 @@ namespace Justice.Portal.Crawler.Crawlers
             //string sid = Regex.Match(wc.ResponseHeaders["Set-Cookie"], "PHPSESSID=([^;]+?);").Groups[1].Value;
             string cookies = wc.ResponseHeaders["Set-Cookie"];
             wc.Headers.Add(HttpRequestHeader.Cookie, cookies);
-            for (int year = 2014; year < 2020; year++)
+            for (int year = 2014; year <= DateTime.Now.Year; year++)
             {
                 wc.DownloadString("http://profile.gdin.bg/?year=" + year);
 

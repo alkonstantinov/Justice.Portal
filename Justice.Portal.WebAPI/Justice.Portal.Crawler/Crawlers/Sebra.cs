@@ -30,14 +30,14 @@ namespace Justice.Portal.Crawler.Crawlers
             {
                 for (int month = 1; month < 13; month++)
                 {
-                    var page = wc.DownloadString($"http://www.justice.government.bg/9/{year}/{month}");
+                    var page = wc.DownloadString($"http://www.mjs.bg/9/{year}/{month}");
                     var mcDates = Regex.Matches(page, "<div class=\\\"Date\\\">([0-9\\.]+)</div>");
                     var mcFiles = Regex.Matches(page, "<a href=\\\"([^\\\"]+)\\\">Изтегли</a>");
                     for (int i = 0; i < mcDates.Count; i++)
                     {
                         try
                         {
-                            byte[] file = wc.DownloadData("http://www.justice.government.bg" + mcFiles[i].Groups[1].Value);
+                            byte[] file = wc.DownloadData("http://www.mjs.bg" + mcFiles[i].Groups[1].Value);
                             string hash;
                             using (var md5 = MD5.Create())
                             {

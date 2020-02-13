@@ -26,12 +26,12 @@ namespace Justice.Portal.Crawler.Crawlers
         {
             JArray result = new JArray();
             //"docs":[{"id":"116454da-620c-4ad0-b0ef-4399c561a067","title":{"bg":"24.04.2016","en":""},"docId":"4C3216697058FE257B4A264CBE69A861","date":"2016-04-24"},{"id":"48260e46-5501-404f-a609-6be3b967ea73","title":{"bg":"25.04.2016","en":""},"docId":"4C3216697058FE257B4A264CBE69A861","date":"2016-04-25"},{"id":"45a97f33-0fd4-4fd3-98dc-f12a8637bb8c","title":{"bg":"01.01.2019","en":""},"docId":"8CCD98F123163912F123C92B59A21FBF","date":"2019-01-01"},{"id":"150092ea-7bef-4c07-9684-eb8a9453072d","title":{"bg":"24.04.2019","en":""},"docId":"BA4DDD4C49C052A75D8E63302D9E8DFE","date":"2019-04-24"}]
-            var page = wc.DownloadString($"http://www.justice.government.bg/38/");
+            var page = wc.DownloadString($"http://www.mjs.bg/38/");
             var mcParts = Regex.Matches(page, "<div class=\"DocumentContainer\">\\s*<div class=\"Title\">([\\w\\W]+?)</div>\\s*<div class=\"Date\">([\\w\\W]+?)</div>[\\w\\W]+?<a href=\"([\\w\\W]+?)\"");
             
             foreach (Match m in mcParts)
             {
-                byte[] file = wc.DownloadData("http://www.justice.government.bg/" + m.Groups[3].Value);
+                byte[] file = wc.DownloadData("http://www.mjs.bg/" + m.Groups[3].Value);
                 string hash;
                 using (var md5 = MD5.Create())
                 {

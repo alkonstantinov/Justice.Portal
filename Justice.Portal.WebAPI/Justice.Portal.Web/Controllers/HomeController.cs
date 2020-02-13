@@ -13,6 +13,7 @@ using Justice.Portal.DB.Models;
 using Justice.Portal.Web.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Configuration.Binder;
 using Newtonsoft.Json.Linq;
 using Serilog;
 
@@ -72,7 +73,10 @@ namespace Justice.Portal.Web.Controllers
 
 
             JObject joPageData = new JObject();
-            joPageData["main"] = JObject.Parse(block.Jsonvalues.Replace("https://localhost:5001",""));
+            var hosts = config.GetSection("HostsToClear").Get<string[]>();
+            foreach (var s in hosts)
+                block.Jsonvalues = block.Jsonvalues.Replace(s, "");
+            joPageData["main"] = JObject.Parse(block.Jsonvalues);
             joPageData["maintype"] = block.BlockTypeId;
             joPageData["mainid"] = block.BlockId;
             joPageData["mainpartid"] = block.PortalPartId;

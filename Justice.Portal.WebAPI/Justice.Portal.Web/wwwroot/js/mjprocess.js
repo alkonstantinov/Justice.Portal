@@ -512,10 +512,14 @@ class MJProcess {
                         <h6 class="date">`+ x.date + `</h6>
                         <h2>`+ (data.title[self.language] || "") + `</h2>
                         <div class="port-content">
-                            <img src="/api/part/GetBlob?hash=`+ data.imageId + `" alt="" class="list-article-img img-prime" />
-                            <div>
+                            <div class="col-4">
+                                <img src="/api/part/GetBlob?hash=`+ data.imageId + `" alt="" class="list-article-img img-prime" style="max-width:100%; max-height:100%"/>
+                            </div>
+                            <div class="col-8">
+                                <div style="height:80%; max-height:80%; overflow: hidden;">
                                 `+ self.NarrowText($(data.body[self.language]).text(), 400) + `
-                                <a class="btn btn-primary" href="/home/index/`+ x.url + `" role="button"><t>learnmore</t></a>
+                                </div>
+                                <a class="btn btn-primary" href="/home/index/`+ x.url + `" role="button" style="bottom:0px"><t>learnmore</t></a>
                             </div>
 						</div>
                     </div>`;
