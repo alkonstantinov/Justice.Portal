@@ -20,7 +20,7 @@ namespace Justice.Portal.DB
 
 
             this.db = jpc;
-            
+
         }
 
         public HashSet<string> GetUserRights(int userId)
@@ -607,7 +607,7 @@ namespace Justice.Portal.DB
                     }).Take(count).ToArray();
         }
 
-        public NewSQItem[] GetNewsSQData(int count, string portalPartId)
+        public NewSQItem[] GetNewsSQData(int count, string portalPartId, string language)
         {
             return (from b in db.Block
                     join btpv in db.BlockTypePropertyValue on new { bid = b.BlockId, pid = "date" } equals new { bid = btpv.BlockId, pid = btpv.PropertyId }
@@ -618,8 +618,12 @@ namespace Justice.Portal.DB
                         BlockId = b.BlockId,
                         Date = btpv.Value,
                         Url = b.Url,
-                        JSONContent = b.Jsonvalues
-                    }).Take(count).ToArray();
+                        JSONContent = b.Jsonvalues,
+                        JSON = JObject.Parse(b.Jsonvalues)
+
+                    })
+                    .Where(x => language == "bg" || (x.JSON["title"] != null && x.JSON["title"]["en"] != null && x.JSON["title"]["en"].ToString() != ""))
+                    .Take(count).ToArray();
         }
 
 

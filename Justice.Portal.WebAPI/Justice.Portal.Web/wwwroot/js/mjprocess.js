@@ -500,7 +500,7 @@ class MJProcess {
         var divs = "";
 
         $.ajax({
-            url: "/api/content/GetNewsSQData?count=3&blockId=" + this.MJPageData["block_" + divId].value,
+            url: "/api/content/GetNewsSQData?count=3&blockId=" + this.MJPageData["block_" + divId].value + "&lang=" + self.language,
             dataType: 'json',
             async: false,
 
@@ -516,7 +516,7 @@ class MJProcess {
                                 <img src="/api/part/GetBlob?hash=`+ data.imageId + `" alt="" class="list-article-img img-prime" style="max-width:100%; max-height:100%"/>
                             </div>
                             <div class="col-8">
-                                <div style="height:80%; max-height:80%; overflow: hidden;">
+                                <div style="height:80%; max-height:80%; min-height:80%; overflow: hidden;">
                                 `+ self.NarrowText($(data.body[self.language]).text(), 400) + `
                                 </div>
                                 <a class="btn btn-primary" href="/home/index/`+ x.url + `" role="button" style="bottom:0px"><t>learnmore</t></a>

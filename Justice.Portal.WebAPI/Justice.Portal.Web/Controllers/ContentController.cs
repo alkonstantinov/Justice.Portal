@@ -49,12 +49,12 @@ namespace Justice.Portal.Web.Controllers
         /// <param name="blockId">част</param>
         /// <returns>извлечени новини</returns>
         [HttpGet("GetNewsSQData")]
-        public async Task<IActionResult> GetNewsSQData(int count, int blockId)
+        public async Task<IActionResult> GetNewsSQData(int count, int blockId, string lang)
         {
             string portalPartId = db.GetBlock(blockId).PortalPartId;
 
 
-            return Ok(db.GetNewsSQData(count, portalPartId));
+            return Ok(db.GetNewsSQData(count, portalPartId, lang));
         }
 
         /// <summary>
@@ -171,7 +171,7 @@ namespace Justice.Portal.Web.Controllers
             return Ok(db.GetPKList(top, count, portalPartId, ss, type));
         }
 
-        
+
 
     }
 

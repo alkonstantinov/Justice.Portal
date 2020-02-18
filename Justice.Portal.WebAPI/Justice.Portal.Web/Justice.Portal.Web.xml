@@ -25,7 +25,7 @@
             <param name="blockId">част</param>
             <returns>извлечени обявления</returns>
         </member>
-        <member name="M:Justice.Portal.Web.Controllers.ContentController.GetNewsSQData(System.Int32,System.Int32)">
+        <member name="M:Justice.Portal.Web.Controllers.ContentController.GetNewsSQData(System.Int32,System.Int32,System.String)">
             <summary>
             Извлича данни за каре новини
             </summary>
