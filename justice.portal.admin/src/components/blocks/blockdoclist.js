@@ -26,6 +26,7 @@ export default class BlockDocList extends BaseComponent {
                 }
             ]
         );
+        this.wysiwyg = React.createRef();
         this.Validate = this.Validate.bind(this);
         this.GetData = this.GetData.bind(this);
         this.AddDoc = this.AddDoc.bind(this);
@@ -65,7 +66,7 @@ export default class BlockDocList extends BaseComponent {
     GetData() {
         return {
             title: this.state.title,
-            body: this.state.body,
+            bodybody: this.wysiwyg.current.GetData(),
             docs: this.state.docs
         };
     }
@@ -182,11 +183,11 @@ export default class BlockDocList extends BaseComponent {
                     <div className="col-12">
 
                         <WYSIWYG
-                            getData={self.GetStateMLData}
-
-                            setData={self.SetStateMLData}
-                            stateId="body"
+                            lang={self.state.lang}
+                            data={self.state.body}
+                            ref={this.wysiwyg}
                         ></WYSIWYG>
+
                     </div>
                 </div>,
 

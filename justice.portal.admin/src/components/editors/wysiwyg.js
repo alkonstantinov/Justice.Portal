@@ -25,13 +25,17 @@ export default class WYSIWYG extends BaseComponent {
         this.ShowHtml = this.ShowHtml.bind(this);
         this.PutNormLink = this.PutNormLink.bind(this);
 
-        var data = this.props.getData(this.props.stateId);
+
+        var data = this.props.data;
+
+        console.log("initial data", data);
 
         this.state = {
             ShowSelectPageDialog: false,
             ShowHtml: false,
             htmlcode: false,
-            Data: data
+            Data: data,
+            lang: this.props.lang
         };
     }
 
@@ -141,14 +145,16 @@ export default class WYSIWYG extends BaseComponent {
 
     shouldComponentUpdate(nextProps, nextState) {
 
-        var propData = nextProps.getData(this.props.stateId)
-        var updText = propData !== this.editor.getData();
-        var updDialog = this.state.ShowSelectPageDialog !== nextProps.ShowSelectPageDialog;
+        if (nextProps.lang !== this.state.lang) {
+            var data = this.state.Data;
+            data[this.state.lang] = this.editor.getData();
+            this.setState({ lang: nextProps.lang, Data: data });
 
-
-        if (updText) this.editor.setData(propData);
-        return updText || updDialog;
+        }
+        return true;
     }
+
+
 
     ShowHtml() {
         this.setState({ ShowHtmlDialog: true, Html: this.editor.getData() });
@@ -157,6 +163,12 @@ export default class WYSIWYG extends BaseComponent {
     SaveHtml() {
         this.editor.setData(this.state.Html);
         this.setState({ ShowHtmlDialog: false });
+    }
+
+    GetData() {
+        var data = this.state.Data;
+        data[this.state.lang] = this.editor.getData();
+        return data;
     }
 
 
@@ -218,15 +230,15 @@ export default class WYSIWYG extends BaseComponent {
                     }}
                     ref="CKEditor"
                     editor={ClassicEditor}
-                    data={self.state.Data}
+                    data={self.state.Data[self.state.lang] || ""}
                     onInit={editor => {
                         self.editor = editor;
                     }}
-                    onChange={(event, editor) => {
-                        const data = editor.getData();
-                        self.props.setData(data, self.props.stateId)
+                // onChange={(event, editor) => {
+                //     const data = editor.getData();
+                //     self.props.setData(data, self.props.stateId)
 
-                    }}
+                // }}
 
                 />
 

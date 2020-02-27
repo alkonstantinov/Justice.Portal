@@ -22,6 +22,7 @@ export default class BlockBio extends BaseComponent {
                 }
             ]
         );
+        this.wysiwyg = React.createRef();
         this.AddImage = this.AddImage.bind(this);
         this.Validate = this.Validate.bind(this);
         this.GetData = this.GetData.bind(this);
@@ -60,7 +61,7 @@ export default class BlockBio extends BaseComponent {
         return {
             title: this.state.title,
             addinfo: this.state.addinfo,
-            body: this.state.body,
+            body: this.wysiwyg.current.GetData(),
             prime: this.state.prime,
             imageId: this.state.imageId
         };
@@ -114,11 +115,11 @@ export default class BlockBio extends BaseComponent {
                     <div className="col-12">
 
                         <WYSIWYG
-                            getData={self.GetStateMLData}
-
-                            setData={self.SetStateMLData}
-                            stateId="body"
+                            lang={self.state.lang}
+                            data={self.state.body}
+                            ref={this.wysiwyg}
                         ></WYSIWYG>
+
 
 
 

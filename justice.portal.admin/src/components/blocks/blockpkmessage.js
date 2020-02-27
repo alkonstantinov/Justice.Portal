@@ -26,6 +26,7 @@ export default class BlockPkMessage extends BaseComponent {
                 }
             ]
         );
+        this.wysiwyg = React.createRef();
         this.Validate = this.Validate.bind(this);
         this.GetData = this.GetData.bind(this);
         var state = { lang: "bg" };
@@ -61,7 +62,7 @@ export default class BlockPkMessage extends BaseComponent {
         return {
             title: this.state.title || {},
             files: this.state.files || [],
-            body: this.state.body,
+            body: this.wysiwyg.current.GetData(),
             type: this.state.type
 
         };
@@ -97,10 +98,9 @@ export default class BlockPkMessage extends BaseComponent {
                     <div className="col-12">
 
                         <WYSIWYG
-                            getData={self.GetStateMLData}
-
-                            setData={self.SetStateMLData}
-                            stateId="body"
+                            lang={self.state.lang}
+                            data={self.state.body}
+                            ref={this.wysiwyg}
                         ></WYSIWYG>
                     </div>
                 </div>,

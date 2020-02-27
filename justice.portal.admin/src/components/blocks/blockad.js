@@ -19,6 +19,7 @@ export default class BlockAd extends BaseComponent {
                 }
             ]
         );
+        this.wysiwyg = React.createRef();
         this.AddImage = this.AddImage.bind(this);
         this.Validate = this.Validate.bind(this);
         this.GetData = this.GetData.bind(this);
@@ -52,7 +53,7 @@ export default class BlockAd extends BaseComponent {
     GetData() {
         return {
             title: this.state.title,
-            body: this.state.body,
+            body: this.wysiwyg.current.GetData(),
             imageId: this.state.imageId
         };
     }
@@ -80,10 +81,11 @@ export default class BlockAd extends BaseComponent {
                 <div className="row">
                     <div className="col-12">
 
+
                         <WYSIWYG
-                            getData={self.GetStateMLData}
-                            setData={self.SetStateMLData}
-                            stateId="body"
+                            lang={self.state.lang}
+                            data={self.state.body}
+                            ref={this.wysiwyg}
                         ></WYSIWYG>
 
 

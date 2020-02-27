@@ -18,6 +18,7 @@ export default class BlockPkOffer extends BaseComponent {
 
     constructor(props) {
         super(props);
+        this.wysiwyg = React.createRef();
         eventClient.emit(
             "addbreadcrump",
             [
@@ -26,6 +27,7 @@ export default class BlockPkOffer extends BaseComponent {
                 }
             ]
         );
+        this.wysiwyg = React.createRef();
         this.Validate = this.Validate.bind(this);
         this.GetData = this.GetData.bind(this);
         var state = { lang: "bg" };
@@ -59,7 +61,7 @@ export default class BlockPkOffer extends BaseComponent {
         return {
             title: this.state.title || {},
             files: this.state.files || [],
-            body: this.state.body,
+            body: this.wysiwyg.current.GetData(),
             enddate: this.state.enddate
 
         };
@@ -89,11 +91,11 @@ export default class BlockPkOffer extends BaseComponent {
                     <div className="col-12">
 
                         <WYSIWYG
-                            getData={self.GetStateMLData}
-
-                            setData={self.SetStateMLData}
-                            stateId="body"
+                            lang={self.state.lang}
+                            data={self.state.body}
+                            ref={this.wysiwyg}
                         ></WYSIWYG>
+
 
 
 

@@ -519,7 +519,7 @@ class MJProcess {
                                 <div style="height:80%; max-height:80%; min-height:80%; overflow: hidden;">
                                 `+ self.NarrowText($(data.body[self.language]).text(), 400) + `
                                 </div>
-                                <a class="btn btn-primary" href="/home/index/`+ x.url + `" role="button" style="bottom:0px"><t>learnmore</t></a>
+                                <a class="btn btn-primary" href="/home/index/`+ x.url + `" role="button" style="margin-top:10px"><t>learnmore</t></a>
                             </div>
 						</div>
                     </div>`;
@@ -1023,6 +1023,7 @@ class MJProcess {
 
 
 
+		var btext = (obj.text||obj.body);
 
         oldDiv.replaceWith($(`<article class= "article-container" >
 
@@ -1030,7 +1031,7 @@ class MJProcess {
 				</h1>
 
             <div class="article-content">
-                `+ self.FixText(obj.text ? obj.text[self.language] : "") + `
+                `+ self.FixText(btext ? btext[self.language] : "") + `
 				</div>
                 `+ divYears + `
 			</article > `));
@@ -1931,6 +1932,7 @@ class MJProcess {
     ShowCareers() {
         var self = this;
         var toShow = this.careers.filter(x => x.type[self.language] === $("#" + self.TypeSelectId).val());
+        toShow.sort((a, b) => a.date > b.date ? -1 : 1);
         var html = `<ul class= 'list-group' > `;
         toShow.forEach(c => {
             var docHtml = `<ul class= 'list-group' > `;

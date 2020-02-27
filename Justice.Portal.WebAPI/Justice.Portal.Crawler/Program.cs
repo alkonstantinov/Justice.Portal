@@ -50,6 +50,7 @@ namespace Justice.Portal.Crawler
                 Console.WriteLine("302. GDIN Page");
                 Console.WriteLine("303. MinPKArchiveCrawler");
                 Console.WriteLine("304. CitizenshipProtoPage");
+                Console.WriteLine("305. MinInterviews");
 
 
 
@@ -211,6 +212,11 @@ namespace Justice.Portal.Crawler
                     case "304":
                         var CitizenshipProtoPage = new CitizenshipProtoPage(db);
                         CitizenshipProtoPage.Download();
+
+                        break;
+                    case "305":
+                        var MinInterview = new MinInterview(db);
+                        MinInterview.Download();
 
                         break;
                 }

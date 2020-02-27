@@ -26,6 +26,7 @@ export default class BlockPkConsult extends BaseComponent {
                 }
             ]
         );
+        this.wysiwyg = React.createRef();
         this.Validate = this.Validate.bind(this);
         this.GetData = this.GetData.bind(this);
         var state = { lang: "bg" };
@@ -63,7 +64,7 @@ export default class BlockPkConsult extends BaseComponent {
         return {
             title: this.state.title || {},
             files: this.state.files || [],
-            body: this.state.body,
+            body: this.wysiwyg.current.GetData(),
             procstatus: this.state.procstatus,
             code: this.state.code,
 

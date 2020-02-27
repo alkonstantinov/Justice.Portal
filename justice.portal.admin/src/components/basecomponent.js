@@ -160,11 +160,14 @@ class BaseComponent extends Component {
         //console.log("get", this.state[stateId][this.state.lang]);
         return this.state[stateId][this.state.lang] || "";
     }
-    SetStateMLData(value, stateId) {
+    SetStateMLData(value, stateId, lang) {
+        if (!lang)
+            lang = this.state.lang;
         var info = this.state[stateId];
-        info[this.state.lang] = value;
+        info[lang] = value;
         this.setState({ [stateId]: info });
     }
+
 
     render() {
         return (<div></div>);

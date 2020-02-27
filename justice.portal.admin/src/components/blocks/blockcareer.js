@@ -27,6 +27,7 @@ export default class BlockCareer extends BaseComponent {
                 }
             ]
         );
+        this.wysiwyg = React.createRef();
         this.Validate = this.Validate.bind(this);
         this.GetData = this.GetData.bind(this);
         this.EditData = this.EditData.bind(this);
@@ -69,7 +70,7 @@ export default class BlockCareer extends BaseComponent {
     GetData() {
         return {
             title: this.state.title,
-            body: this.state.body,
+            bodybody: this.wysiwyg.current.GetData(),
             data: this.state.data
         };
     }
@@ -222,11 +223,11 @@ export default class BlockCareer extends BaseComponent {
                     <div className="col-12">
 
                         <WYSIWYG
-                            getData={self.GetStateMLData}
-
-                            setData={self.SetStateMLData}
-                            stateId="body"
+                            lang={self.state.lang}
+                            data={self.state.body}
+                            ref={this.wysiwyg}
                         ></WYSIWYG>
+
                     </div>
                 </div>,
                 <div className="row">

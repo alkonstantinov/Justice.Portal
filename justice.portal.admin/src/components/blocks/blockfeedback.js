@@ -26,6 +26,7 @@ export default class BlockFeedback extends BaseComponent {
                 }
             ]
         );
+        this.wysiwyg = React.createRef();
         this.Validate = this.Validate.bind(this);
         this.GetData = this.GetData.bind(this);
         this.AddData = this.AddData.bind(this);
@@ -62,7 +63,7 @@ export default class BlockFeedback extends BaseComponent {
     GetData() {
         return {
             title: this.state.title,
-            body: this.state.body,
+            body: this.wysiwyg.current.GetData(),
             datas: this.state.datas,
             sendTo: this.state.sendTo
         };
@@ -142,11 +143,11 @@ export default class BlockFeedback extends BaseComponent {
                     <div className="col-12">
 
                         <WYSIWYG
-                            getData={self.GetStateMLData}
-
-                            setData={self.SetStateMLData}
-                            stateId="body"
+                            lang={self.state.lang}
+                            data={self.state.body}
+                            ref={this.wysiwyg}
                         ></WYSIWYG>
+
                     </div>
                     <div className="col-10">
                         <label className="control-label">Изпращане на</label>
