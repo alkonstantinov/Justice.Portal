@@ -243,10 +243,11 @@ class MJProcess {
                         <div class="emission-title">
                             <h2 class="white">`+ obj.title[self.language] + `                                
 							</h2>
-                            <a role="button" class="btn btn-emission js-video" data-toggle="modal" data-src="`+ obj.url + `" data-target="#liveEmission">
++ `+((obj.url!=null&&obj.url!="")?
+                            `<a role="button" class="btn btn-emission js-video" data-toggle="modal" data-src="`+ obj.url + `" data-target="#liveEmission">
                                 <svg class="icon icon-play-button"><use xlink: href="images/symbol-defs.svg#icon-play-button"></use></svg>
                             <t>watchlive</t>
-							</a>
+							</a>`: ``) +`
                     </div>
                 </div>
             </div>

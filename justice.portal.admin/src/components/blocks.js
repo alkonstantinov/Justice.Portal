@@ -90,9 +90,10 @@ export default class Blocks extends BaseComponent {
     }
 
 
-    EditBlock(blockId) {
+    EditBlock(blockId, blockTypeId) {
         this.setState({
             EditBlockId: blockId,
+            blockTypeId: blockTypeId,
             ShowEdit: true
         })
     }
@@ -153,6 +154,7 @@ export default class Blocks extends BaseComponent {
                             </div>
                             <div className="col-4">
                                 <select className="form-control" value={self.state.blockTypeId} onChange={(e) => self.setState({ blockTypeId: e.target.value }, () => self.LoadData())}>
+                                    <option value="0"></option>
                                     {
                                         self.state.blockTypes.map(x => <option value={x.blockTypeId}>{x.name}</option>)
                                     }
@@ -167,7 +169,12 @@ export default class Blocks extends BaseComponent {
                         </div>
                         <div className="row">
                             <div className="col-2">
-                                <button className="btn btn-primary pull-right" onClick={() => self.EditBlock(null)}>Нов</button>
+                                {
+                                    self.state.blockTypeId != "0" ?
+                                        <button className="btn btn-primary pull-right" onClick={() => self.EditBlock(null, self.state.blockTypeId)}>Нов</button>
+                                        : null
+                                }
+
                             </div>
                         </div>
                         <div className="row">
@@ -189,7 +196,7 @@ export default class Blocks extends BaseComponent {
 
                                                                 [
                                                                     <button className="btn btn-danger" onClick={() => self.DeleteBlock(obj.blockId)}><i className="far fa-trash-alt"></i></button>,
-                                                                    <button className="btn btn-light" onClick={() => self.EditBlock(obj.blockId)}><i className="fas fa-edit"></i></button>
+                                                                    <button className="btn btn-light" onClick={() => self.EditBlock(obj.blockId, obj.blockTypeId)}><i className="fas fa-edit"></i></button>
                                                                 ]
                                                         }
                                                     </td>

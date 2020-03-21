@@ -349,10 +349,10 @@ namespace Justice.Portal.DB
         public JSBlock[] GetBlocks(string portalPartId, string blockTypeId, HashSet<int> rs, string ss)
         {
             return ModelMapper.Instance.Mapper.Map<ICollection<Block>, ICollection<JSBlock>>(db.Block
-                .Where(x => x.BlockTypeId == blockTypeId
+                .Where(x => (blockTypeId == "0" || x.BlockTypeId == blockTypeId)
                 && x.PortalPartId == portalPartId
                 && rs.Contains(x.RubricId)
-                && (string.IsNullOrEmpty(ss) || x.Name.Contains(ss, StringComparison.InvariantCultureIgnoreCase)))
+                && (string.IsNullOrEmpty(ss) || x.Name.Contains(ss, StringComparison.InvariantCultureIgnoreCase) || x.Url.Equals(ss, StringComparison.InvariantCultureIgnoreCase)))
                 .OrderBy(x => x.Name).Take(50).ToArray()).ToArray();
         }
 
