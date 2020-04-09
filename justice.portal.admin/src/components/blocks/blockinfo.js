@@ -55,7 +55,7 @@ export default class BlockInfo extends BaseComponent {
     GetData() {
         return {
             title: this.state.title,
-            bodybody: this.wysiwyg.current.GetData(),
+            body: this.wysiwyg.current.GetData(),
             imageId: this.state.imageId
         };
     }

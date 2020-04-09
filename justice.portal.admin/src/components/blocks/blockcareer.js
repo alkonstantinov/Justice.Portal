@@ -62,7 +62,6 @@ export default class BlockCareer extends BaseComponent {
 
     }
 
-
     Validate() {
         return null;
     }
@@ -70,7 +69,7 @@ export default class BlockCareer extends BaseComponent {
     GetData() {
         return {
             title: this.state.title,
-            bodybody: this.wysiwyg.current.GetData(),
+            body: this.wysiwyg.current.GetData(),
             data: this.state.data
         };
     }

@@ -50,7 +50,11 @@ export default class BlockDocList extends BaseComponent {
             state.docs = [];
         }
 
-        state.years = [...new Set(state.docs.map(i => new Date(i.date).getFullYear()))];
+        var yearsSet = new Set(state.docs.map(i => new Date(i.date).getFullYear()));
+        //if (!yearsSet.has(new Date().getFullYear()))
+        yearsSet.add(new Date().getFullYear());
+
+        state.years = [...yearsSet];
         state.currentYear = state.years[0];
         state.currentMonth = 1;
 
@@ -66,7 +70,7 @@ export default class BlockDocList extends BaseComponent {
     GetData() {
         return {
             title: this.state.title,
-            bodybody: this.wysiwyg.current.GetData(),
+            body: this.wysiwyg.current.GetData(),
             docs: this.state.docs
         };
     }
