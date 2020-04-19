@@ -6,6 +6,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 
 namespace Justice.Portal.DB
@@ -428,9 +429,18 @@ namespace Justice.Portal.DB
             if (b == null)
             {
                 db.Blob.Add(blob);
-                db.SaveChanges();
+                
             }
-            else blob.BlobId = b.BlobId;
+            else
+            {
+                blob.BlobId = b.BlobId;
+                b.ContentType = blob.ContentType;
+                b.Extension = blob.Extension;
+                b.Filename = blob.Filename;                
+            }
+                
+
+            db.SaveChanges();
 
             return blob.BlobId;
         }

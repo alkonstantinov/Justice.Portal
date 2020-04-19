@@ -55,8 +55,8 @@ namespace Justice.Portal.Crawler.Crawlers
                 {
                     Content = file,
                     ContentType = "application/octet-stream",
-                    Extension = Path.GetExtension(m.Groups[1].Value),
-                    Filename = Path.GetFileName(m.Groups[1].Value),
+                    Extension = Path.GetExtension(mDoc.Groups[1].Value),
+                    Filename = Path.GetFileName(mDoc.Groups[1].Value),
                     Hash = hash
                 };
                 db.AddBlob(b);

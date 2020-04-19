@@ -226,8 +226,7 @@ namespace Justice.Portal.Web.Controllers
             var bt = db.GetBlockType(block.BlockTypeId);
 
             if (bt.IsSearchable)
-
-                await Task.Run(() => SolrComm.UpdateBlock(block));
+                Task.Run(() => SolrComm.UpdateBlock(block));
             this.SaveUserAction(this.GetUserAction("Запис на част", JObject.FromObject(data).ToString()));
 
             return Ok();

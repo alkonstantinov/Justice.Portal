@@ -243,11 +243,11 @@ class MJProcess {
                         <div class="emission-title">
                             <h2 class="white">`+ obj.title[self.language] + `                                
 							</h2>
-+ `+((obj.url!=null&&obj.url!="")?
-                            `<a role="button" class="btn btn-emission js-video" data-toggle="modal" data-src="`+ obj.url + `" data-target="#liveEmission">
++ `+ ((obj.url != null && obj.url != "") ?
+                `<a role="button" class="btn btn-emission js-video" data-toggle="modal" data-src="` + obj.url + `" data-target="#liveEmission">
                                 <svg class="icon icon-play-button"><use xlink: href="images/symbol-defs.svg#icon-play-button"></use></svg>
                             <t>watchlive</t>
-							</a>`: ``) +`
+							</a>`: ``) + `
                     </div>
                 </div>
             </div>
@@ -890,6 +890,7 @@ class MJProcess {
         });
         resultTbl += "</tr></thead><tbody>";
         var download = self.TranslateWord("download");
+        var link = self.TranslateWord("link").toLowerCase();
         searchResult.forEach(x => {
             resultTbl += "<tr>";
             self.CollectionStructure.forEach(ss => {
@@ -897,13 +898,13 @@ class MJProcess {
                     case 1:
                         resultTbl += "<td>" + x[ss.id] + "</td>"; break;
                     case 2:
-                        resultTbl += "<td>" + x[ss.id][self.language] + "</td>"; break;
+                        resultTbl += "<td>" + (x[ss.id][self.language] || "") + "</td>"; break;
                     case 3:
                         resultTbl += "<td>" + x[ss.id] + "</td>"; break;
                     case 4:
                         resultTbl += "<td><a href='/api/part/getblob?hash=" + x[ss.id] + "'>" + download + "</a></td>"; break;
                     case 5:
-                        resultTbl += "<td><a href='" + x[ss.id] + "'>" + download + "</a></td>"; break;
+                        resultTbl += "<td><a href='" + x[ss.id] + "'>" + link + "</a></td>"; break;
                 }
 
             });
@@ -1024,7 +1025,7 @@ class MJProcess {
 
 
 
-		var btext = (obj.text||obj.body);
+        var btext = (obj.text || obj.body);
 
         oldDiv.replaceWith($(`<article class= "article-container" >
 
