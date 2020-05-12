@@ -6,7 +6,7 @@ namespace Justice.Portal.DB.JSModels
 {
     public class CielaDocInfo
     {
-        public int Id { get; set; }
+        public Int64 Id { get; set; }
 
         public string Name { get; set; }
     }

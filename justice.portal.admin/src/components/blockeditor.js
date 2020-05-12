@@ -504,7 +504,7 @@ export default class BlockEditor extends BaseComponent {
                     <div className="row">
                         <div className="col-8">
                             <label className="control-label" htmlFor="Date">Заглавие</label>
-                            <input type="text" className="form-control" value={this.state.Name} onChange={(e) => self.setState({ Name: e.target.value })}></input>
+                            <input type="text" className="form-control" value={this.state.Name} onChange={(e) => self.setState({ Name: e.target.value })} maxLength="199"></input>
                         </div>
                         <div className="col-2">
                             <input className="form-check-input" type="checkbox"

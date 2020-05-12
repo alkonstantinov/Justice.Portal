@@ -110,13 +110,13 @@ namespace Justice.Portal.Web.Services
 
 
 
-            HashSet<int> hsIds = new HashSet<int>();
+            HashSet<Int64> hsIds = new HashSet<Int64>();
             List<CielaDocInfo> result = new List<CielaDocInfo>();
 
-            foreach (Match m in Regex.Matches(resultXML, "<Document db=\"0\" id=\"([0-9]+)\"[^>]+>([\\w\\W]*?)</Document>"))
+            foreach (Match m in Regex.Matches(resultXML, "<Document[\\w\\W]*?id=\"([\\-0-9]+?)\"[\\w\\W]*?>([\\w\\W]*?)</Document>"))
             {
 
-                int id = int.Parse(m.Groups[1].Value);
+                Int64 id = Int64.Parse(m.Groups[1].Value);
                 string name = m.Groups[2].Value;
                 if (hsIds.Contains(id))
                     continue;

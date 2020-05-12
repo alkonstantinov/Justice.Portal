@@ -60,11 +60,11 @@ namespace Justice.Portal.Web.Controllers
         //    return Ok(result);
         //}
 
-            /// <summary>
-            /// извлича страница
-            /// </summary>
-            /// <param name="portalPartId">част</param>
-            /// <returns>страница</returns>
+        /// <summary>
+        /// извлича страница
+        /// </summary>
+        /// <param name="portalPartId">част</param>
+        /// <returns>страница</returns>
         [HttpGet("GetTemplates")]
         public async Task<IActionResult> GetTemplates(string portalPartId)
         {
@@ -288,7 +288,7 @@ namespace Justice.Portal.Web.Controllers
             if (!db.IsAuthenticated(token))
                 return Unauthorized();
 
-            return Ok(db.GetCollections());
+            return Ok(db.GetCollections(Guid.Parse(token)));
         }
 
         /// <summary>
@@ -377,7 +377,7 @@ namespace Justice.Portal.Web.Controllers
                 return Unauthorized();
             if (!this.HasRight("adminheaders"))
                 return Unauthorized();
-            return Ok(db.GetHeaders());
+            return Ok(db.GetHeaders(Guid.Parse(token)));
         }
 
         /// <summary>

@@ -10,6 +10,8 @@ import eventClient from '../modules/eventclient';
 import uuidv4 from 'uuid/v4';
 import { ToggleButton } from 'primereact/togglebutton';
 import moment from 'moment';
+import UIContext from '../modules/context'
+
 
 export default class HeaderEditor extends BaseComponent {
 
@@ -40,14 +42,34 @@ export default class HeaderEditor extends BaseComponent {
 
 
 
-    componentDidMount() {
+    async componentDidMount() {
         var self = this;
+        await Comm.Instance().get('part/GetBlockRequisites')
+            .then(result => {
+
+                self.setState({
+                    parts: result.data.parts,
+                    portalPartId: UIContext.LastPortalPartId || result.data.parts[0].portalPartId
+                });
+            })
+            .catch(error => {
+                if (error.response && error.response.status === 401)
+                    toast.error("Липса на права", {
+                        onClose: this.Logout
+                    });
+                else
+                    toast.error(error.message);
+
+            });
+
+
         if (self.props.match.params.id) {
             Comm.Instance().get('part/GetHeader?headerId=' + self.props.match.params.id)
                 .then(result => {
                     self.setState({
                         content: result.data.content,
                         title: result.data.title,
+                        portalPartId: result.data.portalPartId,
                         mode: "edit"
                     });
 
@@ -85,7 +107,8 @@ export default class HeaderEditor extends BaseComponent {
         var data = {
             HeaderId: self.props.match.params.id,
             Content: self.state.content || "",
-            Title: self.state.title || ""
+            Title: self.state.title || "",
+            PortalPartId: self.state.portalPartId
         };
         Comm.Instance().post('part/SaveHeader', data)
             .then(result => {
@@ -143,7 +166,16 @@ export default class HeaderEditor extends BaseComponent {
                         </div>
                     </div>
                     <div className="row">
-                        <div className="col-12">
+                        <div className="col-3">
+                            <label className="control-label">Част</label>
+                            <select className="form-control" value={self.state.portalPartId} onChange={(e) => self.setState({ portalPartId: e.target.value })}>
+                                {
+                                    self.state.parts.map(x => <option value={x.portalPartId}>{x.name}</option>)
+                                }
+                            </select>
+                        </div>
+
+                        <div className="col-9">
                             <label className="control-label">Название</label>
                             <input type="text" className="form-control" value={this.state.title} onChange={(e) => self.setState({ title: e.target.value })}></input>
 

@@ -12,6 +12,7 @@ using System.Text;
 namespace Justice.Portal.DB
 {
     //Scaffold-DbContext "Server=DESKTOP-NIQT1U7;Database=JusticePortal;Trusted_Connection=True;persist security info=True;user id=sa;password=123;MultipleActiveResultSets=True;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models -Force
+    //Scaffold-DbContext "Server=172.16.0.56\MSSQLSERVER2017;Database=JusticePortal;Trusted_Connection=False;persist security info=True;user id = sa; password=@D1mitrov;MultipleActiveResultSets=True;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models -Force
     public class DBFuncs
     {
         protected JusticePortalContext db;
@@ -429,16 +430,16 @@ namespace Justice.Portal.DB
             if (b == null)
             {
                 db.Blob.Add(blob);
-                
+
             }
             else
             {
                 blob.BlobId = b.BlobId;
                 b.ContentType = blob.ContentType;
                 b.Extension = blob.Extension;
-                b.Filename = blob.Filename;                
+                b.Filename = blob.Filename;
             }
-                
+
 
             db.SaveChanges();
 
@@ -534,9 +535,16 @@ namespace Justice.Portal.DB
 
         }
 
-        public JSCollection[] GetCollections()
+        public JSCollection[] GetCollections(Guid token)
         {
-            return db.Collection.Select(x =>
+            var user = db.Session.Include(x => x.PortalUser).First(x => x.SessionKey == token);
+            var allowedParts = GetUserParts(user.PortalUserId);
+
+
+
+            return db.Collection
+                .Where(x => allowedParts.Contains(x.PortalPartId))
+                .Select(x =>
             new JSCollection()
             {
                 CollectionId = x.CollectionId,
@@ -569,6 +577,7 @@ namespace Justice.Portal.DB
             c.Content = collection.Content;
             c.Name = collection.Name;
             c.Structure = collection.Structure;
+            c.PortalPartId = collection.PortalPartId;
             db.SaveChanges();
         }
 
@@ -694,10 +703,14 @@ namespace Justice.Portal.DB
         }
 
 
-        public JSHeader[] GetHeaders()
+        public JSHeader[] GetHeaders(Guid token)
         {
+            var user = db.Session.Include(x => x.PortalUser).First(x => x.SessionKey == token);
+            var allowedParts = GetUserParts(user.PortalUserId);
 
-            return db.Header.Select(x => new JSHeader() { HeaderId = x.HeaderId, Title = x.Title }).ToArray();
+            return db.Header
+                .Where(x => allowedParts.Contains(x.PortalPartId))
+                .Select(x => new JSHeader() { HeaderId = x.HeaderId, Title = x.Title }).ToArray();
         }
 
         public JSHeader GetHeader(int headerId)
@@ -721,6 +734,7 @@ namespace Justice.Portal.DB
                 h = db.Header.First(x => x.HeaderId == header.HeaderId);
                 h.Content = header.Content;
                 h.Title = header.Title;
+                h.PortalPartId = header.PortalPartId;
 
             }
             db.SaveChanges();

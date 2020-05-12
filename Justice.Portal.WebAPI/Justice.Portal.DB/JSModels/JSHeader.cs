@@ -8,5 +8,7 @@ namespace Justice.Portal.DB.JSModels
         public int HeaderId { get; set; }
         public string Title { get; set; }
         public string Content { get; set; }
+
+        public string PortalPartId { get; set; }
     }
 }

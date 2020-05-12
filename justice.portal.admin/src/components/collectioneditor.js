@@ -10,9 +10,9 @@ import eventClient from '../modules/eventclient';
 import uuidv4 from 'uuid/v4';
 import { ToggleButton } from 'primereact/togglebutton';
 import moment from 'moment';
+import UIContext from '../modules/context'
 
 export default class CollectionEditor extends BaseComponent {
-    portalPartId;
 
     constructor(props) {
         super(props);
@@ -72,6 +72,23 @@ export default class CollectionEditor extends BaseComponent {
     async LoadData() {
         var self = this;
         var sources = [];
+        await Comm.Instance().get('part/GetBlockRequisites')
+            .then(result => {
+
+                self.setState({
+                    parts: result.data.parts,
+                    portalPartId: UIContext.LastPortalPartId || result.data.parts[0].portalPartId
+                });
+            })
+            .catch(error => {
+                if (error.response && error.response.status === 401)
+                    toast.error("Липса на права", {
+                        onClose: this.Logout
+                    });
+                else
+                    toast.error(error.message);
+
+            });
         if (self.props.match.params.id)
             await Comm.Instance().get('part/GetCollection?collectionId=' + self.props.match.params.id)
                 .then(result => {
@@ -79,6 +96,7 @@ export default class CollectionEditor extends BaseComponent {
                         structure: JSON.parse(result.data.structure),
                         content: JSON.parse(result.data.content),
                         name: result.data.name,
+                        portalPartId: result.data.portalPartId,
                         mode: "edit"
                     });
                 })
@@ -134,7 +152,8 @@ export default class CollectionEditor extends BaseComponent {
             CollectionId: self.props.match.params.id,
             Name: this.state.name,
             Structure: JSON.stringify(this.state.structure),
-            Content: JSON.stringify(content)
+            Content: JSON.stringify(content),
+            PortalPartId: self.state.portalPartId
         };
         Comm.Instance().post('part/SaveCollection', data)
             .then(result => {
@@ -236,7 +255,19 @@ export default class CollectionEditor extends BaseComponent {
                             <ToggleButton checked={self.state.lang === "bg"} onChange={(e) => this.setState({ lang: "bg" })} onLabel="БГ" offLabel="БГ"></ToggleButton>
                             <ToggleButton checked={self.state.lang === "en"} onChange={(e) => this.setState({ lang: "en" })} onLabel="EN" offLabel="EN"></ToggleButton>
                         </div>
-                        <div className="col-10">
+
+                    </div>
+
+                    <div className="row">
+                        <div className="col-3">
+                            <label className="control-label">Част</label>
+                            <select className="form-control" value={self.state.portalPartId} onChange={(e) => self.setState({ portalPartId: e.target.value })}>
+                                {
+                                    self.state.parts.map(x => <option value={x.portalPartId}>{x.name}</option>)
+                                }
+                            </select>
+                        </div>
+                        <div className="col-9">
                             <label className="control-label">Наименование</label>
                             <input type="text" className="form-control" value={self.state.name} onChange={(e) => self.setState({ name: e.target.value })}></input>
                         </div>
