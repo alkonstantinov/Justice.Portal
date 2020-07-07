@@ -33,6 +33,23 @@ function ZoomOut() {
 
 class MJProcess {
 
+    hostsToClear = [
+        "https://localhost:5001",
+        "http://172.16.0.57:8080"
+
+    ];
+
+    ClearHosts(data) {
+        if (data == null)
+            return;
+
+        var strData = JSON.stringify(data);
+        var self = this;
+        self.hostsToClear.forEach(h => strData = strData.split(h).join(""));
+        return JSON.parse(strData);
+
+    }
+
     constructor() {
 
         this.translation = {};
@@ -533,6 +550,7 @@ class MJProcess {
             async: false,
 
             success: function (data) {
+                data = self.ClearHosts(data);
                 data.forEach((x, idx) => {
                     var data = JSON.parse(x.jsonContent);
                     divs +=
