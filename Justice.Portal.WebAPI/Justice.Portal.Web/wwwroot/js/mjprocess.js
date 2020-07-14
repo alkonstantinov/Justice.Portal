@@ -288,7 +288,7 @@ class MJProcess {
                             <h2 class="white">`+ obj.title[self.language] + `                                
 							</h2>
 + `+ ((obj.url != null && obj.url != "") ?
-                `<a role="button" class="btn btn-emission js-video" data-toggle="modal" data-src="` + obj.url + `" data-target="#liveEmission">
+                `<a role="button" class="btn btn-emission js-video" href="` + obj.url + `">
                                 <svg class="icon icon-play-button"><use xlink: href="images/symbol-defs.svg#icon-play-button"></use></svg>
                             <t>watchlive</t>
 							</a>`: ``) + `
@@ -298,6 +298,36 @@ class MJProcess {
 			</div>
              `));
 
+//        var oldDiv = $("#" + divId);
+//        var obj = isMain ? this.MJPageData.main : this.MJPageData["block_" + divId].blockData;
+//        var self = this;
+//        oldDiv.replaceWith($(`
+//            <div class= "port-wrapper grid-item-emission" >
+//            <div class="port-head">
+//                <h3 class="port-title"><t>emissions</t></h3>
+//                <div class="port-link-item">
+//                </div>
+//            </div>
+//            <div class="port-box p-0 bgr-black box-border height-350">
+//                <div class="abs-content" style='background-image: url("/api/part/GetBlob?hash=`+ obj.imageId + `");'>
+//                    <div class="abs-cover"></div>
+//                    <div class="emission-label">
+//                        <img src="/images/live-symbol.png">
+//                            <span><t>live</t></span>
+//						</div>
+//                        <div class="emission-title">
+//                            <h2 class="white">`+ obj.title[self.language] + `                                
+//							</h2>
+//+ `+ ((obj.url != null && obj.url != "") ?
+//                `<a role="button" class="btn btn-emission js-video" data-toggle="modal" data-src="` + obj.url + `" data-target="#liveEmission">
+//                                <svg class="icon icon-play-button"><use xlink: href="images/symbol-defs.svg#icon-play-button"></use></svg>
+//                            <t>watchlive</t>
+//							</a>`: ``) + `
+//                    </div>
+//                </div>
+//            </div>
+//			</div>
+//             `));
 
     }
 
