@@ -390,7 +390,14 @@ namespace Justice.Portal.DB
 
         public JSBlock GetBlock(int blockId)
         {
-            return ModelMapper.Instance.Mapper.Map<JSBlock>(db.Block.First(x => x.BlockId == blockId));
+            try
+            {
+                return ModelMapper.Instance.Mapper.Map<JSBlock>(db.Block.First(x => x.BlockId == blockId));
+            }
+            catch
+            {
+                return new JSBlock();
+            }
         }
 
 

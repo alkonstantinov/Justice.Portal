@@ -31,13 +31,17 @@ function ZoomOut() {
     }
 }
 
+var hostsToClear = [
+    "https://localhost:5001",
+    "http://172.16.0.57:8080"
+
+];
+
+
 class MJProcess {
 
-    hostsToClear = [
-        "https://localhost:5001",
-        "http://172.16.0.57:8080"
-
-    ];
+    
+    
 
     ClearHosts(data) {
         if (data == null)
@@ -45,7 +49,7 @@ class MJProcess {
 
         var strData = JSON.stringify(data);
         var self = this;
-        self.hostsToClear.forEach(h => strData = strData.split(h).join(""));
+        hostsToClear.forEach(h => strData = strData.split(h).join(""));
         return JSON.parse(strData);
 
     }
@@ -298,36 +302,36 @@ class MJProcess {
 			</div>
              `));
 
-//        var oldDiv = $("#" + divId);
-//        var obj = isMain ? this.MJPageData.main : this.MJPageData["block_" + divId].blockData;
-//        var self = this;
-//        oldDiv.replaceWith($(`
-//            <div class= "port-wrapper grid-item-emission" >
-//            <div class="port-head">
-//                <h3 class="port-title"><t>emissions</t></h3>
-//                <div class="port-link-item">
-//                </div>
-//            </div>
-//            <div class="port-box p-0 bgr-black box-border height-350">
-//                <div class="abs-content" style='background-image: url("/api/part/GetBlob?hash=`+ obj.imageId + `");'>
-//                    <div class="abs-cover"></div>
-//                    <div class="emission-label">
-//                        <img src="/images/live-symbol.png">
-//                            <span><t>live</t></span>
-//						</div>
-//                        <div class="emission-title">
-//                            <h2 class="white">`+ obj.title[self.language] + `                                
-//							</h2>
-//+ `+ ((obj.url != null && obj.url != "") ?
-//                `<a role="button" class="btn btn-emission js-video" data-toggle="modal" data-src="` + obj.url + `" data-target="#liveEmission">
-//                                <svg class="icon icon-play-button"><use xlink: href="images/symbol-defs.svg#icon-play-button"></use></svg>
-//                            <t>watchlive</t>
-//							</a>`: ``) + `
-//                    </div>
-//                </div>
-//            </div>
-//			</div>
-//             `));
+        //        var oldDiv = $("#" + divId);
+        //        var obj = isMain ? this.MJPageData.main : this.MJPageData["block_" + divId].blockData;
+        //        var self = this;
+        //        oldDiv.replaceWith($(`
+        //            <div class= "port-wrapper grid-item-emission" >
+        //            <div class="port-head">
+        //                <h3 class="port-title"><t>emissions</t></h3>
+        //                <div class="port-link-item">
+        //                </div>
+        //            </div>
+        //            <div class="port-box p-0 bgr-black box-border height-350">
+        //                <div class="abs-content" style='background-image: url("/api/part/GetBlob?hash=`+ obj.imageId + `");'>
+        //                    <div class="abs-cover"></div>
+        //                    <div class="emission-label">
+        //                        <img src="/images/live-symbol.png">
+        //                            <span><t>live</t></span>
+        //						</div>
+        //                        <div class="emission-title">
+        //                            <h2 class="white">`+ obj.title[self.language] + `                                
+        //							</h2>
+        //+ `+ ((obj.url != null && obj.url != "") ?
+        //                `<a role="button" class="btn btn-emission js-video" data-toggle="modal" data-src="` + obj.url + `" data-target="#liveEmission">
+        //                                <svg class="icon icon-play-button"><use xlink: href="images/symbol-defs.svg#icon-play-button"></use></svg>
+        //                            <t>watchlive</t>
+        //							</a>`: ``) + `
+        //                    </div>
+        //                </div>
+        //            </div>
+        //			</div>
+        //             `));
 
     }
 
@@ -958,11 +962,20 @@ class MJProcess {
         });
 
         var resultTbl = "<table class='table table-bordered table-striped'><thead><tr>";
-
+        var sortId = self.CollectionStructure[0].id;
+        searchResult.sort((a, b) => {
+            if (a[sortId] < b[sortId])
+                return 1;
+            if (a[sortId] > b[sortId])
+                return -1;
+            return 0;
+        })
         self.CollectionStructure.forEach(x => {
             resultTbl += "<th>" + x.name[self.language] + "</th>";
 
         });
+
+
         resultTbl += "</tr></thead><tbody>";
         var download = self.TranslateWord("download");
         var link = self.TranslateWord("link").toLowerCase();
