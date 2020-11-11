@@ -305,7 +305,7 @@ export default class BlockCareer extends BaseComponent {
                                 : null
                         }
                         {
-                            self.state.data.map((i, no) =>
+                            self.state.data.reverse().map((i, no) =>
                                 <div className="row" key={no}>
                                     <div className="col-3">
                                         {i.type[self.state.lang]}

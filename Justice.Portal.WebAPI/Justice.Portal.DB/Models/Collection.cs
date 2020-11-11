@@ -11,6 +11,10 @@ namespace Justice.Portal.DB.Models
         public string Content { get; set; }
         public string PortalPartId { get; set; }
 
+        public int RubricId { get; set; }
+
         public virtual PortalPart PortalPart { get; set; }
+
+        public virtual Rubric Rubric { get; set; }
     }
 }

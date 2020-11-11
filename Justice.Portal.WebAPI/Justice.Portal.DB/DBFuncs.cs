@@ -585,6 +585,7 @@ namespace Justice.Portal.DB
             c.Name = collection.Name;
             c.Structure = collection.Structure;
             c.PortalPartId = collection.PortalPartId;
+            c.RubricId = collection.RubricId;
             db.SaveChanges();
         }
 

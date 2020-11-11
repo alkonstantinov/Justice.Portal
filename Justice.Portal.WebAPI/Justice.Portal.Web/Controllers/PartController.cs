@@ -305,8 +305,12 @@ namespace Justice.Portal.Web.Controllers
             string token = this.GetToken();
             if (!db.IsAuthenticated(token))
                 return Unauthorized();
+            var col = db.GetCollection(collectionId);
+            var allowedRubrics = db.GetUserRubrics(token);
+            if(!allowedRubrics.Contains(col.RubricId))
+                return Unauthorized();
 
-            return Ok(db.GetCollection(collectionId));
+            return Ok(col);
         }
 
         /// <summary>

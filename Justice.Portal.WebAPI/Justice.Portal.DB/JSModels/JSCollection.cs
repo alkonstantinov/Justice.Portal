@@ -11,5 +11,7 @@ namespace Justice.Portal.DB.JSModels
         public string Content { get; set; }
 
         public string PortalPartId { get; set; }
+
+        public int RubricId { get; set; }
     }
 }

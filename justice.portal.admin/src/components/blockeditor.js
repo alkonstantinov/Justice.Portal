@@ -529,7 +529,7 @@ export default class BlockEditor extends BaseComponent {
                     <div className="row">
                         <div className="col-12">
                             <label className="control-label">Рубрика</label>
-                            <select className="form-control" value={self.state.rubricId} onChange={(e) => self.setState({ rubricId: e.target.value }, () => self.LoadData())}>
+                            <select className="form-control" value={self.state.rubricId} onChange={(e) => self.setState({ rubricId: e.target.value })}>
                                 {
                                     self.state.rubrics.filter(x => x.portalPartId == self.props.match.params.portalPartId).map(x => <option value={x.rubricId}>{x.titleBg}</option>)
                                 }

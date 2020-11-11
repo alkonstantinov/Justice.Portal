@@ -40,6 +40,7 @@ export default class CollectionEditor extends BaseComponent {
         this.Cancel = this.Cancel.bind(this);
         this.ClearContent = this.ClearContent.bind(this);
         this.Save = this.Save.bind(this);
+        this.FixRubricId = this.FixRubricId.bind(this);
 
 
 
@@ -69,6 +70,15 @@ export default class CollectionEditor extends BaseComponent {
         this.setState({ [arr]: data });
     }
 
+    FixRubricId() {
+        let self = this;
+        let currentRubric = self.state.rubrics.filter(x => x.rubricId == self.state.rubricId)[0];
+        if (currentRubric && currentRubric.portalPartId == self.state.portalPartId)
+            return;
+        let newRubric = self.state.rubrics.filter(x => x.portalPartId == self.state.portalPartId)[0];
+        self.setState({ rubricId: newRubric.rubricId });
+    }
+
     async LoadData() {
         var self = this;
         var sources = [];
@@ -77,6 +87,7 @@ export default class CollectionEditor extends BaseComponent {
 
                 self.setState({
                     parts: result.data.parts,
+                    rubrics: result.data.rubrics,
                     portalPartId: UIContext.LastPortalPartId || result.data.parts[0].portalPartId
                 });
             })
@@ -97,6 +108,7 @@ export default class CollectionEditor extends BaseComponent {
                         content: JSON.parse(result.data.content),
                         name: result.data.name,
                         portalPartId: result.data.portalPartId,
+                        rubricId: result.data.rubricId,
                         mode: "edit"
                     });
                 })
@@ -149,11 +161,12 @@ export default class CollectionEditor extends BaseComponent {
         var self = this;
         var content = this.ClearContent();
         var data = {
-            CollectionId: self.props.match.params.id,
+            CollectionId: self.props.match.params.id,            
             Name: this.state.name,
             Structure: JSON.stringify(this.state.structure),
             Content: JSON.stringify(content),
-            PortalPartId: self.state.portalPartId
+            PortalPartId: self.state.portalPartId,
+            RubricId: self.state.rubricId
         };
         Comm.Instance().post('part/SaveCollection', data)
             .then(result => {
@@ -261,7 +274,7 @@ export default class CollectionEditor extends BaseComponent {
                     <div className="row">
                         <div className="col-3">
                             <label className="control-label">Част</label>
-                            <select className="form-control" value={self.state.portalPartId} onChange={(e) => self.setState({ portalPartId: e.target.value })}>
+                            <select className="form-control" value={self.state.portalPartId} onChange={(e) => self.setState({ portalPartId: e.target.value }, () => self.FixRubricId())}>
                                 {
                                     self.state.parts.map(x => <option value={x.portalPartId}>{x.name}</option>)
                                 }
@@ -270,6 +283,16 @@ export default class CollectionEditor extends BaseComponent {
                         <div className="col-9">
                             <label className="control-label">Наименование</label>
                             <input type="text" className="form-control" value={self.state.name} onChange={(e) => self.setState({ name: e.target.value })}></input>
+                        </div>
+                    </div>
+                    <div className="row">
+                        <div className="col-12">
+                            <label className="control-label">Рубрика</label>
+                            <select className="form-control" value={self.state.rubricId} onChange={(e) => self.setState({ rubricId: e.target.value })}>
+                                {
+                                    self.state.rubrics.filter(x => x.portalPartId == self.state.portalPartId).map(x => <option value={x.rubricId}>{x.titleBg}</option>)
+                                }
+                            </select>
                         </div>
                     </div>
                     <div className="row">
