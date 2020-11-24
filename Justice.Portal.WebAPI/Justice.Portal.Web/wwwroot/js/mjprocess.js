@@ -40,8 +40,8 @@ var hostsToClear = [
 
 class MJProcess {
 
-    
-    
+
+
 
     ClearHosts(data) {
         if (data == null)
@@ -593,8 +593,9 @@ class MJProcess {
                         <h2>`+ (data.title[self.language] || "") + `</h2>
                         <div class="port-content">
                             <div class="col-4">
-                                <img src="/api/part/GetBlob?hash=`+ data.imageId + `" alt="" class="list-article-img img-prime" style="max-width:100%; max-height:100%"/>
-                            </div>
+                                `
+                            + (data.imageId ? `<img src="/api/part/GetBlob?hash=`+ data.imageId + `" alt="" class="list-article-img img-prime" style="max-width:100%; max-height:100%" />` : ``) +
+                            `</div>
                             <div class="col-8">
                                 <div style="height:80%; max-height:80%; min-height:80%; overflow: hidden;">
                                 `+ self.NarrowText($(data.body[self.language]).text(), 400) + `
