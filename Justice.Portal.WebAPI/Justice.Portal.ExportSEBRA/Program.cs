@@ -13,20 +13,18 @@ using Spire.Xls;
 
 namespace Justice.Portal.ExportSEBRA
 {
-    class Program
+    static class Program
     {
 
         static DBFuncs db;
 
         static void Main(string[] args)
         {
-            DbContextOptions<JusticePortalContext> x = new DbContextOptions<JusticePortalContext>();
             db = new DBFuncs(new JusticePortalContext());
             var rec = db.GetBlock(int.Parse(ConfigurationManager.AppSettings["SebraBlockId"]));
             var json = JObject.Parse(rec.Jsonvalues);
             var docArr = json["docs"] as JArray;
             int days = 0;
-
             if (!int.TryParse(ConfigurationManager.AppSettings["days"], out days))
                 days = 3;
 
@@ -35,7 +33,13 @@ namespace Justice.Portal.ExportSEBRA
             if (currentDoc == null)
                 return;
             var docRec = db.GetBlob(currentDoc["docId"].Value<string>());
-            File.WriteAllBytes(ConfigurationManager.AppSettings["pathForExport"], docRec.Content);
+            string fnm = Path.GetTempFileName();
+            File.WriteAllBytes(fnm, docRec.Content);
+            Workbook workbook = new Workbook();
+            workbook.LoadFromFile(fnm);
+            var sheet = workbook.Worksheets[0];
+            sheet.SaveToFile(ConfigurationManager.AppSettings["pathForExport"], ",", Encoding.UTF8);
+
 
 
         }
