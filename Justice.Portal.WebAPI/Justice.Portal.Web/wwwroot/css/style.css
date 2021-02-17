@@ -9,7 +9,13 @@
 .icon-lion-form {
     width: 75px;
     height: 95px;
-    fill: #fff;
+    fill: #000;
+}
+
+.icon-main-form {
+    width: 75px;
+    height: 75px;
+    fill: #000;
 }
 
 .icon-lion-form-small {
@@ -21,7 +27,7 @@
 .header-container-inner .logo-separator .icon-lion-form {
     width: 55px;
     height: 75px;
-    fill: #fff;
+    fill: #000;
 }
 
 .icon-lion-form-micro {
@@ -708,6 +714,37 @@ footer {
             color: #574d46;
         }
 
+header:after {
+    content: "";
+    display: block;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 100%;
+    height: 100%;
+    background-color: #fff;
+    z-index: -1;
+    -webkit-box-sizing: content-box;
+    box-sizing: content-box;
+    padding: 15px;
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+}
+
+header.header-container-inner.container-fluid:after {
+    width: calc(100vw - 48px);
+}
+
+@media (max-width: 768px) {
+    header {
+        width: 100%;
+    }
+
+        header:after {
+            width: calc(100vw - 48px);
+        }
+}
+
 .sticky-wrapper {
     position: -webkit-sticky;
     position: sticky;
@@ -835,7 +872,7 @@ p {
 }
 
 .logo-title-main {
-    color: #fff;
+    color: #000;
     font-size: 26px;
     font-family: 'HelenCondBold';
     text-transform: uppercase;
@@ -845,7 +882,7 @@ p {
 
 .logo-title-sub {
     max-width: 450px;
-    color: #fff;
+    color: #000;
     font-size: 20px;
     font-family: 'HelenCondRegular';
     margin: 0;
@@ -965,7 +1002,7 @@ p {
     width: 100%;
     background-image: -webkit-gradient(linear, left top, right top, from(rgba(0, 0, 0, 0)), to(rgba(0, 0, 0, 0.6)));
     background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.6));
-    z-index: 2;
+    z-index: 1;
 }
 
     .top-nav-wrapper .top-nav {
@@ -1152,7 +1189,7 @@ p {
     top: 13px;
     margin-right: 20px;
     display: block;
-    border-right: 2px solid white;
+    border-right: 2px solid black;
 }
 
 .header-container-inner .logo-title {
@@ -1968,7 +2005,7 @@ p {
     }
 
         .home-head .header-container .logo-separator::after {
-            border-right: 2px solid white;
+            border-right: 2px solid black;
         }
 }
 
@@ -2166,4 +2203,101 @@ html .disabled-ver {
 figure img {
     max-width: 100%;
     max-height: 100%;
+}
+
+.pach-header-logo {
+    max-width: none;
+    background-color: #fff;
+    z-index: 1;
+}
+
+.header-pach .top-nav-wrapper {
+    background-image: none;
+    background-color: #fff !important;
+}
+
+    .header-pach .top-nav-wrapper .top-nav,
+    .header-pach .header-container-inner {
+        max-width: none;
+    }
+
+        .header-pach .header-container-inner > div {
+            transform: translateY(-24px);
+        }
+
+    .header-pach .top-nav-wrapper a {
+        color: #000 !important;
+    }
+
+.header-pach .search-container input {
+    background: transparent;
+    border: none;
+}
+
+.header-pach .search-container input {
+    background-color: #e4e4e4;
+    border-radius: 0.25rem;
+}
+
+    .header-pach .search-container input::placeholder {
+        color: #928f8f !important;
+    }
+
+.header-pach .search-container .input-group-append {
+    background-color: #f1f1f1;
+    border-top-right-radius: 0.25rem;
+    border-bottom-right-radius: 0.25rem;
+}
+
+.header-pach .search-container button {
+    background: transparent;
+}
+
+    .header-pach .search-container button .icon-search {
+        transform: translateY(3px);
+    }
+
+.header-pach .search-container1 {
+    display: none;
+}
+
+.header-pach header.header-container-inner.container-fluid:after {
+    width: calc(100vw - 47px);
+}
+
+.header-pach h4 {
+    font-size: 14px !important;
+}
+
+.header-pach .home-head .header-container-inner > div {
+    transform: translateY(-9px);
+}
+
+.header-pach .header-wrapper::after {
+    background-position: center 90px;
+}
+
+@media (max-width: 768px) {
+    .header-pach .header-container-inner > div {
+        transform: translateY(-4px);
+    }
+
+    .header-pach .header-container-inner {
+        transform: translateY(-16px);
+    }
+
+    .pach-header-logo {
+        margin-bottom: -15px;
+        padding-bottom: 15px;
+    }
+
+    .header-pach .logo-title-inner {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .header-pach.inner-pach .logo-title-inner {
+        align-items: flex-start;
+    }
 }

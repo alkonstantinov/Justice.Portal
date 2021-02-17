@@ -39,7 +39,7 @@ namespace Justice.Portal.Web.Controllers
         /// </summary>
         /// <param name="url">уникален идентификатор</param>
         /// <returns>страница</returns>
-        public IActionResult Index([FromRoute]string url)
+        public IActionResult Index([FromRoute] string url)
         {
 
             JSBlock block;
@@ -69,7 +69,7 @@ namespace Justice.Portal.Web.Controllers
             }
 
 
-        
+
 
 
             JObject joPageData = new JObject();
@@ -113,7 +113,7 @@ namespace Justice.Portal.Web.Controllers
         /// <param name="id">идентификатор</param>
         /// <returns>документ</returns>
         [HttpGet("home/NormDoc/{id}")]
-        public IActionResult NormDoc([FromRoute]Int64 id)
+        public IActionResult NormDoc([FromRoute] Int64 id)
         {
             return View("index", cielaComm.GetDocument(id));
         }
@@ -174,6 +174,19 @@ namespace Justice.Portal.Web.Controllers
 
 
             return Json("OK");
+        }
+
+        [Route("robots.txt", Name = "GetRobotsText")]
+        public ContentResult RobotsText()
+        {
+            StringBuilder stringBuilder = new StringBuilder();
+
+
+            stringBuilder.AppendLine("user-agent: *");
+            stringBuilder.AppendLine("Allow: /");
+            //stringBuilder.AppendLine(this.Url.RouteUrl("GetSitemapXml", null, this.Request.Url.Scheme).TrimEnd('/'));
+
+            return this.Content(stringBuilder.ToString(), "text/plain", Encoding.UTF8);
         }
     }
 
