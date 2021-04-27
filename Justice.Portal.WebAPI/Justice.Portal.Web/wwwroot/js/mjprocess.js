@@ -1268,6 +1268,28 @@ class MJProcess {
             }
 
         });
+
+        let allImages = document.getElementsByTagName('img');
+
+        for (let i = 0; i < allImages.length; i++) {
+            let attr = allImages[i].getAttribute("alt");
+            if ((attr || "") === "") {
+                allImages[i].setAttribute("alt", " ");
+            }
+        }
+
+        let allLinks = document.getElementsByTagName('a');
+
+        for (let i = 0; i < allLinks.length; i++) {
+            let attr = allLinks[i].getAttribute("alt");
+            if ((attr || "") === "") {
+                allLinks[i].setAttribute("alt", " ");
+            }
+            attr = allLinks[i].getAttribute("href");
+            if ((attr || "") === "") {
+                allLinks[i].setAttribute("href", "#");
+            }
+        }
     }
 
 
