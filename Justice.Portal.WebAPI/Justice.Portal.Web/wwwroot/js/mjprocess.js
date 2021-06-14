@@ -597,8 +597,8 @@ class MJProcess {
                             + (data.imageId ? `<img src="/api/part/GetBlob?hash=`+ data.imageId + `" alt="" class="list-article-img img-prime" style="max-width:100%; max-height:100%" />` : ``) +
                             `</div>
                             <div class="col-8">
-                                <div style="height:80%; max-height:80%; min-height:80%; overflow: hidden;">
-                                `+ self.NarrowText($(data.body[self.language]).text(), 400) + `
+                                <div style="height:60%; max-height:60%; min-height:60%; overflow: hidden;">
+                                `+ self.NarrowText($(data.body[self.language]).text(), 350) + `
                                 </div>
                                 <a class="btn btn-primary" href="/home/index/`+ x.url + `" role="button" style="margin-top:10px"><t>learnmore</t></a>
                             </div>
@@ -980,6 +980,8 @@ class MJProcess {
         resultTbl += "</tr></thead><tbody>";
         var download = self.TranslateWord("download");
         var link = self.TranslateWord("link").toLowerCase();
+        //console.log("self.CollectionStructure", self.CollectionStructure);
+        //console.log("searchResult", searchResult);
         searchResult.forEach(x => {
             resultTbl += "<tr>";
             self.CollectionStructure.forEach(ss => {
@@ -989,7 +991,7 @@ class MJProcess {
                     case 2:
                         resultTbl += "<td>" + (x[ss.id][self.language] || "") + "</td>"; break;
                     case 3:
-                        resultTbl += "<td>" + x[ss.id] + "</td>"; break;
+                        resultTbl += "<td><small>" + self.FormatDate(x[ss.id]) + "</small></td>"; break;
                     case 4:
                         resultTbl += "<td><a href='/api/part/getblob?hash=" + x[ss.id] + "'>" + download + "</a></td>"; break;
                     case 5:
@@ -1020,6 +1022,7 @@ class MJProcess {
             }
         });
         var divSearchControls = "";
+        
         self.CollectionStructure.forEach(x => {
             switch (parseInt(x.type)) {
                 case 1:

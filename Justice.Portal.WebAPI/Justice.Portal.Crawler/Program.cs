@@ -51,7 +51,7 @@ namespace Justice.Portal.Crawler
                 Console.WriteLine("303. MinPKArchiveCrawler");
                 Console.WriteLine("304. CitizenshipProtoPage");
                 Console.WriteLine("305. MinInterviews");
-
+                Console.WriteLine("400. Sitemap generator");
 
 
                 var choice = Console.ReadLine();
@@ -217,6 +217,11 @@ namespace Justice.Portal.Crawler
                     case "305":
                         var MinInterview = new MinInterview(db);
                         MinInterview.Download();
+
+                        break;
+                    case "400":
+                        var SitemapGenerator = new SitemapGenerator(db);
+                        SitemapGenerator.Download();
 
                         break;
                 }

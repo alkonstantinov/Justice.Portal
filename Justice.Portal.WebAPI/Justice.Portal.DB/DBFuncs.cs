@@ -894,6 +894,15 @@ namespace Justice.Portal.DB
             return JArray.FromObject(blocks.ToArray());
         }
 
+        public Block[] GetAllPages()
+        {
+            var blocks = db.Block
+                .Where(x => !string.IsNullOrEmpty(x.Url)).ToArray();
+            return blocks;
+
+
+        }
+
 
 
     }
