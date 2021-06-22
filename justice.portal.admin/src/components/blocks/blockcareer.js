@@ -50,11 +50,13 @@ export default class BlockCareer extends BaseComponent {
             state.title = obj.title || {};
             state.body = obj.body || {};
             state.data = obj.data || [];
+            state.nogroup = obj.nogroup || false;
         }
         else {
             state.title = {};
             state.body = {};
             state.data = [];
+            state.nogroup = true;
         }
 
 
@@ -70,7 +72,8 @@ export default class BlockCareer extends BaseComponent {
         return {
             title: this.state.title,
             body: this.wysiwyg.current.GetData(),
-            data: this.state.data
+            data: this.state.data,
+            nogroup: this.state.nogroup
         };
     }
 
@@ -227,6 +230,19 @@ export default class BlockCareer extends BaseComponent {
                             ref={this.wysiwyg}
                         ></WYSIWYG>
 
+                    </div>
+                </div>,
+                <div className="row">
+                    <div className="col-12">
+                        <div className="form-check">
+                            <input className="form-check-input" type="checkbox"
+                                checked={self.state.nogroup}
+                                onChange={(e) => self.setState({ nogroup: e.target.checked })}
+                            ></input>
+                            <label className="form-check-label">
+                                Без групиране
+                            </label>
+                        </div>
                     </div>
                 </div>,
                 <div className="row">

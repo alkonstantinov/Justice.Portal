@@ -594,8 +594,8 @@ class MJProcess {
                         <div class="port-content">
                             <div class="col-4">
                                 `
-                            + (data.imageId ? `<img src="/api/part/GetBlob?hash=`+ data.imageId + `" alt="" class="list-article-img img-prime" style="max-width:100%; max-height:100%" />` : ``) +
-                            `</div>
+                        + (data.imageId ? `<img src="/api/part/GetBlob?hash=` + data.imageId + `" alt="" class="list-article-img img-prime" style="max-width:100%; max-height:100%" />` : ``) +
+                        `</div>
                             <div class="col-8">
                                 <div style="height:60%; max-height:60%; min-height:60%; overflow: hidden;">
                                 `+ self.NarrowText($(data.body[self.language]).text(), 350) + `
@@ -1022,7 +1022,7 @@ class MJProcess {
             }
         });
         var divSearchControls = "";
-        
+
         self.CollectionStructure.forEach(x => {
             switch (parseInt(x.type)) {
                 case 1:
@@ -2045,9 +2045,9 @@ class MJProcess {
         return data;
     }
 
-    ShowCareers() {
+    ShowCareers(filter) {
         var self = this;
-        var toShow = this.careers.filter(x => x.type[self.language] === $("#" + self.TypeSelectId).val());
+        var toShow = filter ? this.careers.filter(x => x.type[self.language] === $("#" + self.TypeSelectId).val()) : this.careers;
         toShow.sort((a, b) => a.date > b.date ? -1 : 1);
         var html = `<ul class= 'list-group' > `;
         toShow.forEach(c => {
@@ -2066,17 +2066,22 @@ class MJProcess {
     PutCareers(divId, isMain) {
         var oldDiv = $("#" + divId);
         var obj = isMain ? this.MJPageData.main : this.MJPageData["block_" + divId].blockData;
+
+        if (obj.nogroup === undefined)
+            obj.nogroup = false;
+
         var blockId = isMain ? this.MJPageData.mainid : this.MJPageData["block_" + divId].value;
         this.ItemsContentId = this.Guid();
         this.TypeSelectId = this.Guid();
         var self = this;
-
         var newContent = `<div class= "port-wrapper" >
             <div class="port-head">
                 <h3 class="port-title">`+ this.TranslateWord("careers") + `</h3><br />
-                <h3 class="port-title"><select class="form-control" id=`+ this.TypeSelectId + ` onchange="mjProcess.ShowCareers()"></select>    </h3>
-                    
-				</div >
+                `+
+            (obj.nogroup ? "" :
+                `<h3 class="port-title"><select class="form-control" id=` + this.TypeSelectId + ` onchange="mjProcess.ShowCareers(${!obj.nogroup})"></select>    </h3>`) +
+
+            `</div >
 
             <div class="port-box box-border" id="` + this.ItemsContentId + `">
 
@@ -2088,10 +2093,11 @@ class MJProcess {
 
         var types = [...new Set(obj.data.map(d => d.type[this.language]))];
         types.forEach(y => $("#" + this.TypeSelectId).append("<option value='" + y + "'>" + y + "</option>"));
-        $("#" + this.TypeSelectId).val(types[0]);
+        if (!obj.nogroup) {
+            $("#" + this.TypeSelectId).val(types[0]);
+        }
         this.careers = obj.data;
-        this.ShowCareers();
-        //this.PutNextNews(blockId);
+        this.ShowCareers(!obj.nogroup);
 
 
     }
@@ -2127,17 +2133,17 @@ class MJProcess {
             if (x.mandatory)
                 lMandatory.push({ id: id, title: x.title[self.language] });
             form +=
-                `<div class="row">
-                <div class="col-12">
-                    <label class="control-label">`+ x.title[self.language] + (x.mandatory ? "*" : "") + `</label>
+                `< div class="row" >
+            <div class="col-12">
+                <label class="control-label">`+ x.title[self.language] + (x.mandatory ? "*" : "") + `</label>
                     `+ element + `
                 </div>
-             </div> `;
+             </div > `;
         });
         form += '</form>';
         self.MandatoryFields = lMandatory;
 
-        oldDiv.replaceWith($(`<article class= "article-container" >
+        oldDiv.replaceWith($(`< article class= "article-container" >
 
             <h1>`+ obj.title[self.language] + `
 				</h1>

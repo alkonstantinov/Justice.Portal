@@ -52,6 +52,7 @@ namespace Justice.Portal.Crawler
                 Console.WriteLine("304. CitizenshipProtoPage");
                 Console.WriteLine("305. MinInterviews");
                 Console.WriteLine("400. Sitemap generator");
+                Console.WriteLine("401. Fix pages");
 
 
                 var choice = Console.ReadLine();
@@ -222,6 +223,11 @@ namespace Justice.Portal.Crawler
                     case "400":
                         var SitemapGenerator = new SitemapGenerator(db);
                         SitemapGenerator.Download();
+
+                        break;
+                    case "401":
+                        var FixPages = new FixPages(db);
+                        FixPages.Download();
 
                         break;
                 }

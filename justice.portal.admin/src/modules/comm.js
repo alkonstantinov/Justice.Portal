@@ -8,8 +8,8 @@ class Comm {
     url = "";
 
     constructor() {
-        //this.url = process.env.NODE_ENV.toLowerCase() === "development" ? "http://172.16.0.57:8080/api/" : "http://172.16.0.57:8080/api/";
-        this.url = process.env.NODE_ENV.toLowerCase() === "development" ? "https://localhost:5001/api/" : "http://172.16.0.57:8080/api/";
+        //this.url = process.env.NODE_ENV.toLowerCase() === "development" ? "https://localhost:5001/api/" : "http://172.16.0.57:8080/api/";
+        this.url = "http://172.16.0.57:8080/api/";
     }
 
     Instance(slow = false) {

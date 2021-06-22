@@ -373,7 +373,7 @@ namespace Justice.Portal.DB
 
         public JSTemplate[] GetTemplates(string portalPartId)
         {
-            return db.Template.Include(x => x.BlockType).Where(x => x.PortalPartId == portalPartId)
+            return db.Template.Include(x => x.BlockType).Where(x => string.IsNullOrEmpty(portalPartId) || x.PortalPartId == portalPartId)
                 .Select(x => new JSTemplate()
                 {
                     TemplateId = x.TemplateId,
