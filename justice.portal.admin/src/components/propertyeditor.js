@@ -73,7 +73,7 @@ export default class PropertyEditor extends BaseComponent {
     GetDate(item) {
 
         if ((this.state.date || "") === "")
-            this.setState({ date: moment().format("YYYY-MM-DD") });
+            this.setState({ date: moment().format("YYYY-MM-DD hh:mm") });
 
         return (
 
@@ -82,8 +82,8 @@ export default class PropertyEditor extends BaseComponent {
                 // readOnlyInput="true" inputClassName="form-control" value={this.state.dddd}></Calendar>,
                 <label className="control-label" htmlFor="Date">{item.name}</label>,
 
-                <Calendar dateFormat="dd.mm.yy" value={(this.state[item.propertyId] || "") === "" ? "" : moment(this.state[item.propertyId], "YYYY-MM-DD").toDate()}
-                    onChange={(e) => this.setState({ [item.propertyId]: moment(e.value).format("YYYY-MM-DD") })}
+                <Calendar showTime hourFormat="24" dateFormat="dd.mm.yy" value={(this.state[item.propertyId] || "") === "" ? "" : moment(this.state[item.propertyId], "YYYY-MM-DD hh:mm").toDate()}
+                    onChange={(e) => this.setState({ [item.propertyId]: moment(e.value).format("YYYY-MM-DD hh:mm") })}
                     readOnlyInput="true" inputClassName="form-control"></Calendar>
             ]
 

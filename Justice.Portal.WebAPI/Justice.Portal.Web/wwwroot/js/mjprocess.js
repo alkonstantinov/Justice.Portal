@@ -289,8 +289,10 @@ class MJProcess {
                             <span><t>live</t></span>
 						</div>
                         <div class="emission-title">
+                            <div class="bgr-blue-gray">
                             <h2 class="white">`+ obj.title[self.language] + `                                
 							</h2>
+                            </div>
 + `+ ((obj.url != null && obj.url != "") ?
                 `<a role="button" class="btn btn-emission js-video" href="` + obj.url + `">
                                 <svg class="icon icon-play-button"><use xlink: href="images/symbol-defs.svg#icon-play-button"></use></svg>
@@ -616,7 +618,7 @@ class MJProcess {
         var newContent =
             `<div class="port-wrapper">
 			    <div class="port-head">
-				    <h3 class="port-title"><t>news</t></h3>
+				    <h1 class="port-title news-title"><t>news</t></h1>
 				    <div class="port-link-item">
 					    <a href="news-list.html" autolink="news" class="port-head-link"><t>allnews</t>
 					        <svg class="icon icon-arrow-right"><use xlink:href="images/symbol-defs.svg#icon-angle-arrow-down"></use></svg>
@@ -1277,7 +1279,7 @@ class MJProcess {
         for (let i = 0; i < allImages.length; i++) {
             let attr = allImages[i].getAttribute("alt");
             if ((attr || "") === "") {
-                allImages[i].setAttribute("alt", " ");
+                allImages[i].setAttribute("alt", "изображение");
             }
         }
 
@@ -1286,7 +1288,7 @@ class MJProcess {
         for (let i = 0; i < allLinks.length; i++) {
             let attr = allLinks[i].getAttribute("alt");
             if ((attr || "") === "") {
-                allLinks[i].setAttribute("alt", " ");
+                allLinks[i].setAttribute("alt", "връзка");
             }
             attr = allLinks[i].getAttribute("href");
             if ((attr || "") === "") {
