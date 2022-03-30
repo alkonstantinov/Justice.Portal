@@ -76,6 +76,17 @@ export default class BlockDocList extends BaseComponent {
     }
 
     AddDoc() {
+
+        let self = this;
+        let date = this.FormatDate(new Date(
+            self.state.currentYear,
+            self.state.currentMonth - 1,
+            1
+        ));
+        console.log("datяяяяяяяя", date, self.state.currentYear,
+            self.state.currentMonth,
+            1);
+
         var newDoc = {
             id: uuidv4(),
             title: {
@@ -83,24 +94,31 @@ export default class BlockDocList extends BaseComponent {
                 en: ''
             },
             docId: null,
-            date: this.FormatDate(new Date())
+            date: date
         }
 
         var docs = this.state.docs;
         docs = [newDoc].concat(docs);
         var years = this.state.years;
-        var currentYear = new Date().getFullYear();
-        if (!years.find(y => y == currentYear))
-            years.push(currentYear);
-        var month = new Date().getMonth() + 1;
+        if (!years.find(y => y == self.state.currentYear))
+            years.push(self.state.currentYear);
+        var month = self.state.currentMonth;
 
 
+
+
+        console.log({
+            docs: docs,
+            years: years,
+            currentYear: parseInt(self.state.currentYear),
+            currentMonth: parseInt(month)
+        });
 
         this.setState({
             docs: docs,
             years: years,
-            currentYear: currentYear,
-            currentMonth: month
+            currentYear: parseInt(self.state.currentYear),
+            currentMonth: parseInt(month)
         });
     }
 
@@ -162,6 +180,7 @@ export default class BlockDocList extends BaseComponent {
     render() {
         var self = this;
         var cy = self.state.docs.filter(x => new Date(x.date).getFullYear() === parseInt(self.state.currentYear) && new Date(x.date).getMonth() === parseInt(self.state.currentMonth) - 1);
+        console.log("cy", cy);
         return (
             [
                 <div className="row">
