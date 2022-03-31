@@ -53,6 +53,8 @@ namespace Justice.Portal.Crawler
                 Console.WriteLine("305. MinInterviews");
                 Console.WriteLine("400. Sitemap generator");
                 Console.WriteLine("401. Fix pages");
+                Console.WriteLine("501. Generate JSON for min careers");
+
 
 
                 var choice = Console.ReadLine();
@@ -225,9 +227,16 @@ namespace Justice.Portal.Crawler
                         SitemapGenerator.Download();
 
                         break;
+
                     case "401":
                         var FixPages = new FixPages(db);
                         FixPages.Download();
+
+                        break;
+
+                    case "501":
+                        var JSONCareer = new JSONCareer(db);
+                        JSONCareer.Download();
 
                         break;
                 }

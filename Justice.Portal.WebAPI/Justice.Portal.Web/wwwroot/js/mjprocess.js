@@ -289,7 +289,8 @@ class MJProcess {
                             <span><t>live</t></span>
 						</div>
                         <div class="emission-title">
-                            <div class="bgr-blue-gray">
+                            <div style="background-color:#000000;">
+
                             <h2 class="white">`+ obj.title[self.language] + `                                
 							</h2>
                             </div>
@@ -2078,10 +2079,10 @@ class MJProcess {
         var self = this;
         var newContent = `<div class= "port-wrapper" >
             <div class="port-head">
-                <h3 class="port-title">`+ this.TranslateWord("careers") + `</h3><br />
+                <h3 class="port-title">`+ this.TranslateWord("careers") + `</h3></div><div class="port-head">
                 `+
             (obj.nogroup ? "" :
-                `<h3 class="port-title"><select class="form-control" id=` + this.TypeSelectId + ` onchange="mjProcess.ShowCareers(${!obj.nogroup})"></select>    </h3>`) +
+                `<select class="form-control" id=` + this.TypeSelectId + ` onchange="mjProcess.ShowCareers(${!obj.nogroup})"></select> `) +
 
             `</div >
 
@@ -2096,7 +2097,12 @@ class MJProcess {
         var types = [...new Set(obj.data.map(d => d.type[this.language]))];
         types.forEach(y => $("#" + this.TypeSelectId).append("<option value='" + y + "'>" + y + "</option>"));
         if (!obj.nogroup) {
-            $("#" + this.TypeSelectId).val(types[0]);
+            let type = new URLSearchParams(window.location.search).get("type");
+            if ((type || "") == "")
+                type = types[0];
+            type = decodeURI(type);
+
+            $("#" + this.TypeSelectId).val(type);
         }
         this.careers = obj.data;
         this.ShowCareers(!obj.nogroup);
