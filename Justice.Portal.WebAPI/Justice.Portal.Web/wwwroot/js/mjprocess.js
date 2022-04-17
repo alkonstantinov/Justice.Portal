@@ -2048,9 +2048,10 @@ class MJProcess {
         return data;
     }
 
-    ShowCareers(filter) {
+    ShowCareers() {
         var self = this;
-        var toShow = filter ? this.careers.filter(x => x.type[self.language] === $("#" + self.TypeSelectId).val()) : this.careers;
+        console.log("self.TypeSelectId).val()", $("#" + self.TypeSelectId).val());
+        var toShow = this.careers.filter(x => x.type[self.language] === $("#" + self.TypeSelectId).val());
         toShow.sort((a, b) => a.date > b.date ? -1 : 1);
         var html = `<ul class= 'list-group' > `;
         toShow.forEach(c => {
@@ -2069,9 +2070,7 @@ class MJProcess {
     PutCareers(divId, isMain) {
         var oldDiv = $("#" + divId);
         var obj = isMain ? this.MJPageData.main : this.MJPageData["block_" + divId].blockData;
-
-        if (obj.nogroup === undefined)
-            obj.nogroup = false;
+        console.log("obj", obj);
 
         var blockId = isMain ? this.MJPageData.mainid : this.MJPageData["block_" + divId].value;
         this.ItemsContentId = this.Guid();
@@ -2080,9 +2079,7 @@ class MJProcess {
         var newContent = `<div class= "port-wrapper" >
             <div class="port-head">
                 <h3 class="port-title">`+ this.TranslateWord("careers") + `</h3></div><div class="port-head">
-                `+
-            (obj.nogroup ? "" :
-                `<select class="form-control" id=` + this.TypeSelectId + ` onchange="mjProcess.ShowCareers(${!obj.nogroup})"></select> `) +
+                <select class="form-control" id=` + this.TypeSelectId + ` onchange="mjProcess.ShowCareers(${true})"></select> ` +
 
             `</div >
 
@@ -2096,16 +2093,15 @@ class MJProcess {
 
         var types = [...new Set(obj.data.map(d => d.type[this.language]))];
         types.forEach(y => $("#" + this.TypeSelectId).append("<option value='" + y + "'>" + y + "</option>"));
-        if (!obj.nogroup) {
-            let type = new URLSearchParams(window.location.search).get("type");
-            if ((type || "") == "")
-                type = types[0];
-            type = decodeURI(type);
+        let type = new URLSearchParams(window.location.search).get("type");
+        if ((type || "") == "")
+            type = types[0];
+        type = decodeURI(type);
 
-            $("#" + this.TypeSelectId).val(type);
-        }
+        $("#" + this.TypeSelectId).val(type);
+
         this.careers = obj.data;
-        this.ShowCareers(!obj.nogroup);
+        this.ShowCareers();
 
 
     }
